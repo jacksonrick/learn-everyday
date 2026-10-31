@@ -10,13 +10,9 @@ from ..extensions import db
 from ..models import (
     AdminUser,
     Child,
-    ChineseChar,
     EnglishPhoneme,
-    EnglishSentence,
-    EnglishWord,
     Grade,
     MathRule,
-    Poem,
     StudyRecord,
 )
 from ..services import level as level_svc
@@ -76,35 +72,6 @@ MATH_RULES = [
     (6, "下", "化简比", "ratio_simplify"),
 ]
 
-# (汉字, 拼音, 部首, 笔画, 结构, 组词, 例句, 等级)
-SAMPLE_CHARS = [
-    ("晨", "chén", "日", 11, "上下", ["早晨", "清晨"], "早晨的空气很新鲜。", "较易"),
-]
-
-SAMPLE_POEMS = [
-    {
-        "title": "望天门山",
-        "author": "李白",
-        "dynasty": "唐",
-        "content": "天门中断楚江开，碧水东流至此回。\n两岸青山相对出，孤帆一片日边来。",
-        "translation": "天门山被楚江冲开，碧绿的江水东流到这里回旋。两岸青山相对而出，一片孤帆从日边驶来。",
-    },
-]
-
-# (单词, 音标, 词性, 释义, 例句, 例句翻译, 等级)
-SAMPLE_WORDS = [
-    ("school", "/skuːl/", "n.", "学校", "I go to school by bus.", "我坐公交车去学校。", "容易"),
-    ("teacher", "/ˈtiːtʃə/", "n.", "老师", "Miss Li is my teacher.", "李老师是我的老师。", "容易"),
-    ("student", "/ˈstjuːdnt/", "n.", "学生", "I am a student.", "我是一名学生。", "较易"),
-]
-
-# (英文, 中文, 重点词, 等级)
-SAMPLE_SENTENCES = [
-    ("This is my book.", "这是我的书。", "this,is,my,book", "容易"),
-    ("I have a new ruler.", "我有一把新尺子。", "have,new,ruler", "容易"),
-    ("Open your book, please.", "请打开你的书。", "open,your,book", "较易"),
-]
-
 SAMPLE_PHONEMES = [
     # 元音 20 个：单元音 12 + 双元音 8
     ("/iː/", "vowel", "长元音", ["see", "tree", "meet"], "嘴角向两边拉开，发长长的“衣”音。"),
@@ -160,13 +127,11 @@ SAMPLE_PHONEMES = [
 
 
 def ensure_seed():
-    _drop_legacy_enabled_columns()
     _seed_grades()
     # 表结构迁移必须先做：后面的 seed 会读写新列（如 v8 的 level）
     _run_migrations()
     _seed_admin()
     _seed_math_rules()
-    _seed_samples()
     _seed_phonemes()
     _seed_child()
     _seed_rewards()
@@ -311,37 +276,6 @@ def _set_data_version(version: int):
     else:
         row.value = json.dumps(version)
     db.session.commit()
-
-
-LEGACY_ENABLED_TABLES = (
-    "grade",
-    "child",
-    "reward",
-    "chinese_char",
-    "poem",
-    "english_word",
-    "english_sentence",
-    "english_phoneme",
-    "math_rule",
-    "math_question",
-)
-
-
-def _drop_legacy_enabled_columns():
-    """v3 起取消「启用/停用」，物理删除即真删除；旧库直接丢掉 enabled 列。"""
-    inspector = inspect(db.engine)
-    tables = set(inspector.get_table_names())
-    dropped = []
-    for table in LEGACY_ENABLED_TABLES:
-        if table not in tables:
-            continue
-        if "enabled" not in {c["name"] for c in inspector.get_columns(table)}:
-            continue
-        db.session.execute(text(f'ALTER TABLE "{table}" DROP COLUMN enabled'))
-        dropped.append(table)
-    if dropped:
-        db.session.commit()
-        current_app.logger.info("已移除启停用字段: %s", ", ".join(dropped))
 
 
 def _drop_legacy_unit_columns():
@@ -614,68 +548,6 @@ def _migrate_math_rules_by_term():
     _seed_math_rules()
 
 
-def _seed_samples():
-    if ChineseChar.query.count() == 0:
-        for i, row in enumerate(SAMPLE_CHARS, 1):
-            char, pinyin, radical, strokes, structure, words, sentence, lv = row
-            db.session.add(
-                ChineseChar(
-                    char=char,
-                    pinyin=pinyin,
-                    radical=radical,
-                    strokes=strokes,
-                    structure=structure,
-                    words_json=json.dumps(words, ensure_ascii=False),
-                    sentence=sentence,
-                    is_key=i <= 10,
-                    level=lv,
-                )
-            )
-
-    if Poem.query.count() == 0:
-        for i, poem in enumerate(SAMPLE_POEMS, 1):
-            db.session.add(
-                Poem(
-                    title=poem["title"],
-                    author=poem["author"],
-                    dynasty=poem["dynasty"],
-                    genre="诗",
-                    content=poem["content"],
-                    translation=poem["translation"],
-                    level=poem.get("level", "较易"),
-                )
-            )
-
-    if EnglishWord.query.count() == 0:
-        for i, row in enumerate(SAMPLE_WORDS, 1):
-            word, phonetic, pos, meaning, example, example_cn, lv = row
-            db.session.add(
-                EnglishWord(
-                    word=word,
-                    phonetic=phonetic,
-                    pos=pos,
-                    meaning=meaning,
-                    example=example,
-                    example_cn=example_cn,
-                    kind="单词",
-                    level=lv,
-                )
-            )
-
-    if EnglishSentence.query.count() == 0:
-        for i, (en, cn, keys, lv) in enumerate(SAMPLE_SENTENCES, 1):
-            db.session.add(
-                EnglishSentence(
-                    en=en,
-                    cn=cn,
-                    key_words=keys,
-                    level=lv,
-                )
-            )
-
-    db.session.commit()
-
-
 def _seed_child():
     if Child.query.count() > 0:
         return
@@ -686,7 +558,7 @@ def _seed_child():
             gender="male",
             grade_id=g3.id if g3 else None,
             term="上",
-            avatar="🐣",
+            avatar="🐔",
         )
     )
     db.session.commit()

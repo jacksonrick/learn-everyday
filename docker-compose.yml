@@ -1,0 +1,58 @@
+# docker compose up -d
+#
+# 默认是开发模式（APP_MODE=dev）：前端跑 Vite dev server（HMR，不构建），后端跑 run.py（debug，
+# 自动重载）。改代码不用重启容器，浏览器里直接看到效果；只有装依赖才需要重启（改 Python 依赖
+# 还要 --build）。
+#
+# 想切成单端口生产模式：APP_MODE=prod docker compose up -d（届时只暴露 5001，前端会先 build）。
+#
+# 关键点：
+#   - 源码（./）整目录挂到 /app，容器里没有源码副本。
+#   - db.sqlite 在 ./ 下，跟着上面的挂载一起进去；WAL 的 -wal/-shm 必须和它同目录，别单独挂文件。
+#   - node_modules 放命名卷：不会把宿主机 macOS 的依赖带进去，也不至于把几万个文件写到 bind mount 上。
+
+name: learneveryday
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        PYTHON_VERSION: "3.12"
+        NODE_VERSION: "22"
+        # 依赖走国内镜像，构建时 pip 用；改这一处同时影响构建和启动时装依赖
+        PIP_INDEX_URL: "${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}"
+        NPM_REGISTRY: "${NPM_REGISTRY:-https://registry.npmmirror.com}"
+    image: learneveryday:latest
+    container_name: learneveryday
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 30s
+    ports:
+      - "${HOST_PORT:-5173}:5173"   # Vite dev server（客户端 / 后台都走这个）
+      - "${API_PORT:-5001}:5001"    # Flask：接口直连、健康检查，也是 dev 下 vite 的代理目标
+    environment:
+      TZ: Asia/Shanghai
+      APP_MODE: "${APP_MODE:-dev}"
+      # dev：Vite 端口；prod：gunicorn 进程数/线程/超时（SQLite 单写者，1 个 worker 多线程即可）
+      VITE_PORT: "5173"
+      GUNICORN_WORKERS: "1"
+      GUNICORN_THREADS: "8"
+      GUNICORN_TIMEOUT: "180"
+      # macOS 上 HMR 不触发时打开这行（改源码后浏览器没反应），改成轮询监听
+      # VITE_USE_POLLING: "1"
+      # 依赖走国内镜像：镜像里已默认这套，这里显式写出来方便改（换回官方就把值改成官方地址）
+      PIP_INDEX_URL: "${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}"
+      NPM_CONFIG_REGISTRY: "${NPM_REGISTRY:-https://registry.npmmirror.com}"
+    volumes:
+      # 源码 + db.sqlite + backups + uploads 全在这一层
+      - ./:/app
+      - node_modules:/app/web/node_modules
+      # 只有 APP_MODE=prod 会用到（前端构建产物）；dev 模式下它就是空目录
+      - web_state:/var/lib/learneveryday
+    # 密码、大模型 Key 走宿主机仓库根目录的 .env（api/.env.example 复制过去），
+    # 这里不写 environment，避免把 .env 的值覆盖掉。
+
+volumes:
+  node_modules:
+  web_state:

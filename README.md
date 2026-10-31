@@ -52,6 +52,68 @@ cd ../api && .venv/bin/python run.py
 - 客户端：`http://localhost:5001/`（无需登录）
 - 后台：`http://localhost:5001/admin`（默认 `admin` / `admin123`，请登录后修改）
 
+## Docker 部署（默认开发模式：热更新，不构建）
+
+镜像里只有运行时（Python 3.12 + Node 22 + Python 依赖），**源码和 db.sqlite 都不进镜像**，全部靠挂载。默认跑开发模式，跟本地 `npm run dev` + `python run.py` 一模一样：
+
+- 前端：`npm run dev` → Vite dev server（5173），改代码浏览器里立刻生效（Fast Refresh）
+- 后端：`python run.py` → `FLASK_DEBUG=1`，改 `.py` 自动重启
+- 不 build、改代码不用重启容器
+
+```bash
+cp api/.env.example .env        # 改 SECRET_KEY / ADMIN_PASSWORD，容器读仓库根目录的 .env
+docker compose up -d --build    # 首次构建镜像；之后日常只需要 up -d / restart
+docker compose logs -f          # 前后端日志都在这里
+```
+
+- 客户端：`http://<宿主机IP>:5173/`，后台：`http://<宿主机IP>:5173/admin`
+- `5001` 是 Flask 直连（Vite 的 `/api` 代理指向它），健康检查也打这里
+- 改代码直接改即可；`git pull` 之后建议 `docker compose restart`（Vite 对新增/删除文件的监听没有改内容稳）
+- 只有装依赖才需要重启：`web/package.json` 变了 → `docker compose restart`（entrypoint 自动 `npm ci`）；`api/requirements.txt` 变了 → `docker compose up -d --build`
+
+切生产模式（单端口 5001，前端构建后由 Flask 托管，跑 gunicorn）：
+
+```bash
+APP_MODE=prod docker compose up -d    # 首次会 vite build 到命名卷，再起 gunicorn
+```
+
+| APP_MODE | 前端 | 后端 | 端口 |
+|---|---|---|---|
+| `dev`（默认） | Vite dev server（HMR） | `run.py` + 自动重载 | 5173、5001 |
+| `prod` | 构建产物，Flask 托管 | gunicorn（1 worker / 8 线程） | 5001 |
+
+挂载与数据：
+
+| 容器内路径 | 来源 | 说明 |
+|---|---|---|
+| `/app` | 宿主机仓库目录 | 源码、`.env`、`db.sqlite`（含 `-wal` / `-shm`）、`backups/`、`uploads/` |
+| `/app/web/node_modules` | 命名卷 `node_modules` | 容器内自装，别映射到宿主机（macOS 的依赖在 Linux 里不能用） |
+| `/var/lib/learneveryday` | 命名卷 `web_state` | 只有 prod 用：前端构建产物 + 依赖指纹 |
+
+几个坑：
+
+- `db.sqlite` 必须和它的 `-wal` / `-shm` 在同一目录，所以**不要**用 `-v ./db.sqlite:/app/db.sqlite` 单独挂文件，挂整个仓库目录就行。
+- 数据库在 bind mount 上，容器以 root 运行，Linux 宿主机上的 `db.sqlite`、`backups/`、`uploads/` 会变成 root 所有。它们都在 `.gitignore` 里，不影响 `git pull`；想改主人就 `sudo chown -R $USER:$USER .`。
+- 别用 `docker compose down -v`，那会把 `node_modules` 命名卷一起删掉（数据在仓库目录里不会丢，但下次启动要重装依赖）。
+- 首次启动要联网 `npm ci`。pip / npm 已默认走国内镜像（清华 pypi + npmmirror）：构建时在 `Dockerfile` 的 `ARG PIP_INDEX_URL` / `NPM_REGISTRY`，运行时在 compose 的 `environment`。要换回官方或换别家，改这一对变量即可：
+
+```bash
+PIP_INDEX_URL=https://pypi.org/simple NPM_REGISTRY=https://registry.npmjs.org \
+  docker compose up -d --build
+```
+- **HMR 不触发**（改了源码浏览器没反应，主要出现在 macOS + Docker Desktop）：`docker-compose.yml` 里打开 `VITE_USE_POLLING: "1"` 改成轮询监听，然后 `restart`。
+- 开发模式带 Werkzeug 调试器，别把 5001 / 5173 暴露到不可信网络。
+- 不想用 compose 也可以：
+
+```bash
+docker build -t learneveryday:latest .
+docker run -d --name learneveryday --init --restart unless-stopped \
+  -p 5173:5173 -p 5001:5001 -v "$PWD:/app" \
+  -v learneveryday_node_modules:/app/web/node_modules \
+  -e APP_MODE=dev \
+  learneveryday:latest
+```
+
 ## 目录
 
 ```

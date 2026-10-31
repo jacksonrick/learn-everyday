@@ -68,10 +68,6 @@ web/
    - 导入只写字形/文本内容，**不写 `grade_id` / `term`**（这两列已从题库表删除）；数据包里的年级只用于保持教材顺序。
    - 结构字段靠 IDS 推断，三条兜底规则见 `build_chars.py` 的 `structure_of()`：部首即本字 → 独体；末级部件全是笔画 → 独体；笔画 ≤ 4 的上下/全包围 → 独体。改这块先跑一遍 `build_chars.py` 抽查「火、四、云、少、太」这些典型字。
 16. **年级是内置只读数据**：`seed.GRADES` 只有 9 条（一年级~六年级、初一~初三），没有高中。`seed._seed_grades()` 每次启动同步：补齐缺失、删掉多余（先清 `child.grade_id` 与挂在它上面的数学规则/应用题）。后台只有 `GET /admin/grades`，没有增删改，前端也没有年级管理页；孩子在「系统 → 孩子管理」。
-17. **SQLite 删列的两个硬坑**（v6 迁移踩过）：
-   - **外键列不能直接 `DROP COLUMN`**：`grade_id` 带 `FOREIGN KEY` 时 SQLite 报 `unknown column ... in foreign key definition`。必须重建表，见 `seed._rebuild_table_without()`（RENAME → 按原 DDL 去掉列与外键行 → CREATE → 拷数据 → DROP 旧表）。
-   - **删列后要收拾尾逗号**：删掉最后一条约束/列后，前一行残留的 `,` 紧跟 `)` 会让 `CREATE TABLE` 报 `near ")"`，用 `re.sub(r",\s*\)\s*$", "\n)", ddl)` 处理。
-
 18. **错题只能靠重做关闭**：`POST /client/wrong-items/<id>/master` 已删除，不要再加回来。关闭路径有两条：① 当天任务里的重练题累计答对 2 次（`submit._upsert_wrong`）；② 错题本专项订正 `GET /client/wrong-practice` + `POST /client/wrong-practice/check` 答对 1 次。题目一律由 `wrong_item.snapshot_json` 还原，快照残缺的条目列表里要提示「再做一次原题后就能订正」，别让它变成一个点不动的死按钮。
 20. **等级（难度）只有一份定义**：`services/level.py` 里的 `LEVELS`（容易/较易/中等/较难/困难）+ `RATIOS`（20/30/30/15/5）+ `GRADE_LEVEL`（1、2 年级容易 … 6 年级困难）。六张表（`chinese_char / poem / english_word / english_sentence / math_rule / math_question`）的 `level` 列都靠它归一，别再复制一份比例常量。
    - 出题：新题走 `level.split()`（语文新字、英语新词、数学应用题）或 `level.pick_one()`（古诗、英语句子）；**复习题和错题重练不按比例**，该复习就得复习。某档题库空了配额自动让给其它档，不会少题。
@@ -104,8 +100,6 @@ web/
 
 24. **写 NULL 要用 `sqlalchemy.null()`**：`StudyRecord(is_correct=None)` 因为列上有 `default=False`，插进去会被顶成 `False`。凡是「未判定/不适用」的三态，都要显式写 `null()`。
 
-25. **录音存放在 `DATA_DIR/uploads/recite/YYYY-MM/`**：`services/storage.py` 负责落盘与安全还原（库里只存相对路径、挡 `..` 越权）。后台接口返回的 `url` 已含 `/api/v1` 前缀，**前端不要再拼前缀**；`<audio>` 带不上 JWT，要用 `fetch + blob URL`。
-
 ## 开发约定
 
 - 后端：Blueprint 只做参数校验与序列化，业务放 `services/`；响应统一 `{ok, data}` / `{ok:false, error:{code,message}}`；写操作用短事务。
@@ -113,7 +107,6 @@ web/
 - 新增题库实体：后端 `_register_bank(...)` 一行注册，前端往 `BANK_CONFIGS` 加一条配置，页面自动生成（表格 + 表单 + AI 入口）。`fields` 支持 `type: 'select'` 配 `options` 做中文下拉。
 - **「AI 补全」由配置声明，不要在表单里写死**：`BANK_CONFIGS` 里加 `aiFill: { from, key, hint }`，`from` 是家长先填的字段、`key` 是传给 `/admin/ai/suggest` 的生成类型（`char` / `word` / `sentence`）。后端 `ai.generate()` 看到 context 里带 `char` / `word` / `sentence` 就走单条补全（`_gen_char` / `_gen_word` / `_gen_sentence`），不带就走批量生成。补全结果按字段名通用合并，`from` 字段本身不回填。
 - 题库列表的「年级学期」列由 `Bank.tsx` 统一渲染（`gradeTermText()`），配置里只要 `withGrade: true` 就自动出现在表格最后一列，不要在 `columns` 里重复加学期列。
-- 题库不再提供 CSV 导入导出，数据只通过「新增 / 编辑 / AI 生成」进入；备份走「系统设置 → 下载数据库」。
 - 组件不要引入新的 UI 库；`components/ui` 里的组件是 shadcn 同源手写版。
 - **客户端截图必须先绕开 PWA 离线包**：`web/scripts/shot.mjs` 里用 `serviceWorkers: 'block'` + 每次新建 context，否则 workbox 会把上一个版本的包喂给浏览器，截图看起来像改动没生效。截图默认落在 `web/docs/screenshots/`（相对 `web/` 目录），别和项目根 `docs/screenshots/` 混淆。
 - **多值字段（组词、例词等）用 `components/ui/tag-input.tsx`**：表单字段声明 `type: 'list'`，值在 form state 里是 `string[]`，保存时 `JSON.stringify`。不要再用「逗号分隔的文本框」，家长一次填多个词时容易漏分隔符。

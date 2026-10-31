@@ -33,8 +33,10 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
+    // 容器里 HMR 监听不到文件变化时，给容器设 VITE_USE_POLLING=1 改成轮询
+    watch: process.env.VITE_USE_POLLING === '1' ? { usePolling: true, interval: 300 } : undefined,
     proxy: {
-      '/api': { target: 'http://127.0.0.1:5001', changeOrigin: true },
+      '/api': { target: process.env.API_TARGET ?? 'http://127.0.0.1:5001', changeOrigin: true },
     },
   },
 })
