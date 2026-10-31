@@ -1,0 +1,13 @@
+{
+  "name": "learneveryday",
+  "private": true,
+  "version": "0.1.0",
+  "description": "小学每日学习打卡系统",
+  "scripts": {
+    "setup": "cd api && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt && cd ../web && npm install",
+    "dev:api": "cd api && .venv/bin/python run.py",
+    "dev:web": "cd web && npm run dev",
+    "build": "cd web && npm run build",
+    "start": "cd api && .venv/bin/python run.py"
+  }
+}

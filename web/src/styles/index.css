@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 100% 98%;
+    --foreground: 24 20% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 24 20% 15%;
+    --primary: 24 95% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 30 60% 96%;
+    --secondary-foreground: 24 30% 25%;
+    --muted: 30 30% 95%;
+    --muted-foreground: 25 10% 45%;
+    --accent: 30 60% 94%;
+    --accent-foreground: 24 30% 25%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 25% 88%;
+    --input: 30 25% 88%;
+    --ring: 24 95% 53%;
+    --radius: 1rem;
+    --chinese: 348 78% 56%;
+    --math: 212 88% 54%;
+    --english: 158 62% 38%;
+  }
+
+  /* 客户端专属暖色 token：只作用于 .client-shell 内部，后台保持中性商务色 */
+  .client-shell {
+    --background: 33 71% 97%;
+    --foreground: 22 39% 17%;
+    --card: 0 0% 100%;
+    --card-foreground: 22 39% 17%;
+    --primary: 17 82% 54%;
+    --primary-foreground: 33 71% 99%;
+    --secondary: 33 62% 94%;
+    --secondary-foreground: 22 39% 20%;
+    --muted: 33 40% 94%;
+    --muted-foreground: 22 20% 44%;
+    --accent: 22 84% 95%;
+    --accent-foreground: 17 82% 40%;
+    --destructive: 6 74% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 28 36% 87%;
+    --input: 28 36% 87%;
+    --ring: 17 82% 54%;
+    --radius: 1.125rem;
+    --chinese: 6 72% 52%;
+    --math: 202 66% 42%;
+    --english: 152 44% 36%;
+
+    --ink: 22 39% 17%;
+    --ink-soft: 22 20% 44%;
+    --paper: 33 71% 97%;
+    --paper-deep: 33 60% 92%;
+    --paper-card: 0 0% 100%;
+    --line: 28 40% 86%;
+    --persimmon: 20 80% 88%;
+    --persimmon-deep: 12 74% 44%;
+    --persimmon-soft: 19 100% 95%;
+    --honey: 43 92% 52%;
+    --grass: 148 44% 40%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+@layer components {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .scr {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .num-pad-btn {
+    @apply flex h-16 items-center justify-center rounded-2xl bg-white text-2xl font-medium shadow-sm ring-1 ring-black/5 transition active:scale-95 active:bg-muted;
+  }
+
+  /* 田字纸：极淡的点阵，像作业本，不抢内容 */
+  .client-paper {
+    background-image: radial-gradient(hsl(var(--line) / 0.55) 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-position: -1px -1px;
+  }
+
+  /* 侧栏当前项的蜡笔指示条 */
+  .nav-mark {
+    @apply absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-r-full bg-persimmon transition-all duration-300;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* 虚线装饰条：用在卡片边缘做蜡笔分隔 */
+  .deco-line {
+    background-image: repeating-linear-gradient(
+      90deg,
+      hsl(var(--persimmon) / 0.35) 0 10px,
+      transparent 10px 18px
+    );
+  }
+}
+
+/* 尊重系统「减弱动态效果」；.no-motion 留给运行时开关（家长可关掉全部装饰动效） */
+@media (prefers-reduced-motion: reduce) {
+  .client-shell *,
+  .client-shell *::before,
+  .client-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.client-shell.no-motion *,
+.client-shell.no-motion *::before,
+.client-shell.no-motion *::after {
+  animation: none !important;
+  transition-duration: 0.01ms !important;
+}

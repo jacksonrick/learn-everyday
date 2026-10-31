@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.venv/
+__pycache__/
+*.pyc
+.env
+db.sqlite
+db.sqlite-wal
+db.sqlite-shm
+backups/
+uploads/
+.DS_Store
+*.log
+
+.workbuddy/
+.idea/
