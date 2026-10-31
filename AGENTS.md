@@ -108,7 +108,7 @@ web/
 - **「AI 补全」由配置声明，不要在表单里写死**：`BANK_CONFIGS` 里加 `aiFill: { from, key, hint }`，`from` 是家长先填的字段、`key` 是传给 `/admin/ai/suggest` 的生成类型（`char` / `word` / `sentence`）。后端 `ai.generate()` 看到 context 里带 `char` / `word` / `sentence` 就走单条补全（`_gen_char` / `_gen_word` / `_gen_sentence`），不带就走批量生成。补全结果按字段名通用合并，`from` 字段本身不回填。
 - 题库列表的「年级学期」列由 `Bank.tsx` 统一渲染（`gradeTermText()`），配置里只要 `withGrade: true` 就自动出现在表格最后一列，不要在 `columns` 里重复加学期列。
 - 组件不要引入新的 UI 库；`components/ui` 里的组件是 shadcn 同源手写版。
-- **客户端截图必须先绕开 PWA 离线包**：`web/scripts/shot.mjs` 里用 `serviceWorkers: 'block'` + 每次新建 context，否则 workbox 会把上一个版本的包喂给浏览器，截图看起来像改动没生效。截图默认落在 `web/docs/screenshots/`（相对 `web/` 目录），别和项目根 `docs/screenshots/` 混淆。
+- **客户端截图必须先绕开 PWA 离线包**：`web/scripts/shot.mjs` 里用 `serviceWorkers: 'block'` + 每次新建 context，否则 workbox 会把上一个版本的包喂给浏览器，截图看起来像改动没生效。截图默认落在 `docs/screenshots`。
 - **多值字段（组词、例词等）用 `components/ui/tag-input.tsx`**：表单字段声明 `type: 'list'`，值在 form state 里是 `string[]`，保存时 `JSON.stringify`。不要再用「逗号分隔的文本框」，家长一次填多个词时容易漏分隔符。
 - **复习队列和错题本的 `item_id` 必须是题库主键**，用 `taskgen.item_key(item)` 取（优先 `ref_id`，数学计算题走 `md5(kind+topic)`）。绝不能存 payload 里的 `item_id`（那是当天第几题），否则第二天复习会取到不相干的字。新增题型时记得在 item 里写 `ref_id`。
 - 后端新增设置项后，要确认真的有人读它（`get_setting`），并在 `Settings.tsx` 的 `NUMBERS` / `SWITCHES` 里露出，否则就是「写在默认值里没人用」。
@@ -131,6 +131,18 @@ rm -f db.sqlite db.sqlite-wal db.sqlite-shm && cd api && .venv/bin/python run.py
 # 类型检查
 cd web && npx tsc --noEmit
 ```
+
+## 容器部署
+
+`Dockerfile` + `docker-entrypoint.sh`，`docker-compose.yml` 只是同一套参数的快捷方式，纯 `docker build` / `docker run` 的完整命令见 README「不用 compose：纯 docker 命令」。三条不能破的约定：
+
+1. **源码和 `db.sqlite` 都不进镜像**。镜像只有 Python 3.12 + Node 22 + Python 依赖 + gunicorn，运行时把仓库目录挂到 `/app`。不要在 Dockerfile 里加 `COPY . /app`。
+2. **默认 `APP_MODE=dev`，不构建前端**：Vite dev server 5173（HMR）+ `run.py` 5001（debug 自动重载）。`APP_MODE=prod` 才 `vite build` 到 `/var/lib/learneveryday/web-dist` 并起 gunicorn，靠 `WEB_DIST` 让 Flask 托管。
+3. **`web/node_modules` 和 `/var/lib/learneveryday` 必须是命名卷**，不能映射到宿主机（macOS 的 esbuild/rollup 二进制在 Linux 里跑不了）。
+
+依赖变化：`api/requirements.txt` 变了 → `pip install` 在容器启动时自动补（长期用还是重建镜像）；`web/package.json` 变了 → `docker restart` 就够，entrypoint 会自己 `npm ci`；只改业务代码 → 什么都不用做。
+
+镜像源统一走 `ARG`：`PIP_INDEX_URL`（清华）、`NPM_REGISTRY`（npmmirror）、`APT_MIRROR`（阿里云）。apt 那段 `RUN set -eux` 会把 `deb.debian.org` / `security.debian.org` 替换成 `APT_MIRROR` 的 host，同时兼容 deb822（`sources.list.d/debian.sources`）和老 `sources.list`；换源只改这几个 ARG，不要去手写 sources 文件。
 
 ## 已知边界
 

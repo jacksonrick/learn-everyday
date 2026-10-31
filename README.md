@@ -11,16 +11,6 @@
 
 技术栈：React 18 + TypeScript + Tailwind + shadcn 同源组件 / Flask 3 + SQLAlchemy + SQLite。
 
-## 界面预览
-
-| 客户端首页 | 数学练习 | 语文答题 |
-|---|---|---|
-| ![首页](docs/screenshots/client-home.png) | ![数学](docs/screenshots/client-math.png) | ![语文](docs/screenshots/client-quiz.png) |
-
-| 打卡日历 | 英语句子 | 后台概览 |
-|---|---|---|
-| ![日历](docs/screenshots/client-calendar.png) | ![英语](docs/screenshots/client-english.png) | ![后台](docs/screenshots/admin-dashboard.png) |
-
 ## 快速开始
 
 ```bash
@@ -94,25 +84,93 @@ APP_MODE=prod docker compose up -d    # 首次会 vite build 到命名卷，再�
 
 - `db.sqlite` 必须和它的 `-wal` / `-shm` 在同一目录，所以**不要**用 `-v ./db.sqlite:/app/db.sqlite` 单独挂文件，挂整个仓库目录就行。
 - 数据库在 bind mount 上，容器以 root 运行，Linux 宿主机上的 `db.sqlite`、`backups/`、`uploads/` 会变成 root 所有。它们都在 `.gitignore` 里，不影响 `git pull`；想改主人就 `sudo chown -R $USER:$USER .`。
-- 别用 `docker compose down -v`，那会把 `node_modules` 命名卷一起删掉（数据在仓库目录里不会丢，但下次启动要重装依赖）。
-- 首次启动要联网 `npm ci`。pip / npm 已默认走国内镜像（清华 pypi + npmmirror）：构建时在 `Dockerfile` 的 `ARG PIP_INDEX_URL` / `NPM_REGISTRY`，运行时在 compose 的 `environment`。要换回官方或换别家，改这一对变量即可：
+- `learneveryday_node_modules` / `learneveryday_web_state` 是 **Docker 命名卷**，不是仓库目录，宿主机里看不到是正常的（`docker volume ls` 能看到，Linux 上实际落在 `/var/lib/docker/volumes/`，Docker Desktop 在它的虚拟机里）。前者必须存在：宿主机的 `web/node_modules` 是 macOS 版（只有 `@esbuild/darwin-arm64`、`@rollup/rollup-darwin-arm64`，27k 文件 / 274MB），把它挂进 Linux 容器，vite 加载时找不到 `@esbuild/linux-*` 会直接崩；反过来容器 `npm ci` 装的 Linux 包也会把宿主机的本地开发环境搞坏。后者存依赖指纹和 prod 构建产物，dev 模式下就是个空目录，可省。
+- 别用 `docker compose down -v`，也别 `docker volume rm learneveryday_node_modules`：那会把 `node_modules` 命名卷一起删掉（数据在仓库目录里不会丢，但下次启动要重装依赖）。
+- 首次启动要联网 `npm ci`。pip / npm / apt 已默认走国内镜像（清华 pypi + npmmirror + 阿里云 debian）：`Dockerfile` 里对应 `ARG PIP_INDEX_URL` / `NPM_REGISTRY` / `APT_MIRROR`，构建时生效；pip 和 npm 运行时也读同名环境变量，所以 compose 的 `environment` 里也写了一份。要换回官方或换别家，改这几个变量即可：
 
 ```bash
 PIP_INDEX_URL=https://pypi.org/simple NPM_REGISTRY=https://registry.npmjs.org \
+APT_MIRROR=http://deb.debian.org \
   docker compose up -d --build
 ```
-- **HMR 不触发**（改了源码浏览器没反应，主要出现在 macOS + Docker Desktop）：`docker-compose.yml` 里打开 `VITE_USE_POLLING: "1"` 改成轮询监听，然后 `restart`。
+- **HMR 不触发**（改了源码浏览器没反应，主要出现在 macOS + Docker Desktop）：改成轮询监听再重启容器 —— compose 里打开 `VITE_USE_POLLING: "1"`；纯 `docker run` 加 `-e VITE_USE_POLLING=1`。
 - 开发模式带 Werkzeug 调试器，别把 5001 / 5173 暴露到不可信网络。
-- 不想用 compose 也可以：
+
+### 不用 compose：纯 docker 命令
+
+compose 只是把下面这些参数写成了文件，等价于这两条命令（**在仓库根目录执行**，`-v` 必须绝对路径，`$PWD` 就是）：
 
 ```bash
+# 1) 构建（只有换 Python 依赖 / Python·Node 版本 / entrypoint 时才需要重跑）
 docker build -t learneveryday:latest .
-docker run -d --name learneveryday --init --restart unless-stopped \
-  -p 5173:5173 -p 5001:5001 -v "$PWD:/app" \
-  -v learneveryday_node_modules:/app/web/node_modules \
+
+# 2) 启动（dev 模式：Vite 5173 + Flask 5001，不构建前端）
+docker run -d --name learneveryday \
+  --init \
+  --restart unless-stopped \
+  --stop-timeout 30 \
+  -p 5173:5173 \
+  -p 5001:5001 \
+  -e TZ=Asia/Shanghai \
   -e APP_MODE=dev \
+  -v "$PWD:/app" \
+  -v learneveryday_node_modules:/app/web/node_modules \
+  -v learneveryday_web_state:/var/lib/learneveryday \
   learneveryday:latest
 ```
+
+访问 `http://<宿主机IP>:5173/`（后台 `/admin`）。`5001` 是 API 直连，dev 模式下直接打开会看到「前端尚未构建」的提示页，属正常。
+
+`.env` 不需要 `--env-file`：`api/app/config.py` 会自己 `load_dotenv` 仓库根目录的 `.env`，它随 `-v "$PWD:/app"` 一起进了容器。
+
+参数对应关系，缺一个就出问题：
+
+| 参数 | 作用 | 漏了会怎样 |
+|---|---|---|
+| `-v "$PWD:/app"` | 源码 + `.env` + `db.sqlite` | 容器里没代码，entrypoint 直接报错退出 |
+| `-v learneveryday_node_modules:/app/web/node_modules` | 前端依赖放卷里 | 宿主机（尤其 macOS）的 `node_modules` 被带进 Linux，esbuild 二进制不匹配，vite 起不来 |
+| `-v learneveryday_web_state:/var/lib/learneveryday` | 依赖指纹、prod 构建产物 | dev 模式能跑，但切 prod 会丢构建产物 |
+| `--init` | 用 tini 当 PID 1 | 回收僵尸进程、`docker stop` 信号转发不干净 |
+| `--stop-timeout 30` | 给前后端 30 秒优雅退出 | 默认 10 秒，vite 可能被直接 SIGKILL |
+| `-e APP_MODE=dev` | 选择模式 | 默认就是 dev，可省；写 `prod` 则只走 5001 |
+| `-e TZ=Asia/Shanghai` | 时区 | 镜像里已默认，可省 |
+
+日常运维：
+
+```bash
+docker logs -f learneveryday          # 前后端日志都在这里（首次会 npm ci，1~2 分钟）
+docker restart learneveryday          # 改依赖 / 改 .env / git pull 之后
+docker stop learneveryday && docker rm learneveryday   # 删掉重来（数据在仓库目录，不丢）
+docker exec -it learneveryday bash    # 进容器
+```
+
+改业务代码**不用**任何操作 —— dev 模式前端 HMR、后端自动重载，容器不用重启。
+
+切单端口生产模式：
+
+```bash
+docker rm -f learneveryday
+docker run -d --name learneveryday --init --restart unless-stopped \
+  -p 5001:5001 \
+  -e APP_MODE=prod \
+  -v "$PWD:/app" \
+  -v learneveryday_node_modules:/app/web/node_modules \
+  -v learneveryday_web_state:/var/lib/learneveryday \
+  learneveryday:latest
+```
+
+它会在启动时 `vite build` 到 `learneveryday_web_state` 卷，再由 Flask 单端口托管。
+
+切国内源（镜像里已默认清华 pypi + npmmirror + 阿里云 debian，要换回官方就传 build-arg；运行时装依赖读的是容器环境变量，对应的传 `-e`）：
+
+```bash
+docker build -t learneveryday:latest \
+  --build-arg PIP_INDEX_URL=https://pypi.org/simple \
+  --build-arg NPM_REGISTRY=https://registry.npmjs.org \
+  --build-arg APT_MIRROR=http://deb.debian.org .
+```
+
+`APT_MIRROR` 填的是**镜像站 host**（不带 `/debian` 后缀），脚本会把 `deb.debian.org` / `security.debian.org` 整体替换成它，`/debian`、`/debian-security` 路径保持不变。
 
 ## 目录
 

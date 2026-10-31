@@ -25,13 +25,14 @@ FROM docker.m.daocloud.io/library/node:${NODE_VERSION}-bookworm-slim AS node
 FROM docker.m.daocloud.io/library/python:${PYTHON_VERSION}-slim-bookworm
 
 # ---------------------------------------------------------------------------
-# pip / npm 走国内镜像
-#   - 构建时：pip install 读 PIP_INDEX_URL
-#   - 启动时：entrypoint 里的 pip 补装 / npm ci 读这两个环境变量
-# 想换回官方或换别家：--build-arg PIP_INDEX_URL=... NPM_REGISTRY=...（compose 里也有同名 args）
+# pip / npm / apt 走国内镜像
+#   - 构建时：pip install 读 PIP_INDEX_URL，apt-get 走 APT_MIRROR
+#   - 启动时：entrypoint 里的 pip 补装 / npm ci 读 PIP_INDEX_URL / NPM_CONFIG_REGISTRY
+# 想换回官方或换别家：--build-arg PIP_INDEX_URL=... NPM_REGISTRY=... APT_MIRROR=...（compose 里也有同名 args）
 # ---------------------------------------------------------------------------
 ARG PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
 ARG NPM_REGISTRY=https://registry.npmmirror.com
+ARG APT_MIRROR=https://mirrors.aliyun.com
 
 LABEL org.opencontainers.image.title="LearnEveryday" \
       org.opencontainers.image.description="每日学习打卡系统" \
@@ -51,9 +52,29 @@ ENV PYTHONUNBUFFERED=1 \
 
 # tzdata：日志和「今天」的计算都按 Asia/Shanghai
 # libstdc++6 / libatomic1 / zlib1g：从 node 镜像搬过来的二进制依赖这些，python slim 里未必齐
-RUN apt-get update \
- && apt-get install -y --no-install-recommends ca-certificates tzdata libstdc++6 libatomic1 zlib1g \
- && rm -rf /var/lib/apt/lists/*
+#
+# apt 源换到 APT_MIRROR（默认阿里云）。Debian 12 用 deb822 格式
+# (/etc/apt/sources.list.d/debian.sources)，老的 /etc/apt/sources.list 一起 sed 兼容；
+# deb.debian.org 和 security.debian.org 都换成同一个 host，security 自然落到
+# mirrors.aliyun.com/debian-security。
+# 万一基础镜像没带 CA 证书，https 源会直接失败，所以缺失时先降级 http 装好
+# ca-certificates 再切回 https（官方 python 镜像自带证书，正常走不到这条分支）。
+RUN set -eux; \
+    for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.sources; do \
+      [ -f "$f" ] || continue; \
+      sed -i -E "s#https?://(deb|security)\.debian\.org#${APT_MIRROR}#g" "$f"; \
+    done; \
+    if [ ! -f /etc/ssl/certs/ca-certificates.crt ]; then \
+      echo '容器内无 CA 证书，apt 源临时降级为 http'; \
+      sed -i 's#https://#http://#g' /etc/apt/sources.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true; \
+      apt-get update; \
+      apt-get install -y --no-install-recommends ca-certificates; \
+      sed -i 's#http://#https://#g' /etc/apt/sources.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true; \
+    fi; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends ca-certificates tzdata libstdc++6 libatomic1 zlib1g; \
+    rm -rf /var/lib/apt/lists/*; \
+    grep -hE '^(URIs:|deb )' /etc/apt/sources.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true
 
 # 从 node 阶段搬运行时；npm 的符号链接自己建，避免 COPY 跨阶段把链接搬坏
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
