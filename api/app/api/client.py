@@ -91,12 +91,12 @@ def tts():
         return fail("TTS_ERROR", exc.message, 400)
 
 
-@bp.get("/tts/audio/<month>/<name>")
-def tts_audio(month: str, name: str):
-    """下发已缓存的合成音频（年月目录 + 32 位十六进制文件名，防穿越）。"""
-    from flask import current_app, send_file
+@bp.get("/tts/audio/<name>")
+def tts_audio(name: str):
+    """下发已缓存的合成音频（文件名限定 32 位十六进制 + .mp3，防穿越）。"""
+    from flask import send_file
 
-    target = tts_svc.resolve_audio(month, name)
+    target = tts_svc.resolve_audio(name)
     if target is None:
         return fail("NOT_FOUND", "音频不存在或已失效", 404)
     return send_file(target, mimetype="audio/mpeg")

@@ -41,7 +41,6 @@ def config() -> dict:
     provider = get_setting("ai_provider") or "deepseek"
     preset = PROVIDERS.get(provider, PROVIDERS["deepseek"])
     return {
-        "enabled": _bool(get_setting("ai_enabled")),
         "provider": provider,
         "base_url": (get_setting("ai_base_url") or preset["base_url"]).strip().rstrip("/"),
         "api_key": (get_setting("ai_api_key") or "").strip(),
@@ -55,7 +54,6 @@ def config() -> dict:
 def status() -> dict:
     cfg = config()
     return {
-        "enabled": cfg["enabled"],
         "provider": cfg["provider"],
         "provider_label": PROVIDERS.get(cfg["provider"], {}).get("label", cfg["provider"]),
         "base_url": cfg["base_url"],

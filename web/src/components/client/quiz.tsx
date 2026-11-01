@@ -3,7 +3,7 @@ import { Check, Delete, RotateCcw, Volume2, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
 import { useChildStore } from '@/stores/child'
-import { speak } from '@/lib/speech'
+import { speak, speakPhoneme } from '@/lib/speech'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -16,6 +16,8 @@ export type Answer = { item_id: number; answer: string; duration_ms: number }
 const READ_TYPES = ['word_read', 'phoneme_read', 'char_read']
 /** 与后端 taskgen.READ_ANSWER 保持一致 */
 const READ_ANSWER = '__read__'
+/** 朗读/认读卡至少停留的秒数：防止无脑连点「下一个」刷完 */
+const READ_MIN_SECONDS = 10
 
 function SpeakButton({ onClick, label = '播放读音' }: { onClick: () => void; label?: string }) {
   return (
@@ -50,6 +52,8 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
   const [picked, setPicked] = useState<number[]>([])
   const [feedback, setFeedback] = useState<{ correct: boolean; answer: string } | null>(null)
   const [busy, setBusy] = useState(false)
+  // 朗读/认读卡的倒计时（秒）：到 0 才允许点「下一个」
+  const [readLeft, setReadLeft] = useState(0)
   const answers = useRef<Answer[]>([])
   const startedAt = useRef(Date.now())
 
@@ -71,7 +75,21 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
     setPicked([])
     setFeedback(null)
     startedAt.current = Date.now()
+    if (!READ_TYPES.includes(String(item?.type ?? ''))) setReadLeft(0)
   }, [index])
+
+  // 朗读/认读卡倒计时：切到下一张卡重新计时；到 0 自动停表
+  useEffect(() => {
+    if (!isRead) return
+    const deadline = Date.now() + READ_MIN_SECONDS * 1000
+    setReadLeft(READ_MIN_SECONDS)
+    const timer = window.setInterval(() => {
+      const left = Math.max(0, Math.ceil((deadline - Date.now()) / 1000))
+      setReadLeft(left)
+      if (left <= 0) window.clearInterval(timer)
+    }, 250)
+    return () => window.clearInterval(timer)
+  }, [index, isRead])
 
   const orderText = useMemo(() => {
     if (!isOrder || !item) return ''
@@ -215,7 +233,19 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
 
         {item.kind === 'phoneme' && !isRead && (
           <div className="mb-4 flex flex-col items-center">
-            <div className="text-4xl font-semibold text-english">{item.symbol as string}</div>
+            <div className="flex items-center gap-3">
+              <div className="text-4xl font-semibold text-english">{item.symbol as string}</div>
+              <SpeakButton
+                onClick={() => {
+                  if (!speakPhoneme(String(item.symbol ?? ''))) {
+                    // 没有内置音频的兜底：读第一个例词
+                    const ex = Array.isArray(item.examples) ? (item.examples as string[])[0] : undefined
+                    if (ex) speak(ex, { lang: 'en-US' })
+                  }
+                }}
+                label="播放音标发音"
+              />
+            </div>
             <div className="mt-1 text-xs text-muted-foreground">{item.category as string}</div>
           </div>
         )}
@@ -223,7 +253,9 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
         {/* 朗读/认读卡：一次把信息看全、听够，点「下一个」就过去 */}
         {isRead && (
           <div className="mx-auto mb-5 w-full max-w-xl rounded-3xl border border-border bg-card p-6">
-            <p className="mb-4 text-center text-xs text-muted-foreground">听一听，跟读一遍，再点「下一个」</p>
+            <p className="mb-4 text-center text-xs text-muted-foreground">
+              听一听，跟读一遍，停留 {READ_MIN_SECONDS} 秒后可继续
+            </p>
 
             {item.type === 'char_read' && (
               <div className="flex flex-col items-center gap-2">
@@ -264,7 +296,13 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
                 <p className="text-lg font-medium">{String(item.meaning ?? '')}</p>
                 {item.example ? (
                   <div className="mt-1 w-full rounded-2xl bg-muted/60 px-4 py-3 text-left">
-                    <p className="text-sm">{String(item.example)}</p>
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-sm">{String(item.example)}</p>
+                      <SpeakButton
+                        onClick={() => speak(String(item.example), { lang: 'en-US' })}
+                        label="播放例句读音"
+                      />
+                    </div>
                     {item.example_cn ? (
                       <p className="mt-1 text-xs text-muted-foreground">{String(item.example_cn)}</p>
                     ) : null}
@@ -277,7 +315,15 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
               <div className="flex flex-col items-center gap-2">
                 <div className="flex items-center gap-3">
                   <span className="text-6xl font-semibold leading-none text-english">{String(item.symbol ?? '')}</span>
-                  <SpeakButton onClick={() => speak(String(item.symbol ?? ''), { lang: 'en-US' })} />
+                  <SpeakButton
+                    onClick={() => {
+                      if (!speakPhoneme(String(item.symbol ?? ''))) {
+                        const ex = Array.isArray(item.examples) ? (item.examples as string[])[0] : undefined
+                        if (ex) speak(ex, { lang: 'en-US' })
+                      }
+                    }}
+                    label="播放音标发音"
+                  />
                 </div>
                 <span className="text-xs text-muted-foreground">{String(item.category ?? '')}</span>
                 {Array.isArray(item.examples) && (item.examples as string[]).length > 0 && (
@@ -301,8 +347,13 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
               </div>
             )}
 
-            <Button size="xl" className="mt-6 w-full" disabled={busy} onClick={() => submitAnswer(READ_ANSWER)}>
-              下一个
+            <Button
+              size="xl"
+              className="mt-6 w-full"
+              disabled={busy || readLeft > 0}
+              onClick={() => submitAnswer(READ_ANSWER)}
+            >
+              {readLeft > 0 ? `跟读中…（${readLeft}s）` : '下一个'}
             </Button>
           </div>
         )}
@@ -477,15 +528,23 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
           </div>
             {!feedback.correct && (
               <div className="mt-3 flex gap-2">
-                {/* 语音只支持古诗与英文朗读：反馈条上只有英文题给「听一遍」 */}
-                {['word', 'sentence', 'phoneme'].includes(String(item.kind)) && (
+                {/* 语音只支持古诗与英文朗读：反馈条上只有英文题给「听一遍」；音标播内置单音音频 */}
+                {String(item.kind) === 'phoneme' ? (
                   <Button
                     variant="outline"
                     className="flex-1"
-                    onClick={() => speak(feedback.answer, { lang: 'en-US' })}
+                    onClick={() => {
+                      if (!speakPhoneme(feedback.answer)) speak(feedback.answer, { lang: 'en-US' })
+                    }}
                   >
                     <Volume2 className="h-4 w-4" /> 听一遍
                   </Button>
+                ) : (
+                  ['word', 'sentence'].includes(String(item.kind)) && (
+                    <Button variant="outline" className="flex-1" onClick={() => speak(feedback.answer, { lang: 'en-US' })}>
+                      <Volume2 className="h-4 w-4" /> 听一遍
+                    </Button>
+                  )
                 )}
               <Button className="flex-1" onClick={next}>
                 下一题

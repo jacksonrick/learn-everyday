@@ -18,7 +18,6 @@ import re
 import urllib.error
 import urllib.request
 import uuid
-from datetime import datetime
 from pathlib import Path
 
 from flask import current_app
@@ -32,9 +31,8 @@ DEFAULT_VOICE_ZH = "zh_female_cancan_mars_bigtts"
 DEFAULT_VOICE_EN = "en_female_amanda_mars_bigtts"
 MAX_CHARS = 200
 
-# 缓存文件名：32 位十六进制 + .mp3；目录按年月分层（uploads/tts/2026-01/xxx.mp3）
+# 缓存文件名：32 位十六进制 + .mp3，统一放在 uploads/tts/ 下不再分年月
 _FILE_RE = re.compile(r"^[0-9a-f]{32}\.mp3$")
-_MONTH_RE = re.compile(r"^\d{4}-\d{2}$")
 
 _VOICES = {"zh": ("tts_voice_zh", DEFAULT_VOICE_ZH), "en": ("tts_voice_en", DEFAULT_VOICE_EN)}
 
@@ -45,16 +43,15 @@ class TTSError(Exception):
         self.message = message
 
 
-def cache_dir(month: str | None = None) -> Path:
-    base = Path(current_app.config["DATA_DIR"]) / "uploads" / "tts"
-    return base / month if month else base
+def cache_dir() -> Path:
+    return Path(current_app.config["DATA_DIR"]) / "uploads" / "tts"
 
 
-def resolve_audio(month: str, name: str) -> Path | None:
-    """把客户端传来的年月 + 文件名还原成缓存文件绝对路径，挡掉路径穿越。"""
-    if not _MONTH_RE.match(month or "") or not _FILE_RE.match(name or ""):
+def resolve_audio(name: str) -> Path | None:
+    """把客户端传来的文件名还原成缓存文件绝对路径，挡掉路径穿越。"""
+    if not _FILE_RE.match(name or ""):
         return None
-    target = cache_dir(month) / name
+    target = cache_dir() / name
     return target if target.is_file() else None
 
 
@@ -88,11 +85,10 @@ def synthesize(text: str, lang: str = "zh", speed: float = 1.0) -> dict:
 
     digest = hashlib.md5(f"{voice}|{speed}|{text}".encode("utf-8")).hexdigest()
     filename = f"{digest}.mp3"
-    month = datetime.now().strftime("%Y-%m")
-    path = cache_dir(month) / filename
+    path = cache_dir() / filename
 
     if path.exists() and path.stat().st_size > 0:
-        return {"url": f"/api/v1/client/tts/audio/{month}/{filename}", "cached": True, "duration_ms": 0}
+        return {"url": f"/api/v1/client/tts/audio/{filename}", "cached": True, "duration_ms": 0}
 
     body = {
         "app": {"appid": app_id, "token": "access_token", "cluster": (get_setting("tts_cluster") or "volcano_tts").strip()},
@@ -144,7 +140,7 @@ def synthesize(text: str, lang: str = "zh", speed: float = 1.0) -> dict:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(audio)
     _log_call(text, duration_ms, ok=True)
-    return {"url": f"/api/v1/client/tts/audio/{month}/{filename}", "cached": False, "duration_ms": duration_ms}
+    return {"url": f"/api/v1/client/tts/audio/{filename}", "cached": False, "duration_ms": duration_ms}
 
 
 def _remote_message(code: int, raw: str) -> str:

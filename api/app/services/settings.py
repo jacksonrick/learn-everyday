@@ -28,8 +28,7 @@ DEFAULTS = {
     "point_checkin": 20,
     "point_wrong_fix": 2,
     "streak_milestones": {"3": 10, "7": 30, "14": 60, "30": 150, "100": 500},
-    # 大模型（当前仅 DeepSeek，兼容 OpenAI 协议）
-    "ai_enabled": False,
+    # 大模型（当前仅 DeepSeek，兼容 OpenAI 协议）：配好参数即可用，没有单独开关
     "ai_provider": "deepseek",
     "ai_base_url": "https://api.deepseek.com/v1",
     "ai_api_key": "",

@@ -84,7 +84,6 @@ export default function SettingsPage() {
 
   const aiPayload = () => {
     const payload: Record<string, any> = {
-      ai_enabled: !!form.ai_enabled,
       ai_provider: form.ai_provider || 'deepseek',
       ai_base_url: (form.ai_base_url || 'https://api.deepseek.com/v1').trim(),
       ai_model: (form.ai_model || 'deepseek-flash').trim(),
@@ -214,21 +213,15 @@ export default function SettingsPage() {
 
       <Card className="p-5">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <p className="text-sm font-medium">AI 智能助手</p>
-            {form.ai_api_key_set ? <Badge variant="success">已配置</Badge> : <Badge variant="outline">未配置</Badge>}
-          </div>
-          <label className="flex items-center gap-2 text-sm">
-            <span className="text-muted-foreground">启用</span>
-            <Switch
-                checked={!!form.ai_enabled}
-                onCheckedChange={(v) => setForm({ ...form, ai_enabled: v })}
-            />
-          </label>
+            <div className="flex flex-wrap items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <p className="text-sm font-medium">AI 智能助手</p>
+              {form.ai_api_key_set ? <Badge variant="success">已配置</Badge> : <Badge variant="outline">未配置</Badge>}
+            </div>
         </div>
 
         <p className="mb-4 text-xs text-muted-foreground">
+          配置好下方参数即可使用，没有单独的启停开关；不填 API Key 时题库页的 AI 功能会提示未配置。
           用于题库编辑页的「AI 补全」和「AI 生成」：自动补汉字拼音部首组词、批量生成古诗 / 单词 / 句子 / 应用题与出题规则。
         </p>
 

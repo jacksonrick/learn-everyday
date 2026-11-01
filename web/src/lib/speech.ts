@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 import { api } from './api'
+import { phonemeAudioUrl } from './phoneme-audio'
 
 /**
  * 语音朗读：浏览器 speechSynthesis 或 豆包 API 合成（后台「语音配置」里切换）。
@@ -104,6 +105,19 @@ export function stopSpeaking() {
     window.speechSynthesis.cancel()
     current = null
   }
+}
+
+/**
+ * 音标发音：直接播内置的本地单音音频（web/public/phonemes/），
+ * 浏览器和 API 模式都走这里——IPA 符号 TTS 读不了。
+ * 返回 false 表示没有对应的本地音频（调用方可自行退回例词朗读）。
+ */
+export function speakPhoneme(symbol: string): boolean {
+  const url = phonemeAudioUrl(symbol)
+  if (!enabled || !url) return false
+  stopSpeaking()
+  playUrl(url)
+  return true
 }
 
 if (typeof window !== 'undefined' && speechSupported()) {

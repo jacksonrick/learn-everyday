@@ -4,158 +4,97 @@
 
 ## 项目定位
 
-单家庭自用的每日学习打卡系统。不做多租户、不做注册、不做支付。
-家长是唯一管理员；孩子只面对客户端，打开即用。
+单家庭自用的每日学习打卡系统。不做多租户、不做注册、不做支付；家长是唯一管理员，孩子只面对客户端，打开即用。
 
-## 目录
+## 结构与数据库
 
-```
-api/
-  app/
-    __init__.py       create_app：注册蓝图、JWT 错误、SPA 静态托管、每日备份
-    config.py         配置（读 .env）
-    extensions.py     db / jwt / cors + SQLite PRAGMA（WAL、外键）
-    models/           base / catalog（年级·孩子）/ bank（三科题库）/ study / reward / system
-    api/              client.py（客户端，无鉴权）、auth.py、admin.py（后台，JWT）
-    services/         mathgen（出题器注册表）、taskgen（每日任务）、grading、submit、points、srs、settings、homophone（同音字）、ai（大模型）
-    seed/seed.py      首次启动写入年级、账号、数学规则、示例题库、示例孩子、奖励
-    utils/            responses（统一响应）、dates
-  run.py
-web/
-  src/
-    pages/client/     首页、语文、数学、英语、我的
-    pages/admin/      登录、布局、概览、孩子、年级、题库（通用 Bank）、记录、打卡、积分、奖励、设置
-    components/client/ layout、quiz（答题内核）、poem-player、result
-    components/ui/    shadcn 同源组件（Button/Card/Dialog/Table/Select/Switch/Tabs…）
-    lib/              api（fetch 封装）、types、hooks、speech（TTS）、utils
-    stores/           zustand（childId 持久化）
-```
+- `api/app/`：models（catalog 年级孩子 / bank 三科题库 / study / reward / system）、api（client 无鉴权、auth、admin JWT）、services（mathgen 出题器注册表 / taskgen 每日任务 / grading / submit / points / srs / settings / homophone / ai）、seed（首次启动数据 + 手写迁移）、utils（responses 统一响应 / dates）
+- `web/src/`：pages/client（首页·语数英·我的）、pages/admin、components/client（layout / quiz 答题内核 / poem-player / result）、components/ui（shadcn 同源手写组件）、lib（api / types / hooks / speech / phoneme-audio / utils）、stores（zustand，childId 持久化）
+- `web/public/phonemes/`：48 个音标真人单音 mp3（IPA 符号 TTS 读不了）。播放走 `lib/phoneme-audio.ts` 的 IPA→文件名映射 + `speech.speakPhoneme()`，**不要**把音标符号丢给 TTS；映射改动必须与 `seed.SAMPLE_PHONEMES` 的 48 个符号对齐
+- **TTS 缓存是内容寻址、不进数据库**：缓存键 = md5(音色|语速|文本)，前端把文本发到 `/client/tts`、后端现场算哈希查 `uploads/tts/` 下同名文件是否在。题库表不存音频地址，别加回来
+- 数据库根目录 `db.sqlite`（WAL，备份=复制文件）。表：`grade / child / chinese_char / poem / english_word / english_sentence / english_phoneme / math_rule / math_question / daily_task / study_record / task_answer / recitation / checkin / srs_item / wrong_item / points_ledger / reward / redemption / admin_user / setting`
+- 唯一约束：`daily_task(child_id,date,subject)`、`checkin(child_id,date)`、`srs_item`、`wrong_item`、`task_answer(task_id,item_id)`
+- **没有迁移工具**：新表靠启动时 `db.create_all()`；新列在 `seed/seed.py` 手写 `ALTER TABLE`（照 `_add_wrong_snapshot_column()` 的写法，先 `inspect(db.engine)` 判断列存在再加）
+- **年级不是枚举**：`grade` 表带 `stage`，题库用 `grade_id` 关联；但 `seed.GRADES` 是内置只读 9 条（一~六年级、初一~初三，无高中），启动时同步、无增删改接口，孩子管理在「系统 → 孩子管理」
 
-## 数据库
+## 核心规则
 
-- 文件：根目录 `db.sqlite`，WAL 模式，备份=复制文件。
-- 表：`grade / child / chinese_char / poem / english_word / english_sentence / english_phoneme / math_rule / math_question / daily_task / study_record / task_answer / recitation / checkin / srs_item / wrong_item / points_ledger / reward / redemption / admin_user / setting`
-- 唯一约束：`daily_task(child_id,date,subject)`、`checkin(child_id,date)`、`srs_item`、`wrong_item`、`task_answer(task_id,item_id)`。
-- **没有迁移工具**：新表靠启动时 `db.create_all()` 自动建；新列要在 `seed/seed.py` 的迁移函数里手写 `ALTER TABLE`（照 `_add_wrong_snapshot_column()` / `_add_level_columns()` 的写法，先看 `inspect(db.engine)` 有没有这列再加）。
-- **年级不是枚举**：`grade` 表带 `stage`（小学/初中/高中），家长可自行增删，题库用 `grade_id` 关联。新增学段不要改代码，改数据。
+- **判分在服务端**：客户端只拿去掉 `answer` 的 payload；`/task/answer` 只做单题反馈，`/task/submit` 才写记录、算分、发积分。
+- **任务幂等（含并发）**：同天同科重复 `start` 返回已有 payload；`get_or_create_task()` 撞唯一约束时回滚取另一路刚插的那条，不能 500。客户端 `startTask()`（`lib/hooks.ts`）用 in-flight map 兜并发；新增「先查后插」位点照此兜底。
+- **答题进度以服务端为准**：`/task/answer` 每题 upsert，`/task/start` 返回 `answered[]`，前端 `lib/resume.ts` 过滤已答题；`submit` 的 `answer_map` 先取存档再被客户端传值覆盖。科目页要自动补交已答未提交的任务；完成判定必须带 `list.length > 0` 保护（题库空时别把 0 题任务标成完成）。
+- **打卡**：三科 `done` 才 `full`，否则 `partial`；补卡 `is_makeup=true` 且 `streak=0`。
+- **积分**：`points.add()` 内做日上限裁剪；流水只增不改、冲正写负数、有 `date`；`balance()` 取最后一条流水的 `balance_after`（滚动账本，不是求和）。
+- **作废打卡 = 级联清理 + 余额重算**：删当天 `study_record / daily_task / checkin / task_answer / recitation`（含 `storage.delete_recite()` 音频）及 `ref_type ∈ {task, checkin, wrong_item}` 的流水（manual/redeem 不动），然后按 id 升序重滚该孩子所有流水的 `balance_after`。**任何新的任务位态表、任何删流水的地方都要同步这两步。**
+- **SRS**：间隔 `[1,2,4,7,15,30]`，答对升 1 档、答错降 1 档明天再考；只记 char / word / poem（数学无稳定主键不入队）。
+- **复习优先**：SRS 到期条目先占认读卡/朗读卡约四成（`taskgen._due_rows()`），其余到期词在选择池、组词题字里排最前；复习占少数、新题为主，别做成复习占大头。
+- **复习队列和错题本的 `item_id` 必须是题库主键**：用 `taskgen.item_key(item)`（优先 `ref_id`；数学计算题是 `md5(kind+topic)` 知识点哈希）。绝不能存 payload 里的 `item_id`（那是当天第几题）。新增题型记得写 `ref_id`。
+- **错题重练与当天题去重**：数学（`kind == 'math'`）比 `stem` 不比 `item_key()`（哈希按知识点聚合，会误删成半数），见 `_dedupe_key()`。
+- **错题只能靠重做关闭**：①当天重练累计答对 2 次（`submit._upsert_wrong`）；②错题本专项订正 `/client/wrong-practice/*` 答对 1 次。题目由 `wrong_item.snapshot_json` 还原；快照残缺的要在列表提示「再做一次原题后就能订正」，别留点不动的死按钮。
+- **古诗与朗读卡不判分**：`NO_SCORE_KINDS`（poem）/ `NO_SCORE_TYPES`（word_read/phoneme_read/char_read）不进总分、不进错题本、不发积分。朗读提交 `READ_ANSWER`（`__read__`）后**必须记 SRS**——朗读是新字词唯一的「学过」入口，不记第二天会当新内容重发。判断一律用 type/kind 白名单。客户端朗读/认读卡要停留 `quiz.tsx` 的 `READ_MIN_SECONDS`（10s）才能点「下一个」，防连点刷完。
+- **物理删除**：模型没有 `enabled`，删除即 `db.session.delete()`，不做软删除。
+- **写 NULL 用 `sqlalchemy.null()`**：列有 `default=False`，直接传 `None` 会被顶成 `False`。
 
-## 关键业务规则（改动前必须理解）
+## 出题
 
-1. **打卡**：语文/数学/英语三科 `status=done` 才 `checkin.status=full`；否则 `partial`。家长补卡 `is_makeup=true`，`streak=0`。
-2. **判分**：服务端持有答案。客户端只能拿到去掉 `answer` 的 payload；`/task/answer` 只做单题反馈，`/task/submit` 才写记录、算分、发积分。
-3. **积分**：`points.add()` 内做日上限裁剪；流水只增不改，冲正写负数；有 `date` 字段用于当日累计。
-4. **SRS**：`[1,2,4,7,15,30]` 天，答对升 1 级、答错降 1 级并明天再考。
-5. **任务幂等**：同一天同科目重复 `start` 返回已有 payload；`submit` 遇到 `done` 直接返回既有结果，不重复计分。
-   - **并发也要幂等**：`taskgen.get_or_create_task()` 插入撞 `daily_task` 唯一约束时回滚并取另一路刚插进去的那条，不能把 `IntegrityError` 抛成 500。客户端 `startTask()`（`lib/hooks.ts`）用模块级 in-flight map 让并发调用复用同一个请求——StrictMode 双挂载、双标签页、误双击都会同时发两条 start。新增「先查后插」的位点（如 `Checkin`、`SrsItem`）要按同样的思路兜底。
-6. **数学出题**：`mathgen.GENERATORS` 是注册表，`math_rule.generator` 存键名，`params_json` 存区间参数；`mathgen.GENERATOR_SPECS` 声明可调参数（key/label/default/min/max），前端据此渲染参数表单。
-   - 出题规则**严格按「年级 + 学期」**：`taskgen._build_math` 用 `filter_by(grade_id=child.grade_id, term=child.term)`，不会串年级、不会串学期。仅当该学期一条规则都没配时才退到本年级其他学期，避免孩子当天无题。
-   - 新增题型：写一个 `@register` 函数 + 在 `GENERATOR_SPECS` 注册参数 + 加一条规则数据，前端下拉自动出现。
-7. **大模型**：`services/ai.py` 只用 `urllib` 调 OpenAI 兼容的 `/chat/completions`，JSON 模式。所有生成都走后端二次校验（字段白名单、出题器白名单、答案只留数字），不合格直接丢弃；入库仍走题库 CRUD 的唯一性检查。
-   - 配置存 `setting` 表：`ai_enabled / ai_provider / ai_base_url / ai_api_key / ai_model / ai_thinking`。
-   - `ai_thinking` 默认 false。DeepSeek 不传时**默认开启思考**，所以请求里必须显式下发 `thinking: {"type": "disabled"|"enabled"}`（仅 provider 为 deepseek 时下发，避免自建代理不认这个字段）。
-   - `ai_api_key` 属于 `settings.SECRET_KEYS`，接口只返回 `ai_api_key_masked` 和 `ai_api_key_set`，PUT 时留空或传掩码表示不修改。
-   - 每次调用（含失败）都往 `ai_call_log` 写一条：`created_at / model / prompt(用户侧提示词) / input_tokens / output_tokens / ok`；`GET /admin/ai/calls` 返回分页 + 累计 token，`DELETE /admin/ai/calls` 清空。日志写失败不影响主流程。
-8. **只有数学看年级**：语文（识字、古诗）、英语（单词、句子、音标）**不关联年级学期**，四张题库表的 `grade_id` / `term` 已删（v6 迁移 `_drop_legacy_bank_grade_columns()`）。取题一律全库随机：`taskgen._pick_unlearned()` / `_pick_learned()`，古诗与句子用 `rng.choice()`。数学严格按 `grade_id + term`。别再给语文英语加回年级过滤。
-9. **唯一性**：`_register_bank(unique=[...])` 在写入时查重（不建索引），`unique_ci=True` 用于单词（忽略大小写）；更新时排除自身。
-10. **没有启停用**：模型里不再有 `enabled` 字段，删除即 `db.session.delete()` 物理删除。旧库由 `seed._drop_legacy_enabled_columns()` 在启动时 `ALTER TABLE ... DROP COLUMN enabled`。不要再用软删除。
-11. **没有单元**：`chinese_char / english_word / english_sentence` 的 `unit` 列已删（v4 迁移 `_drop_legacy_unit_columns()`）。`math_question.unit` 是**答案单位**（元/个/米），不能一起删。
-12. **AI 去重口径必须与唯一性校验一致**：诗按标题、词按 word、句按 en 都是**全库**唯一，所以 `_existing_for_ai()` 必须把全库已有内容交给模型。曾按当前年级过滤，导致「选四年级生成 5 首，4 首因与一年级重复被 409 拒绝」。
-13. **补充要求要进提示词**：前端所有 AI 弹窗都会传 `context.requirement`，由 `ai._extra_line(context)` 统一拼进六类提示词。新增生成类型时记得把 `extra` 接上，否则输入框会变成摆设。条数也要写死（`items 里必须有 N 个元素`），`max_tokens` 随 count 增长。
-14. **没有排序字段**：9 张表的 `sort_order` 已删（v5 迁移 `_drop_legacy_sort_columns()`）。题库列表统一 `created_at DESC, id DESC`（最新的在最上面），年级/奖励用 `id ASC`（学段顺序、建奖励的顺序）。`_register_bank()` 不再收 `order_fields` 参数，排序写在里面；新增题库实体不用再配排序。语文英语取题是全库随机，数学按规则生成，都不再依赖 id 顺序。
-15. **内置题库**：`app/seed/data/` 下有三个离线数据包（2176 字、112 首古诗、740 个英语单词），由 `scripts/build_chars.py` / `scripts/build_poems.py` / `scripts/build_words.py` 生成，导入逻辑在 `services/bank_import.py`，后台入口在「系统设置 → 内置题库」，接口是 `GET /admin/bank/builtin` + `POST /admin/bank/import`（`kinds` 取 `chars / poems / words`）。
-   - 导入**幂等**：按 汉字 / 古诗标题 / 单词（**忽略大小写**）查重后跳过，不覆盖已有记录（家长改过的内容不能被数据包冲掉）。单词查重要和后台新增一致（`func.lower(word)` 比对），否则 `Apple` 和 `apple` 会各留一条。
-   - 写入必须**倒序遍历**：同一批 `created_at` 相同，列表按 `id DESC` 排会把六年级顶到最前；倒序插入后 id 才回到教材顺序。
-   - 导入只写字形/文本内容，**不写 `grade_id` / `term`**（这两列已从题库表删除）；数据包里的年级只用于保持教材顺序与折算等级。
-   - 单词包按年级拆在 `scripts/words/g1.py` … `g6.py`（元组 = 单词/音标/词性/释义/例句/例句翻译）。一、二年级取人教**新起点**，三至六年级取人教 **PEP**——PEP 没有一二年级课本，两条线拼起来才是 1-6 年级。`build_words.py` 会自检重复词、音标格式、词性取值范围与空字段，不通过直接退出。
-   - 结构字段靠 IDS 推断，三条兜底规则见 `build_chars.py` 的 `structure_of()`：部首即本字 → 独体；末级部件全是笔画 → 独体；笔画 ≤ 4 的上下/全包围 → 独体。改这块先跑一遍 `build_chars.py` 抽查「火、四、云、少、太」这些典型字。
-16. **年级是内置只读数据**：`seed.GRADES` 只有 9 条（一年级~六年级、初一~初三），没有高中。`seed._seed_grades()` 每次启动同步：补齐缺失、删掉多余（先清 `child.grade_id` 与挂在它上面的数学规则/应用题）。后台只有 `GET /admin/grades`，没有增删改，前端也没有年级管理页；孩子在「系统 → 孩子管理」。
-18. **错题只能靠重做关闭**：`POST /client/wrong-items/<id>/master` 已删除，不要再加回来。关闭路径有两条：① 当天任务里的重练题累计答对 2 次（`submit._upsert_wrong`）；② 错题本专项订正 `GET /client/wrong-practice` + `POST /client/wrong-practice/check` 答对 1 次。题目一律由 `wrong_item.snapshot_json` 还原，快照残缺的条目列表里要提示「再做一次原题后就能订正」，别让它变成一个点不动的死按钮。
-20. **等级（难度）只有一份定义**：`services/level.py` 里的 `LEVELS`（容易/较易/中等/较难/困难）+ `RATIOS`（10/40/30/15/5）+ `GRADE_LEVEL`（1、2 年级容易 … 6 年级困难）。六张表（`chinese_char / poem / english_word / english_sentence / math_rule / math_question`）的 `level` 列都靠它归一，别再复制一份比例常量。
-   - 出题：新题走 `level.split()`（语文新字、英语新词、数学应用题）或 `level.pick_one()`（古诗、英语句子）；**复习题和错题重练不按比例**，该复习就得复习。某档题库空了配额自动让给其它档，不会少题。
-   - 数学计算题靠 `math_rule.level` 分配配额，但规则本身按「年级 + 学期」过滤，同一学期往往全在同一档，配额会回补——这不是 bug。
-   - 导入：数据包的 `grade`（教材年级）用 `level_svc.from_grade()` 折算，绝不直接写 grade 列。
-   - 新增题库实体：模型加 `level`、`_register_bank` 白名单加 `"level"`、`BANK_CONFIGS` 加一列 + 一个 `type: 'select'` 字段（`options: LEVEL_OPTIONS`）。后台 `_coerce` 会把空值/脏值归一到「中等」，不用前端兜。
-   - `math_question.difficulty(1-3)` 已删，别再引回来。
+- **每日题量后台可配**（`settings.py` 的 `DEFAULTS`；设置页按语/数/英/其它四个 Tab；0 = 当天不出该题型）：
+  语文 认读 5 / 组词 5 / 古诗 1（`chinese_read / chinese_word / chinese_poem`）；
+  数学 计算题 15 / 应用题 2（`math_calc / math_app`）；
+  英语 朗读 10 / 音标朗读 2 / 音标选词 2 / 看中选英 2 / 看英选中 2 / 组句 1（`english_word_read / english_phoneme_read / english_phoneme_pick / english_word_choice / english_meaning_choice / english_sentence_count`）；
+  其它 错题重练 `retry_count` = 2。旧键已删，`all_settings()` 只认 DEFAULTS 里的键。
+- **等级只有一份定义**：`level.py` 的 `LEVELS` + `RATIOS`（10/40/30/15/5）+ `GRADE_LEVEL`（1、2 年级容易 … 6 年级困难）。六张题库表的 `level` 列都靠它归一，别复制比例常量。新题走 `level.split()` / `pick_one()`；**复习题和错题重练不按比例**。某档题库空了配额自动回补（数学同一学期常全在一档，这是正常的）。导入用 `from_grade()` 折算，不直接写 grade。
+- **只有数学看年级学期**：语文英语题库不关联年级学期，全库随机；数学严格 `grade_id + term`，仅当该学期没配规则时退到本年级其他学期。别给语文英语加回年级过滤。
+- **组词题**：题字取已学过的字（到期优先），答案是词里的另一个字；干扰项按词内真实读音取同音字，并排除一切能与题字拼成词的字（否则两个答案）。
+- **数学**：`mathgen.GENERATORS` 注册表，`math_rule.generator` 存键名、`params_json` 存区间参数，`GENERATOR_SPECS` 声明可调参数。新增题型 = `@register` + 注册参数 + 加规则数据，前端自动出现。
+- 词库小于「朗读 + 选择题总数」时先给选择题留词，朗读卡让路；当天朗读过的词不再出选择题，朗读过的音标不再出音标选词。
 
-22. **题库检索过滤是通用的，不要按库写死**：`admin._filtered()` 里遍历 `_FILTER_COLUMNS`（`level / pos / type / category / genre`），模型上有这一列且请求带了同名参数才加 `WHERE`。前端只在 `BANK_CONFIGS` 里写 `filters: [{ name, label, options }]`，`name` 直接当查询参数传给后端。所以加新过滤器 = 后端加列名进 `_FILTER_COLUMNS`（如需）+ 前端加一条 `filters`，不要在接口里写 `if prefix == 'words'` 这种分支。
-    - 音标库没有 `level` 列，天然不支持难度过滤；它用 `type=vowel|consonant`。
-    - **`english_word.kind` 已删**（`data_version=11`，见 `seed._drop_english_word_kind()`）：单词不再分「单词 / 短语」，所以 `kind` 也一并从 `_FILTER_COLUMNS` 里去掉了。别再引回来。
-    - `App.tsx` 的 `BankPage` 必须带 `key={cfg.key}`，否则切库时筛选/页码状态会串到下一个库。
-    - **`math_rule.weight` 已删**（`data_version=9`）：出题比例只由 `level` 决定，同档规则等概率。别再引回权重。
-    - 错题重练与当天题去重时，数学（`kind == 'math'`）要比 `stem` 而不是 `item_key()`——数学的 `item_key` 是按知识点聚合的哈希，用它去重会把同知识点的题全删掉（20 题变 10 题），见 `_dedupe_key()`。
+## AI（大模型）
 
-19. **作废打卡 = 级联清理 + 余额重算**：`DELETE /admin/checkins/<id>`（`admin.checkin_void`）会删掉当天该孩子的 `study_record`、`daily_task`、`checkin`，以及当天 `ref_type ∈ {task, checkin, wrong_item}` 的 `points_ledger`（`manual` / `redeem` 不动）。因为 `points.balance()` 取的是**最后一条流水的 `balance_after`**（滚动账本，不是求和），删完必须把该孩子所有流水按 `id` 升序重新滚一遍 `balance_after`，否则余额会永久错位。新增任何删除流水的地方都要记得做这一步。
-    - v1.11 起还要顺手清 `task_answer`（否则孩子重做时会「接着做」到作废前的进度）和 `recitation`（连同 `storage.delete_recite()` 的音频文件）。**任何新的任务位态表，作废路径都要同步加进去。**
+- `services/ai.py` 用 urllib 调 OpenAI 兼容 `/chat/completions`，JSON 模式；结果走后端二次校验（字段白名单、出题器白名单、答案清洗），不合格丢弃；入库仍过题库唯一性检查。
+- **没有 `ai_enabled` 开关**：配好参数即可用，`/admin/ai/status` 只看 `configured`（API Key 是否已填）。`ai_api_key` 属 `SECRET_KEYS`，只回掩码，PUT 留空/传掩码 = 不修改。
+- DeepSeek 不传 thinking 默认开启，请求必须显式下发 `thinking`（仅 provider 为 deepseek 时下发）。
+- 每次调用（含失败）写 `ai_call_log`，日志失败不影响主流程。
+- **去重口径与唯一性一致**：`_existing_for_ai()` 交**全库**已有内容（诗按标题、词按 word、句按 en），别按年级过滤。
+- `context.requirement` 由 `_extra_line()` 统一拼进所有提示词；条数写死（`items 必须有 N 个`），`max_tokens` 随 count 增长。新增生成类型记得接 extra。
 
-21. **答题进度以服务端存档为准**：`task_answer(task_id, item_id)` 唯一约束，`/client/task/answer` 每答一题 upsert 一次，`/client/task/start` 返回 `answered[]`。客户端用 `lib/resume.ts` 过滤掉已答的题，题号写成「第 N / M 题 · 接着上次」。`/client/task/submit` 里 `answer_map` **先取存档再用客户端传值覆盖**，所以即使前端状态丢了也不漏题。新增科目页（或新增科目）要沿用这套：科目页自动补交已答完但未提交的任务，判定必须带 `list.length > 0` 的保护，否则题库空时会把 0 题的任务标记成完成。
+## 题库
 
-22. **古诗与朗读卡不判分**：`taskgen.NO_SCORE_KINDS`（`poem`）+ `taskgen.NO_SCORE_TYPES`（`word_read` / `phoneme_read` / `char_read`）不计入 `count_scored()` 总分、不进错题本、不发积分。
-    - 古诗：`task_answer` 记 `__recited__`，是否背诵以有没有录音为准；`study_record.is_correct` 写 `recited`（v1.11 起不再写 NULL）。
-    - 朗读/认读卡：客户端点「下一个」时提交 `taskgen.READ_ANSWER`（`__read__`），`submit` 只记一条「已朗读 / 已认读」的学习记录 + 一条 SRS（`srs.record(..., True)`）。**SRS 不能省**：朗读是新词新字唯一的「学过」入口，不记的话第二天又当成新内容重发。
-    - 两者判断都用 `item["type"]` / `item["kind"]` 的白名单，别再指望 `type == 'recite'`。
+- **新增题库实体**：后端 `_register_bank(...)` 一行注册，前端 `BANK_CONFIGS` 加一条，页面自动生成（表格 + 表单 + AI 入口）。`fields` 支持 `select`（配 options）与 `list`（多值用 `components/ui/tag-input.tsx`，存 JSON，别用逗号分隔文本框）。
+- **过滤通用**：`admin._filtered()` 遍历 `_FILTER_COLUMNS`（level/pos/type/category/genre），模型有列且请求带同名参数才加 WHERE；前端 `filters: [{name, label, options}]` 直接当查询参数，别写按库分支。音标库无 level，用 `type=vowel|consonant`。
+- **唯一性**：`_register_bank(unique=[...])` 写入查重（不建索引），`unique_ci=True` 忽略大小写（单词）；更新排除自身。
+- **排序**：题库 `created_at DESC, id DESC`，年级/奖励 `id ASC`；写进 `_register_bank()` 内，无 order_fields 参数。
+- `App.tsx` 的 **`BankPage` 必须带 `key={cfg.key}`**，否则切库时筛选/页码串库。年级学期列配 `withGrade: true` 自动渲染，别手加。
+- **AI 补全由配置声明**：`BANK_CONFIGS.aiFill: {from, key, hint}`；后端 context 带 char/word/sentence 走单条补全，不带走批量生成。
+- **内置题库**：`seed/data/` 三包（2176 字 / 112 诗 / 740 词），`bank_import.py` 导入，入口「系统设置 → 内置题库」。导入幂等（按 汉字/诗标题/单词忽略大小写 查重跳过，不覆盖家长改过的内容）、**倒序写入**（同批 created_at 相同，正序会被 id DESC 顶乱）、不写 grade_id/term（年级只用于排序与折算等级）。数据包由 `scripts/build_*.py` 生成：单词按年级拆 g1–g6（一二年级人教新起点、三至六年级 PEP，`build_words.py` 带自检）；汉字结构靠 IDS 推断（`structure_of()` 三条兜底规则，改前抽查「火四云少太」）。
 
-23. **每日题量按科目在后台配置**（`services/settings.py` 的 `DEFAULTS`，设置页按语/数/英/其它四个标签页展示；0 表示当天不出该题型）：
-    - 语文：`chinese_read`（认读卡，默认 5）+ `chinese_word`（补全词语，默认 5）+ `chinese_poem`（古诗背诵，默认 1）。认读卡展示部首/笔画/结构/组词/例句；补全题给题字、答案是词里的另一个字，题字取已学过的字，干扰项按词内真实读音取同音字并排除一切能与题字拼成词的字（否则有两个答案）。
-    - 数学：`math_calc`（计算题，默认 15，按出题规则现算）+ `math_app`（应用题，默认 2，从同年级学期题库抽取）。
-    - 英语：`english_word_read`（单词朗读，默认 10）+ `english_phoneme_read`（音标朗读，默认 2）+ `english_phoneme_pick`（音标选词，默认 2）+ `english_word_choice`（看中文选英文，默认 2）+ `english_meaning_choice`（看英文选中文，默认 2）+ `english_sentence_count`（组句，默认 1）。朗读过的单词不再拿去出词义选择题，音标朗读过的也不再出音标选词；旧的布尔开关 `english_phoneme` / `english_sentence` 已删。
-    - 词库太小（`len(words) < 选择题总数`）时先给选择题留词，朗读卡会让路。
-    - 错题重练由 `retry_count`（默认 2）决定；`english_new_words` / `chinese_new_chars` / `poem_per_day` / `wrong_review_count` / `math_count` 这些旧配置已删除，`all_settings()` 只认 `DEFAULTS` 里的键，别再拿 `get_setting()` 读它们。
-    - **复习优先**：遗忘曲线（SRS）到期的字/词会优先占认读卡、朗读卡约四成名额（`taskgen._due_rows()`），剩余到期词在选择题里优先出现；组词题题字里到期字排最前面。重复率靠「复习占少数 + 新题为主」控制，别做成复习占大头。
+## 已删字段 / 旧接口（别加回来）
 
-24. **写 NULL 要用 `sqlalchemy.null()`**：`StudyRecord(is_correct=None)` 因为列上有 `default=False`，插进去会被顶成 `False`。凡是「未判定/不适用」的三态，都要显式写 `null()`。
+`chinese_char / poem / english_word / english_sentence` 的 `grade_id` + `term`；`unit`（`math_question.unit` 是答案单位，保留）；9 张表的 `sort_order`；`enabled`；`english_word.kind`；`math_rule.weight`；`math_question.difficulty`；`ai_enabled`；`POST /client/wrong-items/<id>/master`。对应迁移函数在 `seed/seed.py`（`_drop_legacy_*` 系列）。
 
 ## 开发约定
 
-- 后端：Blueprint 只做参数校验与序列化，业务放 `services/`；响应统一 `{ok, data}` / `{ok:false, error:{code,message}}`；写操作用短事务。
-- 前端：TS strict；只用 Tailwind（动画除外不写内联样式）；API 字段保持 **snake_case**，前后端一致，不做驼峰转换。
-- 新增题库实体：后端 `_register_bank(...)` 一行注册，前端往 `BANK_CONFIGS` 加一条配置，页面自动生成（表格 + 表单 + AI 入口）。`fields` 支持 `type: 'select'` 配 `options` 做中文下拉。
-- **「AI 补全」由配置声明，不要在表单里写死**：`BANK_CONFIGS` 里加 `aiFill: { from, key, hint }`，`from` 是家长先填的字段、`key` 是传给 `/admin/ai/suggest` 的生成类型（`char` / `word` / `sentence`）。后端 `ai.generate()` 看到 context 里带 `char` / `word` / `sentence` 就走单条补全（`_gen_char` / `_gen_word` / `_gen_sentence`），不带就走批量生成。补全结果按字段名通用合并，`from` 字段本身不回填。
-- 题库列表的「年级学期」列由 `Bank.tsx` 统一渲染（`gradeTermText()`），配置里只要 `withGrade: true` 就自动出现在表格最后一列，不要在 `columns` 里重复加学期列。
-- 组件不要引入新的 UI 库；`components/ui` 里的组件是 shadcn 同源手写版。
-- **客户端截图必须先绕开 PWA 离线包**：`web/scripts/shot.mjs` 里用 `serviceWorkers: 'block'` + 每次新建 context，否则 workbox 会把上一个版本的包喂给浏览器，截图看起来像改动没生效。截图默认落在 `docs/screenshots`。
-- **多值字段（组词、例词等）用 `components/ui/tag-input.tsx`**：表单字段声明 `type: 'list'`，值在 form state 里是 `string[]`，保存时 `JSON.stringify`。不要再用「逗号分隔的文本框」，家长一次填多个词时容易漏分隔符。
-- **复习队列和错题本的 `item_id` 必须是题库主键**，用 `taskgen.item_key(item)` 取（优先 `ref_id`，数学计算题走 `md5(kind+topic)`）。绝不能存 payload 里的 `item_id`（那是当天第几题），否则第二天复习会取到不相干的字。新增题型时记得在 item 里写 `ref_id`。
-- 后端新增设置项后，要确认真的有人读它（`get_setting`），并在 `Settings.tsx` 的 `NUMBERS` / `SWITCHES` 里露出，否则就是「写在默认值里没人用」。
+- 后端：Blueprint 只做参数校验与序列化，业务放 `services/`；响应统一 `{ok, data}` / `{ok:false, error:{code,message}}`；写操作短事务。
+- 前端：TS strict；只用 Tailwind（动画除外不写内联样式）；API 字段 snake_case 前后端一致，不做驼峰转换；不引入新 UI 库（`components/ui` 是 shadcn 同源手写版）。
+- 新增设置项要确认真的有人读（`get_setting`），并在 `Settings.tsx` 的 NUMBERS / SWITCHES / TAB_FIELDS 里露出。
+- 客户端截图用 `web/scripts/shot.mjs`（已带 serviceWorkers block 防 PWA 旧包），落 `docs/screenshots`。
+- 完成里程碑：勾 `docs/03-开发计划.md`，并在 `.workbuddy/memory/YYYY-MM-DD.md` 记一行结论。
 
-## 常见任务
+## 常用命令
 
 ```bash
-# 起后端（开发）
-cd api && .venv/bin/python run.py
-
-# 起前端（开发，5173 代理 /api 到 5001）
-cd web && npm run dev
-
-# 生产：构建后由 Flask 单端口托管
-cd web && npm run build && cd ../api && .venv/bin/python run.py
-
-# 重置数据库（会删掉所有学习记录）
-rm -f db.sqlite db.sqlite-wal db.sqlite-shm && cd api && .venv/bin/python run.py
-
-# 类型检查
-cd web && npx tsc --noEmit
+cd api && .venv/bin/python run.py     # 后端（开发）
+cd web && npm run dev                 # 前端（5173 代理 /api 到 5001）
+cd web && npm run build               # 生产构建，Flask 单端口托管
+cd web && npx tsc --noEmit            # 类型检查
+rm -f db.sqlite db.sqlite-wal db.sqlite-shm && cd api && .venv/bin/python run.py   # 重置数据库（删学习记录）
 ```
 
 ## 容器部署
 
-`Dockerfile` + `docker-entrypoint.sh`，`docker-compose.yml` 只是同一套参数的快捷方式，纯 `docker build` / `docker run` 的完整命令见 README「不用 compose：纯 docker 命令」。三条不能破的约定：
-
-1. **源码和 `db.sqlite` 都不进镜像**。镜像只有 Python 3.12 + Node 22 + Python 依赖 + gunicorn，运行时把仓库目录挂到 `/app`。不要在 Dockerfile 里加 `COPY . /app`。
-2. **默认 `APP_MODE=dev`，不构建前端**：Vite dev server 5173（HMR）+ `run.py` 5001（debug 自动重载）。`APP_MODE=prod` 才 `vite build` 到 `/var/lib/learneveryday/web-dist` 并起 gunicorn，靠 `WEB_DIST` 让 Flask 托管。
-3. **`web/node_modules` 和 `/var/lib/learneveryday` 必须是命名卷**，不能映射到宿主机（macOS 的 esbuild/rollup 二进制在 Linux 里跑不了）。
-
-依赖变化：`api/requirements.txt` 变了 → `pip install` 在容器启动时自动补（长期用还是重建镜像）；`web/package.json` 变了 → `docker restart` 就够，entrypoint 会自己 `npm ci`；只改业务代码 → 什么都不用做。
-
-镜像源统一走 `ARG`：`PIP_INDEX_URL`（清华）、`NPM_REGISTRY`（npmmirror）、`APT_MIRROR`（阿里云）。apt 那段 `RUN set -eux` 会把 `deb.debian.org` / `security.debian.org` 替换成 `APT_MIRROR` 的 host，同时兼容 deb822（`sources.list.d/debian.sources`）和老 `sources.list`；换源只改这几个 ARG，不要去手写 sources 文件。
+- 源码和 `db.sqlite` 都不进镜像，运行时把仓库挂到 `/app`；不要 `COPY . /app`。
+- 默认 `APP_MODE=dev`（Vite HMR + run.py 5001）；`prod` 才 `vite build` + gunicorn。
+- `web/node_modules` 与 `/var/lib/learneveryday` 必须是命名卷，不能映射宿主机目录（macOS↔Linux 二进制不兼容）。
+- 依赖：`requirements.txt` 变 → 启动自动 pip install；`package.json` 变 → `docker restart` 触发 npm ci。换源只改 ARG（`PIP_INDEX_URL` / `NPM_REGISTRY` / `APT_MIRROR`），别手写 sources 文件。纯 docker 命令见 README。
 
 ## 已知边界
 
-- 默认账号 `admin/admin123`，首次登录后必须提醒用户修改。
-- 识字库/古诗库/单词库已内置 2176 个常用字、112 首统编版古诗与 740 个小学英语单词（`api/app/seed/data/`），可在「系统设置 → 内置题库」一键导入；不足的再用「AI 补全」或「AI 生成」补。
-- 音标库是内置 48 个（20 元音 + 28 辅音），`allow_create=False / allow_delete=False`，只能编辑；seed 按 symbol 幂等补齐，不会覆盖家长改过的内容。
-- 浏览器 TTS 在部分离线场景不可用；需要稳定发音就给条目配 `audio_url`。
-- SQLite 并发写有限，多设备同时提交极端情况下会短暂锁表（已开 WAL + 15s timeout）。
-
-## 维护记忆
-
-每次完成一个里程碑，在 `docs/03-开发计划.md` 勾选对应项，并在 `.workbuddy/memory/YYYY-MM-DD.md` 记一行结论（做了什么、为什么这么选）。
+默认账号 `admin/admin123`（首次登录提醒改密）；浏览器 TTS 离线不可用，需稳定发音就配 `audio_url`；SQLite 并发写有限（已开 WAL + 15s timeout）。
