@@ -36,10 +36,12 @@ export default function RewardsPage() {
   }
 
   const remove = async (id: number) => {
-    if (!confirm('删除这个奖励？')) return
+    if (!confirm('删除这个奖励？兑换记录会保留，只是不再出现在孩子的兑换清单里。')) return
     try {
       await api.del(`/admin/rewards/${id}`, true)
+      toast.success('已删除')
       qc.invalidateQueries({ queryKey: ['admin-rewards'] })
+      qc.invalidateQueries({ queryKey: ['admin-redemptions'] })
     } catch (e) {
       toast.error(e instanceof Error ? e.message : '删除失败')
     }
@@ -116,7 +118,7 @@ export default function RewardsPage() {
               (redemptions.data ?? []).map((r: any) => (
                 <TableRow key={r.id}>
                   <TableCell>
-                    {r.reward_icon} {r.reward_name || `#${r.reward_id}`}
+                    {r.reward_icon} {r.reward_name || (r.reward_id ? `#${r.reward_id}` : '已删除的奖励')}
                   </TableCell>
                   <TableCell>{r.cost}</TableCell>
                   <TableCell>

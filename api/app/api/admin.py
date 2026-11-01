@@ -5,7 +5,7 @@ from pathlib import Path
 
 from flask import Blueprint, current_app, request, send_file
 from flask_jwt_extended import get_jwt_identity, jwt_required
-from sqlalchemy import Boolean, Integer, func, text
+from sqlalchemy import Boolean, Integer, func, or_, text
 
 from ..extensions import db
 from ..models import (
@@ -26,7 +26,6 @@ from ..models import (
     PointsLedger,
     Recitation,
     Redemption,
-    Recitation,
     Reward,
     StudyRecord,
     SrsItem,
@@ -275,8 +274,19 @@ def children_delete(child_id: int):
     child = Child.query.get(child_id)
     if child is None:
         return fail("NOT_FOUND", "孩子不存在", 404)
-    for model in (DailyTask, StudyRecord, Checkin, PointsLedger, WrongItem):
+    # 删孩子前把所有引用他的记录清干净，顺序按外键依赖来：
+    # 答题卡/学习记录/背诵都挂在 daily_task 上，兑换记录引用奖励，先清子表再删主表
+    task_ids = [t.id for t in DailyTask.query.filter_by(child_id=child_id).all()]
+    if task_ids:
+        TaskAnswer.query.filter(TaskAnswer.task_id.in_(task_ids)).delete(synchronize_session=False)
+    TaskAnswer.query.filter_by(child_id=child_id).delete(synchronize_session=False)
+    for rec in Recitation.query.filter_by(child_id=child_id).all():
+        storage.delete_recite(rec.file_path)
+        db.session.delete(rec)
+    Redemption.query.filter_by(child_id=child_id).delete(synchronize_session=False)
+    for model in (StudyRecord, Checkin, SrsItem, DailyTask, PointsLedger, WrongItem):
         model.query.filter_by(child_id=child_id).delete(synchronize_session=False)
+    Reward.query.filter_by(child_id=child_id).delete(synchronize_session=False)
     db.session.delete(child)
     db.session.commit()
     return ok({"deleted": True})
@@ -782,6 +792,17 @@ def rewards_delete(reward_id: int):
     row = Reward.query.get(reward_id)
     if row is None:
         return fail("NOT_FOUND", "奖励不存在", 404)
+    pending = Redemption.query.filter_by(reward_id=reward_id, status="pending").count()
+    if pending:
+        return fail("CONFLICT", f"还有 {pending} 条待审批的兑换申请，先通过或驳回再删除", 409)
+    # 历史兑换记录不能跟着删（已扣的积分流水指向它），只断开关联、补上名称快照
+    Redemption.query.filter(
+        Redemption.reward_id == reward_id,
+        or_(Redemption.reward_name.is_(None), Redemption.reward_name == ""),
+    ).update({"reward_name": row.name, "reward_icon": row.icon or "🎁"}, synchronize_session=False)
+    Redemption.query.filter_by(reward_id=reward_id).update(
+        {"reward_id": None}, synchronize_session=False
+    )
     db.session.delete(row)
     db.session.commit()
     return ok({"deleted": True})
@@ -798,8 +819,9 @@ def redemptions_list():
     data = []
     for r in rows:
         item = r.to_dict()
-        item["reward_name"] = r.reward.name if r.reward else ""
-        item["reward_icon"] = r.reward.icon if r.reward else ""
+        # 奖励被删掉后关系为空，用下单时记下的快照兜底
+        item["reward_name"] = r.reward.name if r.reward else (r.reward_name or "已删除的奖励")
+        item["reward_icon"] = r.reward.icon if r.reward else (r.reward_icon or "🎁")
         data.append(item)
     return ok(data)
 

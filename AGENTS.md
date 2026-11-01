@@ -32,6 +32,8 @@
 - **错题只能靠重做关闭**：①当天重练累计答对 2 次（`submit._upsert_wrong`）；②错题本专项订正 `/client/wrong-practice/*` 答对 1 次。题目由 `wrong_item.snapshot_json` 还原；快照残缺的要在列表提示「再做一次原题后就能订正」，别留点不动的死按钮。
 - **古诗与朗读卡不判分**：`NO_SCORE_KINDS`（poem）/ `NO_SCORE_TYPES`（word_read/phoneme_read/char_read）不进总分、不进错题本、不发积分。朗读提交 `READ_ANSWER`（`__read__`）后**必须记 SRS**——朗读是新字词唯一的「学过」入口，不记第二天会当新内容重发。判断一律用 type/kind 白名单。客户端朗读/认读卡要停留 `quiz.tsx` 的 `READ_MIN_SECONDS`（10s）才能点「下一个」，防连点刷完。
 - **物理删除**：模型没有 `enabled`，删除即 `db.session.delete()`，不做软删除。
+- **奖励可以删，兑换记录不跟着删**：`redemption.reward_id` 可空，另有 `reward_name / reward_icon` 快照（下单时写入）。删除奖励时先看有没有 `pending` 申请（有就 409 拒绝），历史记录只把 `reward_id` 断成 NULL、名称靠快照显示——不能级联删，积分流水 `ref_type='redemption'` 还指着它。
+- **删孩子要按外键顺序清子表**：`task_answer → recitation`（含 `storage.delete_recite()`）`→ study_record → daily_task → checkin / srs_item / points_ledger / wrong_item → redemption → reward`。漏一张就撞外键，前端表现为「服务端异常 FOREIGN KEY constraint failed」。
 - **写 NULL 用 `sqlalchemy.null()`**：列有 `default=False`，直接传 `None` 会被顶成 `False`。
 
 ## 出题

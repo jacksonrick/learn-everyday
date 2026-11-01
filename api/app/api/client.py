@@ -456,7 +456,14 @@ def redeem():
     if balance < reward.cost:
         return fail("VALIDATION_ERROR", f"积分不足，还差 {reward.cost - balance} 分", 400)
 
-    row = Redemption(child_id=child.id, reward_id=reward.id, cost=reward.cost, status="pending")
+    row = Redemption(
+        child_id=child.id,
+        reward_id=reward.id,
+        reward_name=reward.name,
+        reward_icon=reward.icon or "🎁",
+        cost=reward.cost,
+        status="pending",
+    )
     db.session.add(row)
     db.session.commit()
     return ok({"id": row.id, "status": row.status, "cost": row.cost})
@@ -497,16 +504,20 @@ def wrong_practice_list():
             # 快照残缺（早期数据或题型改造），没法重做，只能靠再做一次原题补上
             continue
         options = snap.get("options") or []
+        # 句子排序（type=order）没有选项，但带词块，重做时要点词成句而不是填空
+        tokens = snap.get("tokens") or []
         items.append(
             {
                 "wrong_id": row.id,
                 "subject": row.subject,
                 "item_type": row.item_type,
                 "kind": snap.get("kind") or row.item_type,
+                "type": snap.get("type") or "",
                 "ref_text": row.ref_text,
                 "stem": snap.get("stem"),
                 "options": options,
-                "input": not options,
+                "tokens": tokens,
+                "input": not options and not tokens,
                 "wrong_count": row.wrong_count or 1,
                 "correct_streak": row.correct_streak or 0,
                 "last_wrong_at": row.last_wrong_at,

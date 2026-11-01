@@ -486,6 +486,53 @@ def _drop_english_word_kind():
     current_app.logger.info("已移除单词库的类型字段")
 
 
+def _relax_redemption_reward_fk():
+    """v12 起奖励可以删除：兑换记录保留奖励名快照，reward_id 允许为空。
+
+    以前 reward_id 是 NOT NULL 外键，家长删掉一个兑换过的奖励会撞外键报错。
+    SQLite 改不了列约束，只能按原 DDL 重建表；重建前先把历史记录的奖励名回填进快照列。
+    """
+    inspector = inspect(db.engine)
+    tables = set(inspector.get_table_names())
+    if "redemption" not in tables:
+        return
+    cols = {c["name"] for c in inspector.get_columns("redemption")}
+    added = []
+    for col, ddl in (("reward_name", "VARCHAR(60) DEFAULT ''"), ("reward_icon", "VARCHAR(16) DEFAULT ''")):
+        if col not in cols:
+            db.session.execute(text(f"ALTER TABLE redemption ADD COLUMN {col} {ddl}"))
+            added.append(col)
+    if "reward" in tables:
+        for col, source in (("reward_name", "name"), ("reward_icon", "icon")):
+            db.session.execute(
+                text(
+                    f"UPDATE redemption SET {col} = "
+                    f"(SELECT reward.{source} FROM reward WHERE reward.id = redemption.reward_id) "
+                    f"WHERE ({col} IS NULL OR {col} = '') AND reward_id IS NOT NULL"
+                )
+            )
+    db.session.commit()
+
+    row = db.session.execute(
+        text("select sql from sqlite_master where type='table' and name='redemption'")
+    ).fetchone()
+    if row is None or not row[0]:
+        return
+    if not re.search(r"[\"']?reward_id[\"']?\s+INTEGER\s+NOT NULL", row[0], re.I):
+        return
+    new_ddl = re.sub(r"([\"']?reward_id[\"']?\s+INTEGER)\s+NOT NULL", r"\1", row[0], flags=re.I)
+    existing = [c["name"] for c in inspect(db.engine).get_columns("redemption")]
+    quoted = ", ".join(f'"{c}"' for c in existing)
+    db.session.execute(text('ALTER TABLE "redemption" RENAME TO "redemption__old"'))
+    db.session.execute(text(new_ddl))
+    db.session.execute(
+        text(f'INSERT INTO "redemption" ({quoted}) SELECT {quoted} FROM "redemption__old"')
+    )
+    db.session.execute(text('DROP TABLE "redemption__old"'))
+    db.session.commit()
+    current_app.logger.info("已允许删除已兑换过的奖励（兑换记录保留名称快照）")
+
+
 def _run_migrations():
     version = _data_version()
     if version < 2:
@@ -517,6 +564,9 @@ def _run_migrations():
     if version < 11:
         _drop_english_word_kind()
         _set_data_version(11)
+    if version < 12:
+        _relax_redemption_reward_fk()
+        _set_data_version(12)
 
 
 def _fix_poem_record_result():

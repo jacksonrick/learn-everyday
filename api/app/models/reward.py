@@ -30,7 +30,11 @@ class Redemption(BaseModel):
     __tablename__ = "redemption"
 
     child_id = db.Column(db.Integer, db.ForeignKey("child.id"), nullable=False)
-    reward_id = db.Column(db.Integer, db.ForeignKey("reward.id"), nullable=False)
+    # 奖励可以被删掉（家长不想要了），历史兑换记录要留着，所以这里允许为空
+    reward_id = db.Column(db.Integer, db.ForeignKey("reward.id"), nullable=True)
+    # 下单时记下奖励名与图标：奖励删掉后兑换记录仍然看得懂当时换的是什么
+    reward_name = db.Column(db.String(60), default="")
+    reward_icon = db.Column(db.String(16), default="")
     cost = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String(10), default="pending")
     note = db.Column(db.String(200), default="")

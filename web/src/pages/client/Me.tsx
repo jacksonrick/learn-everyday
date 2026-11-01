@@ -571,6 +571,7 @@ function WrongPractice({
 }) {
   const [index, setIndex] = useState(0)
   const [answer, setAnswer] = useState('')
+  const [picked, setPicked] = useState<number[]>([])
   const [feedback, setFeedback] = useState<any | null>(null)
   const [sending, setSending] = useState(false)
   const [fixed, setFixed] = useState(0)
@@ -582,14 +583,20 @@ function WrongPractice({
   const item = queue[index]
   const startedAt = useMemo(() => Date.now(), [index, again])
 
+  // 句子排序题和打卡里的组句题一样：点词成句，不给输入框
+  const tokens: string[] = item?.tokens ?? []
+  const isOrder = tokens.length > 0
+  const orderText = picked.map((i) => tokens[i]).join(' ')
+
   const submit = async () => {
-    if (!answer.trim() || sending) return
+    const final = isOrder ? orderText : answer.trim()
+    if (!final || sending) return
     setSending(true)
     try {
       const res = await api.post<any>('/client/wrong-practice/check', {
         child_id: childId,
         wrong_id: item.wrong_id,
-        answer: answer.trim(),
+        answer: final,
         duration_ms: Date.now() - startedAt,
       })
       setFeedback(res)
@@ -605,12 +612,14 @@ function WrongPractice({
   const next = () => {
     setIndex((i) => i + 1)
     setAnswer('')
+    setPicked([])
     setFeedback(null)
   }
 
   const retry = () => {
     setAgain((n) => n + 1)
     setAnswer('')
+    setPicked([])
     setFeedback(null)
   }
 
@@ -663,7 +672,44 @@ function WrongPractice({
         </div>
         <p className="mt-3 text-lg font-medium leading-relaxed">{item.stem}</p>
 
-        {options.length > 0 ? (
+        {isOrder ? (
+          <div className="mt-4 space-y-3">
+            <div className="flex min-h-[64px] flex-wrap items-center gap-1.5 rounded-2xl border-2 border-dashed border-line/80 bg-paper-card p-3">
+              {orderText ? (
+                <span className="text-lg leading-relaxed">{orderText}</span>
+              ) : (
+                <span className="text-sm text-ink-soft">点下面的单词组句</span>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {tokens.map((token, i) => (
+                <button
+                  key={`${token}-${i}`}
+                  disabled={picked.includes(i) || !!feedback}
+                  onClick={() => setPicked([...picked, i])}
+                  className={cn(
+                    'rounded-xl border px-3 py-2 text-sm transition-all',
+                    picked.includes(i)
+                      ? 'border-line/60 bg-paper-deep text-ink-soft opacity-40'
+                      : 'border-line/80 bg-paper-card hover:border-persimmon/50',
+                  )}
+                >
+                  {token}
+                </button>
+              ))}
+            </div>
+            {!feedback && (
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={!picked.length}
+                onClick={() => setPicked(picked.slice(0, -1))}
+              >
+                撤销一个
+              </Button>
+            )}
+          </div>
+        ) : options.length > 0 ? (
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             {options.map((opt) => (
               <button
@@ -717,7 +763,7 @@ function WrongPractice({
 
         <div className="mt-5 flex flex-wrap gap-3">
           {!feedback ? (
-            <Button disabled={!answer.trim() || sending} onClick={submit}>
+            <Button disabled={!(isOrder ? picked.length : answer.trim()) || sending} onClick={submit}>
               {sending ? '判分中…' : '提交答案'}
             </Button>
           ) : feedback.correct ? (
@@ -725,8 +771,10 @@ function WrongPractice({
           ) : (
             <Button onClick={retry}>再做一次</Button>
           )}
-          {feedback && !feedback.correct && answer && (
-            <p className="self-center text-xs text-ink-soft">你的答案：{answer}</p>
+          {feedback && !feedback.correct && (isOrder ? orderText : answer) && (
+            <p className="self-center text-xs text-ink-soft">
+              你的答案：{isOrder ? orderText : answer}
+            </p>
           )}
         </div>
       </Card>
