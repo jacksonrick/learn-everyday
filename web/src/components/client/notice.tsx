@@ -68,9 +68,6 @@ export function EmptyNotice({ title, tip, to }: { title: string; tip: string; to
         <Button asChild variant="outline">
           <Link to="/">回到今日</Link>
         </Button>
-        <Button asChild>
-          <Link to={to}>去整理题库</Link>
-        </Button>
       </div>
     </Card>
   )

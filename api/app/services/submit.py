@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 
 from ..extensions import db
-from ..models import Checkin, DailyTask, Recitation, StudyRecord, TaskAnswer, WrongItem
+from ..models import Checkin, DailyTask, StudyRecord, TaskAnswer, WrongItem
 from ..utils.dates import now_iso, today_str
 from . import grading, points, srs, taskgen
 from .settings import get_setting
@@ -90,6 +90,8 @@ def _snapshot(item) -> dict:
     keys = (
         "kind", "type", "stem", "answer", "options", "tokens", "unit", "topic", "level",
         "char", "pinyin", "radical", "strokes", "structure", "words", "sentence",
+        # blank 决定补全题的空框在题字左边还是右边，漏了它重练时词序会反过来
+        "blank",
         "word", "phonetic", "pos", "meaning", "example", "example_cn",
         "symbol", "category", "mouth_tip", "en", "cn", "key_words", "line",
         "masked", "blanks", "solution",
@@ -282,10 +284,8 @@ def submit(child, subject: str, answers: list[dict], today: str | None = None) -
 
     # 错题订正：重练答对才给分，每天有上限，防止靠刷错题攒积分
     fix_points = int(get_setting("point_wrong_fix") or 0)
-    fix_cap = int(get_setting("point_wrong_fix_cap") or 0)
     if retry_ok and fix_points > 0:
-        already = points.earned_by_reason(child.id, "wrong_fix", today)
-        room = retry_ok * fix_points if fix_cap <= 0 else max(0, fix_cap - already)
+        room = retry_ok * fix_points
         delta = min(retry_ok * fix_points, room)
         if delta > 0:
             got = points.add(child.id, delta, "wrong_fix", "task", task.id, today=today)

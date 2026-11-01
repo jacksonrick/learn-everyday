@@ -17,7 +17,7 @@ api/
     extensions.py     db / jwt / cors + SQLite PRAGMA（WAL、外键）
     models/           base / catalog（年级·孩子）/ bank（三科题库）/ study / reward / system
     api/              client.py（客户端，无鉴权）、auth.py、admin.py（后台，JWT）
-    services/         mathgen（出题器注册表）、taskgen（每日任务）、grading、submit、points、srs、settings、ai（大模型）
+    services/         mathgen（出题器注册表）、taskgen（每日任务）、grading、submit、points、srs、settings、homophone（同音字）、ai（大模型）
     seed/seed.py      首次启动写入年级、账号、数学规则、示例题库、示例孩子、奖励
     utils/            responses（统一响应）、dates
   run.py
@@ -62,22 +62,24 @@ web/
 12. **AI 去重口径必须与唯一性校验一致**：诗按标题、词按 word、句按 en 都是**全库**唯一，所以 `_existing_for_ai()` 必须把全库已有内容交给模型。曾按当前年级过滤，导致「选四年级生成 5 首，4 首因与一年级重复被 409 拒绝」。
 13. **补充要求要进提示词**：前端所有 AI 弹窗都会传 `context.requirement`，由 `ai._extra_line(context)` 统一拼进六类提示词。新增生成类型时记得把 `extra` 接上，否则输入框会变成摆设。条数也要写死（`items 里必须有 N 个元素`），`max_tokens` 随 count 增长。
 14. **没有排序字段**：9 张表的 `sort_order` 已删（v5 迁移 `_drop_legacy_sort_columns()`）。题库列表统一 `created_at DESC, id DESC`（最新的在最上面），年级/奖励用 `id ASC`（学段顺序、建奖励的顺序）。`_register_bank()` 不再收 `order_fields` 参数，排序写在里面；新增题库实体不用再配排序。语文英语取题是全库随机，数学按规则生成，都不再依赖 id 顺序。
-15. **内置题库**：`app/seed/data/` 下有两个离线数据包（2176 字、112 首古诗），由 `scripts/build_chars.py` / `scripts/build_poems.py` 生成，导入逻辑在 `services/bank_import.py`，后台入口在「系统设置 → 内置题库」，接口是 `GET /admin/bank/builtin` + `POST /admin/bank/import`。
-   - 导入**幂等**：按 汉字 / 古诗标题 查重后跳过，不覆盖已有记录（家长改过的内容不能被数据包冲掉）。
+15. **内置题库**：`app/seed/data/` 下有三个离线数据包（2176 字、112 首古诗、740 个英语单词），由 `scripts/build_chars.py` / `scripts/build_poems.py` / `scripts/build_words.py` 生成，导入逻辑在 `services/bank_import.py`，后台入口在「系统设置 → 内置题库」，接口是 `GET /admin/bank/builtin` + `POST /admin/bank/import`（`kinds` 取 `chars / poems / words`）。
+   - 导入**幂等**：按 汉字 / 古诗标题 / 单词（**忽略大小写**）查重后跳过，不覆盖已有记录（家长改过的内容不能被数据包冲掉）。单词查重要和后台新增一致（`func.lower(word)` 比对），否则 `Apple` 和 `apple` 会各留一条。
    - 写入必须**倒序遍历**：同一批 `created_at` 相同，列表按 `id DESC` 排会把六年级顶到最前；倒序插入后 id 才回到教材顺序。
-   - 导入只写字形/文本内容，**不写 `grade_id` / `term`**（这两列已从题库表删除）；数据包里的年级只用于保持教材顺序。
+   - 导入只写字形/文本内容，**不写 `grade_id` / `term`**（这两列已从题库表删除）；数据包里的年级只用于保持教材顺序与折算等级。
+   - 单词包按年级拆在 `scripts/words/g1.py` … `g6.py`（元组 = 单词/音标/词性/释义/例句/例句翻译）。一、二年级取人教**新起点**，三至六年级取人教 **PEP**——PEP 没有一二年级课本，两条线拼起来才是 1-6 年级。`build_words.py` 会自检重复词、音标格式、词性取值范围与空字段，不通过直接退出。
    - 结构字段靠 IDS 推断，三条兜底规则见 `build_chars.py` 的 `structure_of()`：部首即本字 → 独体；末级部件全是笔画 → 独体；笔画 ≤ 4 的上下/全包围 → 独体。改这块先跑一遍 `build_chars.py` 抽查「火、四、云、少、太」这些典型字。
 16. **年级是内置只读数据**：`seed.GRADES` 只有 9 条（一年级~六年级、初一~初三），没有高中。`seed._seed_grades()` 每次启动同步：补齐缺失、删掉多余（先清 `child.grade_id` 与挂在它上面的数学规则/应用题）。后台只有 `GET /admin/grades`，没有增删改，前端也没有年级管理页；孩子在「系统 → 孩子管理」。
 18. **错题只能靠重做关闭**：`POST /client/wrong-items/<id>/master` 已删除，不要再加回来。关闭路径有两条：① 当天任务里的重练题累计答对 2 次（`submit._upsert_wrong`）；② 错题本专项订正 `GET /client/wrong-practice` + `POST /client/wrong-practice/check` 答对 1 次。题目一律由 `wrong_item.snapshot_json` 还原，快照残缺的条目列表里要提示「再做一次原题后就能订正」，别让它变成一个点不动的死按钮。
-20. **等级（难度）只有一份定义**：`services/level.py` 里的 `LEVELS`（容易/较易/中等/较难/困难）+ `RATIOS`（20/30/30/15/5）+ `GRADE_LEVEL`（1、2 年级容易 … 6 年级困难）。六张表（`chinese_char / poem / english_word / english_sentence / math_rule / math_question`）的 `level` 列都靠它归一，别再复制一份比例常量。
+20. **等级（难度）只有一份定义**：`services/level.py` 里的 `LEVELS`（容易/较易/中等/较难/困难）+ `RATIOS`（10/40/30/15/5）+ `GRADE_LEVEL`（1、2 年级容易 … 6 年级困难）。六张表（`chinese_char / poem / english_word / english_sentence / math_rule / math_question`）的 `level` 列都靠它归一，别再复制一份比例常量。
    - 出题：新题走 `level.split()`（语文新字、英语新词、数学应用题）或 `level.pick_one()`（古诗、英语句子）；**复习题和错题重练不按比例**，该复习就得复习。某档题库空了配额自动让给其它档，不会少题。
    - 数学计算题靠 `math_rule.level` 分配配额，但规则本身按「年级 + 学期」过滤，同一学期往往全在同一档，配额会回补——这不是 bug。
    - 导入：数据包的 `grade`（教材年级）用 `level_svc.from_grade()` 折算，绝不直接写 grade 列。
    - 新增题库实体：模型加 `level`、`_register_bank` 白名单加 `"level"`、`BANK_CONFIGS` 加一列 + 一个 `type: 'select'` 字段（`options: LEVEL_OPTIONS`）。后台 `_coerce` 会把空值/脏值归一到「中等」，不用前端兜。
    - `math_question.difficulty(1-3)` 已删，别再引回来。
 
-22. **题库检索过滤是通用的，不要按库写死**：`admin._filtered()` 里遍历 `_FILTER_COLUMNS`（`level / pos / kind / type / category / genre`），模型上有这一列且请求带了同名参数才加 `WHERE`。前端只在 `BANK_CONFIGS` 里写 `filters: [{ name, label, options }]`，`name` 直接当查询参数传给后端。所以加新过滤器 = 后端加列名进 `_FILTER_COLUMNS`（如需）+ 前端加一条 `filters`，不要在接口里写 `if prefix == 'words'` 这种分支。
+22. **题库检索过滤是通用的，不要按库写死**：`admin._filtered()` 里遍历 `_FILTER_COLUMNS`（`level / pos / type / category / genre`），模型上有这一列且请求带了同名参数才加 `WHERE`。前端只在 `BANK_CONFIGS` 里写 `filters: [{ name, label, options }]`，`name` 直接当查询参数传给后端。所以加新过滤器 = 后端加列名进 `_FILTER_COLUMNS`（如需）+ 前端加一条 `filters`，不要在接口里写 `if prefix == 'words'` 这种分支。
     - 音标库没有 `level` 列，天然不支持难度过滤；它用 `type=vowel|consonant`。
+    - **`english_word.kind` 已删**（`data_version=11`，见 `seed._drop_english_word_kind()`）：单词不再分「单词 / 短语」，所以 `kind` 也一并从 `_FILTER_COLUMNS` 里去掉了。别再引回来。
     - `App.tsx` 的 `BankPage` 必须带 `key={cfg.key}`，否则切库时筛选/页码状态会串到下一个库。
     - **`math_rule.weight` 已删**（`data_version=9`）：出题比例只由 `level` 决定，同档规则等概率。别再引回权重。
     - 错题重练与当天题去重时，数学（`kind == 'math'`）要比 `stem` 而不是 `item_key()`——数学的 `item_key` 是按知识点聚合的哈希，用它去重会把同知识点的题全删掉（20 题变 10 题），见 `_dedupe_key()`。
@@ -92,11 +94,13 @@ web/
     - 朗读/认读卡：客户端点「下一个」时提交 `taskgen.READ_ANSWER`（`__read__`），`submit` 只记一条「已朗读 / 已认读」的学习记录 + 一条 SRS（`srs.record(..., True)`）。**SRS 不能省**：朗读是新词新字唯一的「学过」入口，不记的话第二天又当成新内容重发。
     - 两者判断都用 `item["type"]` / `item["kind"]` 的白名单，别再指望 `type == 'recite'`。
 
-23. **每日题量是写死的结构，不是配置项**（`taskgen` 顶部常量）：
-    - 语文：`char_read` 5 + `word_choice` 5 + `recite` 1；认读卡展示部首/笔画/结构/组词/例句，组词题从全库随机出（排除当天认读过的字）。
-    - 英语：`word_read` 由 `english_word_read`（默认 10）决定 + `phoneme_read` 2 + `word_choice` 2 + `meaning_choice` 2 + `choice`（音标选词）2 + `order` 1；朗读过的单词不再拿去出词义选择题，音标朗读过的也不再出音标选词。
-    - 词库太小（`len(words) < 4`）时先给选择题留 4 个词，朗读卡会让路；音标/句子两个开关关掉就整段不出。
-    - 错题重练固定 `RETRY_LIMIT = 2` 道，`english_new_words` / `chinese_new_chars` / `poem_per_day` / `wrong_review_count` 这些旧配置已删除，`all_settings()` 只认 `DEFAULTS` 里的键，别再拿 `get_setting()` 读它们。
+23. **每日题量按科目在后台配置**（`services/settings.py` 的 `DEFAULTS`，设置页按语/数/英/其它四个标签页展示；0 表示当天不出该题型）：
+    - 语文：`chinese_read`（认读卡，默认 5）+ `chinese_word`（补全词语，默认 5）+ `chinese_poem`（古诗背诵，默认 1）。认读卡展示部首/笔画/结构/组词/例句；补全题给题字、答案是词里的另一个字，题字取已学过的字，干扰项按词内真实读音取同音字并排除一切能与题字拼成词的字（否则有两个答案）。
+    - 数学：`math_calc`（计算题，默认 15，按出题规则现算）+ `math_app`（应用题，默认 2，从同年级学期题库抽取）。
+    - 英语：`english_word_read`（单词朗读，默认 10）+ `english_phoneme_read`（音标朗读，默认 2）+ `english_phoneme_pick`（音标选词，默认 2）+ `english_word_choice`（看中文选英文，默认 2）+ `english_meaning_choice`（看英文选中文，默认 2）+ `english_sentence_count`（组句，默认 1）。朗读过的单词不再拿去出词义选择题，音标朗读过的也不再出音标选词；旧的布尔开关 `english_phoneme` / `english_sentence` 已删。
+    - 词库太小（`len(words) < 选择题总数`）时先给选择题留词，朗读卡会让路。
+    - 错题重练由 `retry_count`（默认 2）决定；`english_new_words` / `chinese_new_chars` / `poem_per_day` / `wrong_review_count` / `math_count` 这些旧配置已删除，`all_settings()` 只认 `DEFAULTS` 里的键，别再拿 `get_setting()` 读它们。
+    - **复习优先**：遗忘曲线（SRS）到期的字/词会优先占认读卡、朗读卡约四成名额（`taskgen._due_rows()`），剩余到期词在选择题里优先出现；组词题题字里到期字排最前面。重复率靠「复习占少数 + 新题为主」控制，别做成复习占大头。
 
 24. **写 NULL 要用 `sqlalchemy.null()`**：`StudyRecord(is_correct=None)` 因为列上有 `default=False`，插进去会被顶成 `False`。凡是「未判定/不适用」的三态，都要显式写 `null()`。
 
@@ -147,7 +151,7 @@ cd web && npx tsc --noEmit
 ## 已知边界
 
 - 默认账号 `admin/admin123`，首次登录后必须提醒用户修改。
-- 识字库/古诗库已内置 2178 个常用字与 112 首统编版古诗（`api/app/seed/data/`），可在「系统设置 → 内置题库」一键导入；不足的再用「AI 补全」或「AI 生成」补。
+- 识字库/古诗库/单词库已内置 2176 个常用字、112 首统编版古诗与 740 个小学英语单词（`api/app/seed/data/`），可在「系统设置 → 内置题库」一键导入；不足的再用「AI 补全」或「AI 生成」补。
 - 音标库是内置 48 个（20 元音 + 28 辅音），`allow_create=False / allow_delete=False`，只能编辑；seed 按 symbol 幂等补齐，不会覆盖家长改过的内容。
 - 浏览器 TTS 在部分离线场景不可用；需要稳定发音就给条目配 `audio_url`。
 - SQLite 并发写有限，多设备同时提交极端情况下会短暂锁表（已开 WAL + 15s timeout）。

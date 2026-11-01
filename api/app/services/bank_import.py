@@ -4,6 +4,7 @@
 
 - ``chars_primary.json``：小学常用汉字 2176 个，带拼音、部首、笔画、结构、组词
 - ``poems_primary.json``：统编版小学语文课内古诗词 112 首
+- ``words_primary.json``：人教 PEP / 新起点小学英语 1-6 年级词汇，带音标、词性、释义、例句
 
 语文、英语题库不关联年级学期（只有数学按年级学期出题），所以数据包里的
 年级/学期字段不再入库；但数据包里的 ``grade`` 会折算成**难度等级**写进 level：
@@ -12,8 +13,9 @@
 
 出题时按 10% / 40% / 30% / 15% / 5% 的等级比例抽题（见 ``services/level.py``）。
 
-两个数据包都由 ``scripts/`` 下的构建脚本从开放数据生成，详见各脚本头部说明。
-导入是幂等的：以汉字、古诗标题为唯一键，已存在的跳过，不会覆盖家长改过的内容。
+三个数据包都由 ``scripts/`` 下的构建脚本生成，详见各脚本头部说明。
+导入是幂等的：以汉字、古诗标题、单词（忽略大小写）为唯一键，已存在的跳过，
+不会覆盖家长改过的内容。
 """
 
 from __future__ import annotations
@@ -23,13 +25,14 @@ from functools import lru_cache
 from pathlib import Path
 
 from ..extensions import db
-from ..models import ChineseChar, Poem
+from ..models import ChineseChar, EnglishWord, Poem
 from . import level as level_svc
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "seed" / "data"
 
 CHARS_FILE = "chars_primary.json"
 POEMS_FILE = "poems_primary.json"
+WORDS_FILE = "words_primary.json"
 
 
 @lru_cache(maxsize=4)
@@ -49,6 +52,11 @@ def _existing_titles() -> set[str]:
     return {row[0] for row in db.session.query(Poem.title).all()}
 
 
+def _existing_words() -> set[str]:
+    """单词的唯一性校验忽略大小写（Apple 与 apple 算同一个词）。"""
+    return {(row[0] or "").strip().lower() for row in db.session.query(EnglishWord.word).all()}
+
+
 def _level_counts(items) -> dict:
     """数据包按 grade 折算后的等级分布，后台导入前先让家长看一眼。"""
     counts = {}
@@ -62,8 +70,10 @@ def preview() -> dict:
     """内置题库概况，用于后台展示「可导入多少条」。"""
     chars = load(CHARS_FILE)["items"]
     poems = load(POEMS_FILE)["items"]
+    words = load(WORDS_FILE)["items"]
     have_chars = _existing_chars()
     have_titles = _existing_titles()
+    have_words = _existing_words()
     return {
         "chars": {
             "total": len(chars),
@@ -76,6 +86,14 @@ def preview() -> dict:
             "available": sum(1 for p in poems if p["title"] not in have_titles),
             "existing": Poem.query.count(),
             "levels": _level_counts(poems),
+        },
+        "words": {
+            "total": len(words),
+            "available": sum(
+                1 for w in words if (w.get("word") or "").strip().lower() not in have_words
+            ),
+            "existing": EnglishWord.query.count(),
+            "levels": _level_counts(words),
         },
     }
 
@@ -135,6 +153,40 @@ def import_poems() -> dict:
             translation="",
             notes="",
             appreciation="",
+            level=level_svc.from_grade(item.get("grade")),
+            audio_url="",
+        ))
+        added += 1
+    if rows:
+        db.session.add_all(rows)
+        db.session.commit()
+    return {"created": added, "skipped": skipped, "total": len(items)}
+
+
+def import_words() -> dict:
+    """导入英语单词库。英语题库不关联年级学期，全库随机出题。
+
+    数据包已按「一年级 → 六年级、单元顺序」排好，倒序写入后列表打开就是低年级词。
+    单词查重忽略大小写，与后台新增时的唯一性校验保持一致。
+    """
+    items = load(WORDS_FILE)["items"]
+    have = _existing_words()
+    added = skipped = 0
+    rows = []
+    for item in reversed(items):
+        word = (item.get("word") or "").strip()
+        key = word.lower()
+        if not word or key in have:
+            skipped += 1
+            continue
+        have.add(key)
+        rows.append(EnglishWord(
+            word=word,
+            phonetic=item.get("phonetic", ""),
+            pos=item.get("pos", ""),
+            meaning=item.get("meaning", ""),
+            example=item.get("example", ""),
+            example_cn=item.get("example_cn", ""),
             level=level_svc.from_grade(item.get("grade")),
             audio_url="",
         ))

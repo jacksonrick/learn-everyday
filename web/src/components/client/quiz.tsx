@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { Check, Delete, RotateCcw, Volume2, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
@@ -26,6 +25,15 @@ function SpeakButton({ onClick, label = '播放读音' }: { onClick: () => void;
   )
 }
 
+/** 补全词语题的空框，跟题字一样高，摆左还是摆右由 blank 决定 */
+function FillBlank() {
+  return (
+    <span className="flex h-[68px] w-[68px] items-center justify-center rounded-2xl border-2 border-dashed border-border text-2xl text-muted-foreground">
+      ?
+    </span>
+  )
+}
+
 type Props = {
   subject: string
   items: QuizItem[]
@@ -35,16 +43,8 @@ type Props = {
   onExit?: () => void
 }
 
-type Prefs = { audio_enabled: boolean; instant_feedback: boolean }
-
 export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props) {
   const childId = useChildStore((s) => s.childId)
-  const { data: prefs } = useQuery({
-    queryKey: ['client-prefs'],
-    queryFn: () => api.get<Prefs>('/client/prefs'),
-    staleTime: 60_000,
-  })
-  const audioOn = prefs?.audio_enabled !== false
   const [index, setIndex] = useState(0)
   const [value, setValue] = useState('')
   const [picked, setPicked] = useState<number[]>([])
@@ -63,6 +63,8 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
   const isWordChoice = item?.type === 'word_choice' && item?.kind === 'word'
   // 朗读/认读卡：只展示信息 + 发音，点「下一个」即可
   const isRead = READ_TYPES.includes(String(item?.type ?? ''))
+  // 语文补全词语：题字 + 空框，选项是单字，答案在词里的另一头
+  const isFillChar = item?.type === 'fill_char'
 
   useEffect(() => {
     setValue('')
@@ -164,7 +166,7 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
       </div>
 
       <div className="flex-1">
-        {item.kind === 'char' && !isRead && (
+        {item.kind === 'char' && !isRead && !isFillChar && (
           <div className="mb-4 flex flex-col items-center gap-2">
             <div className="text-[76px] font-medium leading-none tracking-widest text-foreground">
               {item.char as string}
@@ -172,19 +174,31 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
           </div>
         )}
 
+        {/* 补全词语：「花 ＿」选“朵”。空框左右取决于题字在词里的位置 */}
+        {isFillChar && (
+          <div className="mb-5 flex flex-col items-center gap-3">
+            <div className="flex items-center justify-center gap-2">
+              {item.blank === 'left' && <FillBlank />}
+              <span className="text-[68px] font-medium leading-none tracking-widest text-foreground">
+                {String(item.char ?? '')}
+              </span>
+              {item.blank !== 'left' && <FillBlank />}
+            </div>
+            <span className="text-sm text-muted-foreground">补一个字，组成词语</span>
+          </div>
+        )}
+
         {item.kind === 'word' && !isWordChoice && !isRead && (
           <div className="mb-4 flex flex-col items-center gap-1">
             <div className="flex items-center gap-2">
               <span className="text-3xl font-semibold">{item.word as string}</span>
-              {audioOn && (
-                <button
-                  onClick={speakCurrent}
-                  className="rounded-full bg-muted p-1.5 text-muted-foreground"
-                  aria-label="播放读音"
-                >
-                  <Volume2 className="h-4 w-4" />
-                </button>
-              )}
+              <button
+                onClick={speakCurrent}
+                className="rounded-full bg-muted p-1.5 text-muted-foreground"
+                aria-label="播放读音"
+              >
+                <Volume2 className="h-4 w-4" />
+              </button>
             </div>
             <span className="text-sm text-muted-foreground">{item.phonetic as string}</span>
           </div>
@@ -215,7 +229,6 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
               <div className="flex flex-col items-center gap-2">
                 <div className="flex items-center gap-3">
                   <span className="text-[76px] font-medium leading-none tracking-widest">{String(item.char ?? '')}</span>
-                  {audioOn && <SpeakButton onClick={() => speak(String(item.char ?? ''), { lang: 'zh-CN' })} />}
                 </div>
                 <span className="text-lg text-muted-foreground">{String(item.pinyin ?? '')}</span>
                 <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
@@ -242,7 +255,7 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
               <div className="flex flex-col items-center gap-2 text-center">
                 <div className="flex items-center gap-3">
                   <span className="text-4xl font-semibold">{String(item.word ?? '')}</span>
-                  {audioOn && <SpeakButton onClick={() => speak(String(item.word ?? ''), { lang: 'en-US' })} />}
+                  <SpeakButton onClick={() => speak(String(item.word ?? ''), { lang: 'en-US' })} />
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <span>{String(item.phonetic ?? '')}</span>
@@ -264,7 +277,7 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
               <div className="flex flex-col items-center gap-2">
                 <div className="flex items-center gap-3">
                   <span className="text-6xl font-semibold leading-none text-english">{String(item.symbol ?? '')}</span>
-                  {audioOn && <SpeakButton onClick={() => speak(String(item.symbol ?? ''), { lang: 'en-US' })} />}
+                  <SpeakButton onClick={() => speak(String(item.symbol ?? ''), { lang: 'en-US' })} />
                 </div>
                 <span className="text-xs text-muted-foreground">{String(item.category ?? '')}</span>
                 {Array.isArray(item.examples) && (item.examples as string[]).length > 0 && (
@@ -294,8 +307,8 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
           </div>
         )}
 
-        {/* 看中文选英文的题干已经在上面卡片里了，不再重复一遍 */}
-        {!isWordChoice && !isRead && (
+        {/* 看中文选英文、补全词语的题干已经在上面卡片里了，不再重复一遍 */}
+        {!isWordChoice && !isRead && !isFillChar && (
           <p className="mb-5 text-center text-lg font-medium leading-relaxed">{item.stem}</p>
         )}
 
@@ -314,7 +327,9 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
                     submitAnswer(opt)
                   }}
                   className={cn(
-                    'flex min-h-[64px] items-center justify-center rounded-2xl border-2 bg-card px-3 py-3 text-center text-lg transition active:scale-[0.98]',
+                    'flex min-h-[64px] items-center justify-center rounded-2xl border-2 bg-card px-3 py-3 text-center transition active:scale-[0.98]',
+                    // 补全题的选项是单个汉字，字号放大才看得清
+                    isFillChar ? 'min-h-[76px] text-3xl font-medium' : 'text-lg',
                     chosen ? 'border-primary' : 'border-border',
                     showCorrect && 'border-emerald-500 bg-emerald-50 text-emerald-700',
                     showWrong && 'border-red-400 bg-red-50 text-red-600',
@@ -460,17 +475,18 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
               </>
             )}
           </div>
-          {!feedback.correct && (
-            <div className="mt-3 flex gap-2">
-              {audioOn && (
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => speak(feedback.answer, { lang: item.kind === 'word' || item.kind === 'sentence' ? 'en-US' : 'zh-CN' })}
-                >
-                  <Volume2 className="h-4 w-4" /> 听一遍
-                </Button>
-              )}
+            {!feedback.correct && (
+              <div className="mt-3 flex gap-2">
+                {/* 语音只支持古诗与英文朗读：反馈条上只有英文题给「听一遍」 */}
+                {['word', 'sentence', 'phoneme'].includes(String(item.kind)) && (
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => speak(feedback.answer, { lang: 'en-US' })}
+                  >
+                    <Volume2 className="h-4 w-4" /> 听一遍
+                  </Button>
+                )}
               <Button className="flex-1" onClick={next}>
                 下一题
               </Button>

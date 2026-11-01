@@ -10,16 +10,15 @@ from ..models import (
     Child,
     DailyTask,
     Poem,
-    PointsLedger,
     Recitation,
     Redemption,
     Reward,
     StudyRecord,
     WrongItem,
 )
-from ..services import grading, points, storage, submit, taskgen
+from ..services import grading, points, storage, submit, taskgen, tts as tts_svc
 from ..services.settings import get_setting
-from ..utils.dates import month_range, now_iso, shift_date, today_str
+from ..utils.dates import month_range, shift_date, today_str
 from ..utils.responses import fail, ok
 
 # 单个录音文件上限 8MB，够录完整首诗了
@@ -65,14 +64,42 @@ def bootstrap():
 
 @bp.get("/prefs")
 def prefs():
-    """客户端用得到的开关：朗读、即时对错。不需要孩子档案。"""
+    """客户端用得到的开关：语音模式、即时对错。不需要孩子档案。"""
     return ok(
         {
-            "audio_enabled": bool(get_setting("audio_enabled")),
+            "voice_mode": get_setting("voice_mode") or "browser",
             "instant_feedback": bool(get_setting("instant_feedback")),
             "srs_enabled": bool(get_setting("srs_enabled")),
         }
     )
+
+
+@bp.post("/tts")
+def tts():
+    """豆包语音合成：一次性输入文本，返回缓存音频地址。
+
+    仅在后台开启 API 模式时可用；相同文本命中缓存不会重复调用远端。
+    """
+    if (get_setting("voice_mode") or "browser") != "api":
+        return fail("TTS_DISABLED", "当前使用浏览器语音，未启用 API 合成", 400)
+    data = request.get_json(silent=True) or {}
+    text = (data.get("text") or "").strip()
+    lang = "en" if data.get("lang") == "en" else "zh"
+    try:
+        return ok(tts_svc.synthesize(text, lang=lang, speed=data.get("speed") or 1.0))
+    except tts_svc.TTSError as exc:
+        return fail("TTS_ERROR", exc.message, 400)
+
+
+@bp.get("/tts/audio/<month>/<name>")
+def tts_audio(month: str, name: str):
+    """下发已缓存的合成音频（年月目录 + 32 位十六进制文件名，防穿越）。"""
+    from flask import current_app, send_file
+
+    target = tts_svc.resolve_audio(month, name)
+    if target is None:
+        return fail("NOT_FOUND", "音频不存在或已失效", 404)
+    return send_file(target, mimetype="audio/mpeg")
 
 
 @bp.get("/today")
@@ -513,10 +540,8 @@ def wrong_practice_check():
         # 专门回来重做并且做对了，这道题就算订正完成
         row.mastered = True
         fix = int(get_setting("point_wrong_fix") or 0)
-        cap = int(get_setting("point_wrong_fix_cap") or 0)
         if fix > 0:
-            already = points.earned_by_reason(child.id, "wrong_fix", today)
-            room = fix if cap <= 0 else max(0, cap - already)
+            room = fix
             delta = min(fix, room)
             if delta > 0:
                 awarded = points.add(

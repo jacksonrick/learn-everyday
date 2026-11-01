@@ -81,11 +81,6 @@ def add(child_id: int, delta: int, reason: str, ref_type: str = "", ref_id: int 
         return 0
     today = today or today_str()
 
-    if delta > 0 and apply_cap:
-        cap = int(get_setting("daily_point_cap") or 0)
-        if cap > 0:
-            remaining = cap - earned_today(child_id, today)
-            delta = min(delta, max(0, remaining))
     if delta == 0:
         return 0
 

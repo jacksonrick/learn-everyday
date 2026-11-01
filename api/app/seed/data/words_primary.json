@@ -1,0 +1,6669 @@
+{
+ "meta": {
+  "name": "人教 PEP / 新起点小学英语词汇",
+  "count": 740,
+  "source": "人民教育出版社 PEP（三年级起点）与新起点（一年级起点）教材 1-6 年级词汇"
+ },
+ "items": [
+  {
+   "grade": 1,
+   "word": "book",
+   "phonetic": "/bʊk/",
+   "pos": "n.",
+   "meaning": "书",
+   "example": "This is my book.",
+   "example_cn": "这是我的书。"
+  },
+  {
+   "grade": 1,
+   "word": "ruler",
+   "phonetic": "/ˈruːlə/",
+   "pos": "n.",
+   "meaning": "尺子",
+   "example": "I have a ruler.",
+   "example_cn": "我有一把尺子。"
+  },
+  {
+   "grade": 1,
+   "word": "pencil",
+   "phonetic": "/ˈpensl/",
+   "pos": "n.",
+   "meaning": "铅笔",
+   "example": "Where is my pencil?",
+   "example_cn": "我的铅笔在哪里？"
+  },
+  {
+   "grade": 1,
+   "word": "pen",
+   "phonetic": "/pen/",
+   "pos": "n.",
+   "meaning": "钢笔",
+   "example": "This is a pen.",
+   "example_cn": "这是一支钢笔。"
+  },
+  {
+   "grade": 1,
+   "word": "schoolbag",
+   "phonetic": "/ˈskuːlbæɡ/",
+   "pos": "n.",
+   "meaning": "书包",
+   "example": "My schoolbag is big.",
+   "example_cn": "我的书包很大。"
+  },
+  {
+   "grade": 1,
+   "word": "teacher",
+   "phonetic": "/ˈtiːtʃə/",
+   "pos": "n.",
+   "meaning": "老师",
+   "example": "Good morning, teacher.",
+   "example_cn": "老师，早上好。"
+  },
+  {
+   "grade": 1,
+   "word": "I",
+   "phonetic": "/aɪ/",
+   "pos": "pron.",
+   "meaning": "我",
+   "example": "I am a pupil.",
+   "example_cn": "我是小学生。"
+  },
+  {
+   "grade": 1,
+   "word": "have",
+   "phonetic": "/hæv/",
+   "pos": "v.",
+   "meaning": "有",
+   "example": "I have a book.",
+   "example_cn": "我有一本书。"
+  },
+  {
+   "grade": 1,
+   "word": "a",
+   "phonetic": "/ə/",
+   "pos": "art.",
+   "meaning": "一个",
+   "example": "This is a cat.",
+   "example_cn": "这是一只猫。"
+  },
+  {
+   "grade": 1,
+   "word": "an",
+   "phonetic": "/ən/",
+   "pos": "art.",
+   "meaning": "一个（元音前）",
+   "example": "I have an apple.",
+   "example_cn": "我有一个苹果。"
+  },
+  {
+   "grade": 1,
+   "word": "face",
+   "phonetic": "/feɪs/",
+   "pos": "n.",
+   "meaning": "脸",
+   "example": "Touch your face.",
+   "example_cn": "摸摸你的脸。"
+  },
+  {
+   "grade": 1,
+   "word": "ear",
+   "phonetic": "/ɪə/",
+   "pos": "n.",
+   "meaning": "耳朵",
+   "example": "Touch your ear.",
+   "example_cn": "摸摸你的耳朵。"
+  },
+  {
+   "grade": 1,
+   "word": "eye",
+   "phonetic": "/aɪ/",
+   "pos": "n.",
+   "meaning": "眼睛",
+   "example": "This is my eye.",
+   "example_cn": "这是我的眼睛。"
+  },
+  {
+   "grade": 1,
+   "word": "nose",
+   "phonetic": "/nəʊz/",
+   "pos": "n.",
+   "meaning": "鼻子",
+   "example": "Touch your nose.",
+   "example_cn": "摸摸你的鼻子。"
+  },
+  {
+   "grade": 1,
+   "word": "mouth",
+   "phonetic": "/maʊθ/",
+   "pos": "n.",
+   "meaning": "嘴",
+   "example": "Open your mouth.",
+   "example_cn": "张开你的嘴。"
+  },
+  {
+   "grade": 1,
+   "word": "this",
+   "phonetic": "/ðɪs/",
+   "pos": "pron.",
+   "meaning": "这个",
+   "example": "This is my cat.",
+   "example_cn": "这是我的猫。"
+  },
+  {
+   "grade": 1,
+   "word": "is",
+   "phonetic": "/ɪz/",
+   "pos": "v.",
+   "meaning": "是",
+   "example": "This is a book.",
+   "example_cn": "这是一本书。"
+  },
+  {
+   "grade": 1,
+   "word": "my",
+   "phonetic": "/maɪ/",
+   "pos": "pron.",
+   "meaning": "我的",
+   "example": "This is my pencil.",
+   "example_cn": "这是我的铅笔。"
+  },
+  {
+   "grade": 1,
+   "word": "dog",
+   "phonetic": "/dɒɡ/",
+   "pos": "n.",
+   "meaning": "狗",
+   "example": "I like my dog.",
+   "example_cn": "我喜欢我的狗。"
+  },
+  {
+   "grade": 1,
+   "word": "bird",
+   "phonetic": "/bɜːd/",
+   "pos": "n.",
+   "meaning": "鸟",
+   "example": "The bird is blue.",
+   "example_cn": "这只鸟是蓝色的。"
+  },
+  {
+   "grade": 1,
+   "word": "tiger",
+   "phonetic": "/ˈtaɪɡə/",
+   "pos": "n.",
+   "meaning": "老虎",
+   "example": "The tiger is big.",
+   "example_cn": "这只老虎很大。"
+  },
+  {
+   "grade": 1,
+   "word": "monkey",
+   "phonetic": "/ˈmʌŋki/",
+   "pos": "n.",
+   "meaning": "猴子",
+   "example": "The monkey is funny.",
+   "example_cn": "这只猴子很有趣。"
+  },
+  {
+   "grade": 1,
+   "word": "cat",
+   "phonetic": "/kæt/",
+   "pos": "n.",
+   "meaning": "猫",
+   "example": "My cat is white.",
+   "example_cn": "我的猫是白色的。"
+  },
+  {
+   "grade": 1,
+   "word": "what",
+   "phonetic": "/wɒt/",
+   "pos": "pron.",
+   "meaning": "什么",
+   "example": "What is this?",
+   "example_cn": "这是什么？"
+  },
+  {
+   "grade": 1,
+   "word": "it",
+   "phonetic": "/ɪt/",
+   "pos": "pron.",
+   "meaning": "它",
+   "example": "It is a dog.",
+   "example_cn": "它是一只狗。"
+  },
+  {
+   "grade": 1,
+   "word": "one",
+   "phonetic": "/wʌn/",
+   "pos": "num.",
+   "meaning": "一",
+   "example": "I have one book.",
+   "example_cn": "我有一本书。"
+  },
+  {
+   "grade": 1,
+   "word": "two",
+   "phonetic": "/tuː/",
+   "pos": "num.",
+   "meaning": "二",
+   "example": "I have two pens.",
+   "example_cn": "我有两支钢笔。"
+  },
+  {
+   "grade": 1,
+   "word": "three",
+   "phonetic": "/θriː/",
+   "pos": "num.",
+   "meaning": "三",
+   "example": "Three cats are here.",
+   "example_cn": "三只猫在这里。"
+  },
+  {
+   "grade": 1,
+   "word": "four",
+   "phonetic": "/fɔː/",
+   "pos": "num.",
+   "meaning": "四",
+   "example": "Four books are red.",
+   "example_cn": "四本书是红色的。"
+  },
+  {
+   "grade": 1,
+   "word": "five",
+   "phonetic": "/faɪv/",
+   "pos": "num.",
+   "meaning": "五",
+   "example": "I see five birds.",
+   "example_cn": "我看见五只鸟。"
+  },
+  {
+   "grade": 1,
+   "word": "six",
+   "phonetic": "/sɪks/",
+   "pos": "num.",
+   "meaning": "六",
+   "example": "Six eggs are in the box.",
+   "example_cn": "盒子里有六个鸡蛋。"
+  },
+  {
+   "grade": 1,
+   "word": "seven",
+   "phonetic": "/ˈsevn/",
+   "pos": "num.",
+   "meaning": "七",
+   "example": "I am seven.",
+   "example_cn": "我七岁了。"
+  },
+  {
+   "grade": 1,
+   "word": "eight",
+   "phonetic": "/eɪt/",
+   "pos": "num.",
+   "meaning": "八",
+   "example": "Eight dogs are white.",
+   "example_cn": "八只狗是白色的。"
+  },
+  {
+   "grade": 1,
+   "word": "nine",
+   "phonetic": "/naɪn/",
+   "pos": "num.",
+   "meaning": "九",
+   "example": "Nine pens are new.",
+   "example_cn": "九支钢笔是新的。"
+  },
+  {
+   "grade": 1,
+   "word": "ten",
+   "phonetic": "/ten/",
+   "pos": "num.",
+   "meaning": "十",
+   "example": "I have ten fingers.",
+   "example_cn": "我有十根手指。"
+  },
+  {
+   "grade": 1,
+   "word": "how",
+   "phonetic": "/haʊ/",
+   "pos": "adv.",
+   "meaning": "怎样",
+   "example": "How many books?",
+   "example_cn": "有多少本书？"
+  },
+  {
+   "grade": 1,
+   "word": "many",
+   "phonetic": "/ˈmeni/",
+   "pos": "adj.",
+   "meaning": "许多的",
+   "example": "How many cats?",
+   "example_cn": "有多少只猫？"
+  },
+  {
+   "grade": 1,
+   "word": "are",
+   "phonetic": "/ɑː/",
+   "pos": "v.",
+   "meaning": "是",
+   "example": "The books are new.",
+   "example_cn": "这些书是新的。"
+  },
+  {
+   "grade": 1,
+   "word": "black",
+   "phonetic": "/blæk/",
+   "pos": "adj.",
+   "meaning": "黑色的",
+   "example": "My cat is black.",
+   "example_cn": "我的猫是黑色的。"
+  },
+  {
+   "grade": 1,
+   "word": "yellow",
+   "phonetic": "/ˈjeləʊ/",
+   "pos": "adj.",
+   "meaning": "黄色的",
+   "example": "The ruler is yellow.",
+   "example_cn": "尺子是黄色的。"
+  },
+  {
+   "grade": 1,
+   "word": "blue",
+   "phonetic": "/bluː/",
+   "pos": "adj.",
+   "meaning": "蓝色的",
+   "example": "The sky is blue.",
+   "example_cn": "天空是蓝色的。"
+  },
+  {
+   "grade": 1,
+   "word": "red",
+   "phonetic": "/red/",
+   "pos": "adj.",
+   "meaning": "红色的",
+   "example": "My bag is red.",
+   "example_cn": "我的书包是红色的。"
+  },
+  {
+   "grade": 1,
+   "word": "green",
+   "phonetic": "/ɡriːn/",
+   "pos": "adj.",
+   "meaning": "绿色的",
+   "example": "The tree is green.",
+   "example_cn": "树是绿色的。"
+  },
+  {
+   "grade": 1,
+   "word": "colour",
+   "phonetic": "/ˈkʌlə/",
+   "pos": "n.",
+   "meaning": "颜色",
+   "example": "What colour is it?",
+   "example_cn": "它是什么颜色？"
+  },
+  {
+   "grade": 1,
+   "word": "apple",
+   "phonetic": "/ˈæpl/",
+   "pos": "n.",
+   "meaning": "苹果",
+   "example": "I like apples.",
+   "example_cn": "我喜欢苹果。"
+  },
+  {
+   "grade": 1,
+   "word": "pear",
+   "phonetic": "/peə/",
+   "pos": "n.",
+   "meaning": "梨",
+   "example": "This pear is sweet.",
+   "example_cn": "这个梨很甜。"
+  },
+  {
+   "grade": 1,
+   "word": "banana",
+   "phonetic": "/bəˈnɑːnə/",
+   "pos": "n.",
+   "meaning": "香蕉",
+   "example": "The banana is yellow.",
+   "example_cn": "香蕉是黄色的。"
+  },
+  {
+   "grade": 1,
+   "word": "orange",
+   "phonetic": "/ˈɒrɪndʒ/",
+   "pos": "n.",
+   "meaning": "橙子；橙色",
+   "example": "I want an orange.",
+   "example_cn": "我想要一个橙子。"
+  },
+  {
+   "grade": 1,
+   "word": "do",
+   "phonetic": "/duː/",
+   "pos": "v.",
+   "meaning": "做（助动词）",
+   "example": "Do you like fish?",
+   "example_cn": "你喜欢鱼吗？"
+  },
+  {
+   "grade": 1,
+   "word": "you",
+   "phonetic": "/juː/",
+   "pos": "pron.",
+   "meaning": "你；你们",
+   "example": "You are my friend.",
+   "example_cn": "你是我的朋友。"
+  },
+  {
+   "grade": 1,
+   "word": "like",
+   "phonetic": "/laɪk/",
+   "pos": "v.",
+   "meaning": "喜欢",
+   "example": "I like bananas.",
+   "example_cn": "我喜欢香蕉。"
+  },
+  {
+   "grade": 1,
+   "word": "yes",
+   "phonetic": "/jes/",
+   "pos": "adv.",
+   "meaning": "是；是的",
+   "example": "Yes, I do.",
+   "example_cn": "是的，我喜欢。"
+  },
+  {
+   "grade": 1,
+   "word": "no",
+   "phonetic": "/nəʊ/",
+   "pos": "adv.",
+   "meaning": "不；不是",
+   "example": "No, I don't.",
+   "example_cn": "不，我不喜欢。"
+  },
+  {
+   "grade": 1,
+   "word": "chair",
+   "phonetic": "/tʃeə/",
+   "pos": "n.",
+   "meaning": "椅子",
+   "example": "The chair is small.",
+   "example_cn": "这把椅子很小。"
+  },
+  {
+   "grade": 1,
+   "word": "desk",
+   "phonetic": "/desk/",
+   "pos": "n.",
+   "meaning": "书桌",
+   "example": "My book is on the desk.",
+   "example_cn": "我的书在书桌上。"
+  },
+  {
+   "grade": 1,
+   "word": "blackboard",
+   "phonetic": "/ˈblækbɔːd/",
+   "pos": "n.",
+   "meaning": "黑板",
+   "example": "Look at the blackboard.",
+   "example_cn": "看黑板。"
+  },
+  {
+   "grade": 1,
+   "word": "on",
+   "phonetic": "/ɒn/",
+   "pos": "prep.",
+   "meaning": "在……上面",
+   "example": "The pen is on the desk.",
+   "example_cn": "钢笔在书桌上。"
+  },
+  {
+   "grade": 1,
+   "word": "under",
+   "phonetic": "/ˈʌndə/",
+   "pos": "prep.",
+   "meaning": "在……下面",
+   "example": "The ball is under the bed.",
+   "example_cn": "球在床下。"
+  },
+  {
+   "grade": 1,
+   "word": "in",
+   "phonetic": "/ɪn/",
+   "pos": "prep.",
+   "meaning": "在……里面",
+   "example": "The cat is in the box.",
+   "example_cn": "猫在盒子里。"
+  },
+  {
+   "grade": 1,
+   "word": "where",
+   "phonetic": "/weə/",
+   "pos": "adv.",
+   "meaning": "在哪里",
+   "example": "Where is my ball?",
+   "example_cn": "我的球在哪里？"
+  },
+  {
+   "grade": 1,
+   "word": "the",
+   "phonetic": "/ðə/",
+   "pos": "art.",
+   "meaning": "这（那）个",
+   "example": "The dog is near the door.",
+   "example_cn": "狗在门旁边。"
+  },
+  {
+   "grade": 1,
+   "word": "light",
+   "phonetic": "/laɪt/",
+   "pos": "n.",
+   "meaning": "灯",
+   "example": "Turn on the light.",
+   "example_cn": "打开灯。"
+  },
+  {
+   "grade": 1,
+   "word": "bed",
+   "phonetic": "/bed/",
+   "pos": "n.",
+   "meaning": "床",
+   "example": "My bear is on the bed.",
+   "example_cn": "我的熊在床上。"
+  },
+  {
+   "grade": 1,
+   "word": "door",
+   "phonetic": "/dɔː/",
+   "pos": "n.",
+   "meaning": "门",
+   "example": "Close the door, please.",
+   "example_cn": "请关门。"
+  },
+  {
+   "grade": 1,
+   "word": "box",
+   "phonetic": "/bɒks/",
+   "pos": "n.",
+   "meaning": "盒子",
+   "example": "The box is big.",
+   "example_cn": "这个盒子很大。"
+  },
+  {
+   "grade": 1,
+   "word": "near",
+   "phonetic": "/nɪə/",
+   "pos": "prep.",
+   "meaning": "靠近",
+   "example": "The chair is near the desk.",
+   "example_cn": "椅子在书桌旁边。"
+  },
+  {
+   "grade": 1,
+   "word": "behind",
+   "phonetic": "/bɪˈhaɪnd/",
+   "pos": "prep.",
+   "meaning": "在……后面",
+   "example": "The cat is behind the door.",
+   "example_cn": "猫在门后面。"
+  },
+  {
+   "grade": 1,
+   "word": "plane",
+   "phonetic": "/pleɪn/",
+   "pos": "n.",
+   "meaning": "飞机",
+   "example": "I see a plane.",
+   "example_cn": "我看见一架飞机。"
+  },
+  {
+   "grade": 1,
+   "word": "ball",
+   "phonetic": "/bɔːl/",
+   "pos": "n.",
+   "meaning": "球",
+   "example": "This is my ball.",
+   "example_cn": "这是我的球。"
+  },
+  {
+   "grade": 1,
+   "word": "doll",
+   "phonetic": "/dɒl/",
+   "pos": "n.",
+   "meaning": "玩偶",
+   "example": "My doll is pretty.",
+   "example_cn": "我的玩偶很漂亮。"
+  },
+  {
+   "grade": 1,
+   "word": "train",
+   "phonetic": "/treɪn/",
+   "pos": "n.",
+   "meaning": "火车",
+   "example": "The train is long.",
+   "example_cn": "这列火车很长。"
+  },
+  {
+   "grade": 1,
+   "word": "car",
+   "phonetic": "/kɑː/",
+   "pos": "n.",
+   "meaning": "小汽车",
+   "example": "My car is red.",
+   "example_cn": "我的小汽车是红色的。"
+  },
+  {
+   "grade": 1,
+   "word": "bear",
+   "phonetic": "/beə/",
+   "pos": "n.",
+   "meaning": "熊；玩具熊",
+   "example": "I have a big bear.",
+   "example_cn": "我有一只大熊。"
+  },
+  {
+   "grade": 1,
+   "word": "can",
+   "phonetic": "/kæn/",
+   "pos": "v.",
+   "meaning": "能；会",
+   "example": "I can see a bird.",
+   "example_cn": "我能看见一只鸟。"
+  },
+  {
+   "grade": 1,
+   "word": "sure",
+   "phonetic": "/ʃʊə/",
+   "pos": "adv.",
+   "meaning": "当然",
+   "example": "Sure, here you are.",
+   "example_cn": "当然，给你。"
+  },
+  {
+   "grade": 1,
+   "word": "sorry",
+   "phonetic": "/ˈsɒri/",
+   "pos": "adj.",
+   "meaning": "对不起的",
+   "example": "Sorry, I am late.",
+   "example_cn": "对不起，我迟到了。"
+  },
+  {
+   "grade": 1,
+   "word": "rice",
+   "phonetic": "/raɪs/",
+   "pos": "n.",
+   "meaning": "米饭",
+   "example": "I want some rice.",
+   "example_cn": "我想要一些米饭。"
+  },
+  {
+   "grade": 1,
+   "word": "noodles",
+   "phonetic": "/ˈnuːdlz/",
+   "pos": "n.",
+   "meaning": "面条",
+   "example": "The noodles are hot.",
+   "example_cn": "面条很烫。"
+  },
+  {
+   "grade": 1,
+   "word": "vegetable",
+   "phonetic": "/ˈvedʒtəbl/",
+   "pos": "n.",
+   "meaning": "蔬菜",
+   "example": "I like vegetables.",
+   "example_cn": "我喜欢蔬菜。"
+  },
+  {
+   "grade": 1,
+   "word": "fish",
+   "phonetic": "/fɪʃ/",
+   "pos": "n.",
+   "meaning": "鱼；鱼肉",
+   "example": "The fish is in the water.",
+   "example_cn": "鱼在水里。"
+  },
+  {
+   "grade": 1,
+   "word": "chicken",
+   "phonetic": "/ˈtʃɪkɪn/",
+   "pos": "n.",
+   "meaning": "鸡肉；鸡",
+   "example": "I like chicken.",
+   "example_cn": "我喜欢鸡肉。"
+  },
+  {
+   "grade": 1,
+   "word": "egg",
+   "phonetic": "/eɡ/",
+   "pos": "n.",
+   "meaning": "鸡蛋",
+   "example": "I have an egg.",
+   "example_cn": "我有一个鸡蛋。"
+  },
+  {
+   "grade": 1,
+   "word": "hungry",
+   "phonetic": "/ˈhʌŋɡri/",
+   "pos": "adj.",
+   "meaning": "饥饿的",
+   "example": "I am hungry now.",
+   "example_cn": "我现在饿了。"
+  },
+  {
+   "grade": 1,
+   "word": "want",
+   "phonetic": "/wɒnt/",
+   "pos": "v.",
+   "meaning": "想要",
+   "example": "I want some juice.",
+   "example_cn": "我想要一些果汁。"
+  },
+  {
+   "grade": 1,
+   "word": "and",
+   "phonetic": "/ænd/",
+   "pos": "conj.",
+   "meaning": "和",
+   "example": "I like rice and eggs.",
+   "example_cn": "我喜欢米饭和鸡蛋。"
+  },
+  {
+   "grade": 1,
+   "word": "juice",
+   "phonetic": "/dʒuːs/",
+   "pos": "n.",
+   "meaning": "果汁",
+   "example": "This juice is sweet.",
+   "example_cn": "这个果汁很甜。"
+  },
+  {
+   "grade": 1,
+   "word": "tea",
+   "phonetic": "/tiː/",
+   "pos": "n.",
+   "meaning": "茶",
+   "example": "My grandma likes tea.",
+   "example_cn": "我奶奶喜欢喝茶。"
+  },
+  {
+   "grade": 1,
+   "word": "milk",
+   "phonetic": "/mɪlk/",
+   "pos": "n.",
+   "meaning": "牛奶",
+   "example": "I drink milk every day.",
+   "example_cn": "我每天喝牛奶。"
+  },
+  {
+   "grade": 1,
+   "word": "water",
+   "phonetic": "/ˈwɔːtə/",
+   "pos": "n.",
+   "meaning": "水",
+   "example": "Please give me water.",
+   "example_cn": "请给我水。"
+  },
+  {
+   "grade": 1,
+   "word": "thirsty",
+   "phonetic": "/ˈθɜːsti/",
+   "pos": "adj.",
+   "meaning": "口渴的",
+   "example": "I am thirsty.",
+   "example_cn": "我口渴了。"
+  },
+  {
+   "grade": 1,
+   "word": "thanks",
+   "phonetic": "/θæŋks/",
+   "pos": "int.",
+   "meaning": "谢谢",
+   "example": "Thanks, Mum.",
+   "example_cn": "谢谢，妈妈。"
+  },
+  {
+   "grade": 1,
+   "word": "shirt",
+   "phonetic": "/ʃɜːt/",
+   "pos": "n.",
+   "meaning": "衬衫",
+   "example": "My shirt is white.",
+   "example_cn": "我的衬衫是白色的。"
+  },
+  {
+   "grade": 1,
+   "word": "T-shirt",
+   "phonetic": "/ˈtiː ʃɜːt/",
+   "pos": "n.",
+   "meaning": "T 恤衫",
+   "example": "This T-shirt is new.",
+   "example_cn": "这件 T 恤是新的。"
+  },
+  {
+   "grade": 1,
+   "word": "skirt",
+   "phonetic": "/skɜːt/",
+   "pos": "n.",
+   "meaning": "短裙",
+   "example": "Her skirt is red.",
+   "example_cn": "她的裙子是红色的。"
+  },
+  {
+   "grade": 1,
+   "word": "dress",
+   "phonetic": "/dres/",
+   "pos": "n.",
+   "meaning": "连衣裙",
+   "example": "I like this dress.",
+   "example_cn": "我喜欢这条连衣裙。"
+  },
+  {
+   "grade": 1,
+   "word": "socks",
+   "phonetic": "/sɒks/",
+   "pos": "n.",
+   "meaning": "短袜",
+   "example": "My socks are blue.",
+   "example_cn": "我的袜子是蓝色的。"
+  },
+  {
+   "grade": 1,
+   "word": "shorts",
+   "phonetic": "/ʃɔːts/",
+   "pos": "n.",
+   "meaning": "短裤",
+   "example": "He has new shorts.",
+   "example_cn": "他有新短裤。"
+  },
+  {
+   "grade": 1,
+   "word": "your",
+   "phonetic": "/jɔː/",
+   "pos": "pron.",
+   "meaning": "你的；你们的",
+   "example": "Is this your book?",
+   "example_cn": "这是你的书吗？"
+  },
+  {
+   "grade": 2,
+   "word": "father",
+   "phonetic": "/ˈfɑːðə/",
+   "pos": "n.",
+   "meaning": "父亲",
+   "example": "My father is tall.",
+   "example_cn": "我父亲很高。"
+  },
+  {
+   "grade": 2,
+   "word": "mother",
+   "phonetic": "/ˈmʌðə/",
+   "pos": "n.",
+   "meaning": "母亲",
+   "example": "My mother is a teacher.",
+   "example_cn": "我母亲是老师。"
+  },
+  {
+   "grade": 2,
+   "word": "brother",
+   "phonetic": "/ˈbrʌðə/",
+   "pos": "n.",
+   "meaning": "兄；弟",
+   "example": "My brother is six.",
+   "example_cn": "我弟弟六岁。"
+  },
+  {
+   "grade": 2,
+   "word": "sister",
+   "phonetic": "/ˈsɪstə/",
+   "pos": "n.",
+   "meaning": "姐；妹",
+   "example": "My sister likes cats.",
+   "example_cn": "我妹妹喜欢猫。"
+  },
+  {
+   "grade": 2,
+   "word": "grandmother",
+   "phonetic": "/ˈɡrænmʌðə/",
+   "pos": "n.",
+   "meaning": "祖母；外祖母",
+   "example": "My grandmother is old.",
+   "example_cn": "我奶奶年纪大了。"
+  },
+  {
+   "grade": 2,
+   "word": "grandfather",
+   "phonetic": "/ˈɡrænfɑːðə/",
+   "pos": "n.",
+   "meaning": "祖父；外祖父",
+   "example": "My grandfather has a car.",
+   "example_cn": "我爷爷有一辆车。"
+  },
+  {
+   "grade": 2,
+   "word": "grandpa",
+   "phonetic": "/ˈɡrænpɑː/",
+   "pos": "n.",
+   "meaning": "爷爷；外公",
+   "example": "Grandpa, look at my book.",
+   "example_cn": "爷爷，看我的书。"
+  },
+  {
+   "grade": 2,
+   "word": "grandma",
+   "phonetic": "/ˈɡrænmɑː/",
+   "pos": "n.",
+   "meaning": "奶奶；外婆",
+   "example": "Grandma likes tea.",
+   "example_cn": "奶奶喜欢喝茶。"
+  },
+  {
+   "grade": 2,
+   "word": "dad",
+   "phonetic": "/dæd/",
+   "pos": "n.",
+   "meaning": "爸爸",
+   "example": "Dad, where is my ball?",
+   "example_cn": "爸爸，我的球在哪里？"
+  },
+  {
+   "grade": 2,
+   "word": "mum",
+   "phonetic": "/mʌm/",
+   "pos": "n.",
+   "meaning": "妈妈",
+   "example": "Mum, I am hungry.",
+   "example_cn": "妈妈，我饿了。"
+  },
+  {
+   "grade": 2,
+   "word": "family",
+   "phonetic": "/ˈfæməli/",
+   "pos": "n.",
+   "meaning": "家庭",
+   "example": "This is my family.",
+   "example_cn": "这是我的家庭。"
+  },
+  {
+   "grade": 2,
+   "word": "who",
+   "phonetic": "/huː/",
+   "pos": "pron.",
+   "meaning": "谁",
+   "example": "Who is she?",
+   "example_cn": "她是谁？"
+  },
+  {
+   "grade": 2,
+   "word": "he",
+   "phonetic": "/hiː/",
+   "pos": "pron.",
+   "meaning": "他",
+   "example": "He is my friend.",
+   "example_cn": "他是我的朋友。"
+  },
+  {
+   "grade": 2,
+   "word": "she",
+   "phonetic": "/ʃiː/",
+   "pos": "pron.",
+   "meaning": "她",
+   "example": "She is a doctor.",
+   "example_cn": "她是一名医生。"
+  },
+  {
+   "grade": 2,
+   "word": "me",
+   "phonetic": "/miː/",
+   "pos": "pron.",
+   "meaning": "我（宾格）",
+   "example": "Look at me.",
+   "example_cn": "看看我。"
+  },
+  {
+   "grade": 2,
+   "word": "classmate",
+   "phonetic": "/ˈklɑːsmeɪt/",
+   "pos": "n.",
+   "meaning": "同班同学",
+   "example": "She is my classmate.",
+   "example_cn": "她是我的同班同学。"
+  },
+  {
+   "grade": 2,
+   "word": "friend",
+   "phonetic": "/frend/",
+   "pos": "n.",
+   "meaning": "朋友",
+   "example": "You are my good friend.",
+   "example_cn": "你是我的好朋友。"
+  },
+  {
+   "grade": 2,
+   "word": "woman",
+   "phonetic": "/ˈwʊmən/",
+   "pos": "n.",
+   "meaning": "女人",
+   "example": "The woman is a nurse.",
+   "example_cn": "这位女士是护士。"
+  },
+  {
+   "grade": 2,
+   "word": "girl",
+   "phonetic": "/ɡɜːl/",
+   "pos": "n.",
+   "meaning": "女孩",
+   "example": "The girl can sing.",
+   "example_cn": "这个女孩会唱歌。"
+  },
+  {
+   "grade": 2,
+   "word": "man",
+   "phonetic": "/mæn/",
+   "pos": "n.",
+   "meaning": "男人",
+   "example": "That man is my uncle.",
+   "example_cn": "那个男人是我叔叔。"
+  },
+  {
+   "grade": 2,
+   "word": "boy",
+   "phonetic": "/bɔɪ/",
+   "pos": "n.",
+   "meaning": "男孩",
+   "example": "The boy has a ball.",
+   "example_cn": "这个男孩有一个球。"
+  },
+  {
+   "grade": 2,
+   "word": "look",
+   "phonetic": "/lʊk/",
+   "pos": "v.",
+   "meaning": "看",
+   "example": "Look at the blackboard.",
+   "example_cn": "看黑板。"
+  },
+  {
+   "grade": 2,
+   "word": "his",
+   "phonetic": "/hɪz/",
+   "pos": "pron.",
+   "meaning": "他的",
+   "example": "His name is Tom.",
+   "example_cn": "他的名字是汤姆。"
+  },
+  {
+   "grade": 2,
+   "word": "her",
+   "phonetic": "/hɜː/",
+   "pos": "pron.",
+   "meaning": "她的",
+   "example": "Her dress is new.",
+   "example_cn": "她的连衣裙是新的。"
+  },
+  {
+   "grade": 2,
+   "word": "name",
+   "phonetic": "/neɪm/",
+   "pos": "n.",
+   "meaning": "名字",
+   "example": "My name is Lily.",
+   "example_cn": "我的名字是莉莉。"
+  },
+  {
+   "grade": 2,
+   "word": "or",
+   "phonetic": "/ɔː/",
+   "pos": "conj.",
+   "meaning": "或者",
+   "example": "A cat or a dog?",
+   "example_cn": "猫还是狗？"
+  },
+  {
+   "grade": 2,
+   "word": "big",
+   "phonetic": "/bɪɡ/",
+   "pos": "adj.",
+   "meaning": "大的",
+   "example": "The box is big.",
+   "example_cn": "这个盒子很大。"
+  },
+  {
+   "grade": 2,
+   "word": "small",
+   "phonetic": "/smɔːl/",
+   "pos": "adj.",
+   "meaning": "小的",
+   "example": "My schoolbag is small.",
+   "example_cn": "我的书包很小。"
+  },
+  {
+   "grade": 2,
+   "word": "tall",
+   "phonetic": "/tɔːl/",
+   "pos": "adj.",
+   "meaning": "高的",
+   "example": "The tree is tall.",
+   "example_cn": "这棵树很高。"
+  },
+  {
+   "grade": 2,
+   "word": "short",
+   "phonetic": "/ʃɔːt/",
+   "pos": "adj.",
+   "meaning": "矮的；短的",
+   "example": "My ruler is short.",
+   "example_cn": "我的尺子很短。"
+  },
+  {
+   "grade": 2,
+   "word": "pretty",
+   "phonetic": "/ˈprɪti/",
+   "pos": "adj.",
+   "meaning": "漂亮的",
+   "example": "She is pretty.",
+   "example_cn": "她很漂亮。"
+  },
+  {
+   "grade": 2,
+   "word": "thin",
+   "phonetic": "/θɪn/",
+   "pos": "adj.",
+   "meaning": "瘦的",
+   "example": "The cat is thin.",
+   "example_cn": "这只猫很瘦。"
+  },
+  {
+   "grade": 2,
+   "word": "handsome",
+   "phonetic": "/ˈhænsəm/",
+   "pos": "adj.",
+   "meaning": "英俊的",
+   "example": "My father is handsome.",
+   "example_cn": "我父亲很英俊。"
+  },
+  {
+   "grade": 2,
+   "word": "new",
+   "phonetic": "/njuː/",
+   "pos": "adj.",
+   "meaning": "新的",
+   "example": "This is my new bag.",
+   "example_cn": "这是我的新书包。"
+  },
+  {
+   "grade": 2,
+   "word": "old",
+   "phonetic": "/əʊld/",
+   "pos": "adj.",
+   "meaning": "旧的；年老的",
+   "example": "My bike is old.",
+   "example_cn": "我的自行车很旧。"
+  },
+  {
+   "grade": 2,
+   "word": "bookshop",
+   "phonetic": "/ˈbʊkʃɒp/",
+   "pos": "n.",
+   "meaning": "书店",
+   "example": "Let's go to the bookshop.",
+   "example_cn": "我们去书店吧。"
+  },
+  {
+   "grade": 2,
+   "word": "zoo",
+   "phonetic": "/zuː/",
+   "pos": "n.",
+   "meaning": "动物园",
+   "example": "I like the zoo.",
+   "example_cn": "我喜欢动物园。"
+  },
+  {
+   "grade": 2,
+   "word": "school",
+   "phonetic": "/skuːl/",
+   "pos": "n.",
+   "meaning": "学校",
+   "example": "We go to school every day.",
+   "example_cn": "我们每天去学校。"
+  },
+  {
+   "grade": 2,
+   "word": "supermarket",
+   "phonetic": "/ˈsuːpəmɑːkɪt/",
+   "pos": "n.",
+   "meaning": "超市",
+   "example": "Mum is in the supermarket.",
+   "example_cn": "妈妈在超市里。"
+  },
+  {
+   "grade": 2,
+   "word": "park",
+   "phonetic": "/pɑːk/",
+   "pos": "n.",
+   "meaning": "公园",
+   "example": "Let's go to the park.",
+   "example_cn": "我们去公园吧。"
+  },
+  {
+   "grade": 2,
+   "word": "hospital",
+   "phonetic": "/ˈhɒspɪtl/",
+   "pos": "n.",
+   "meaning": "医院",
+   "example": "The hospital is near here.",
+   "example_cn": "医院就在附近。"
+  },
+  {
+   "grade": 2,
+   "word": "go",
+   "phonetic": "/ɡəʊ/",
+   "pos": "v.",
+   "meaning": "去",
+   "example": "Let's go home.",
+   "example_cn": "我们回家吧。"
+  },
+  {
+   "grade": 2,
+   "word": "to",
+   "phonetic": "/tuː/",
+   "pos": "prep.",
+   "meaning": "向；朝",
+   "example": "We go to school.",
+   "example_cn": "我们去上学。"
+  },
+  {
+   "grade": 2,
+   "word": "grass",
+   "phonetic": "/ɡrɑːs/",
+   "pos": "n.",
+   "meaning": "草",
+   "example": "The grass is green.",
+   "example_cn": "草是绿色的。"
+  },
+  {
+   "grade": 2,
+   "word": "tree",
+   "phonetic": "/triː/",
+   "pos": "n.",
+   "meaning": "树",
+   "example": "The tree is very tall.",
+   "example_cn": "这棵树很高。"
+  },
+  {
+   "grade": 2,
+   "word": "flower",
+   "phonetic": "/ˈflaʊə/",
+   "pos": "n.",
+   "meaning": "花",
+   "example": "The flower is pink.",
+   "example_cn": "这朵花是粉色的。"
+  },
+  {
+   "grade": 2,
+   "word": "boat",
+   "phonetic": "/bəʊt/",
+   "pos": "n.",
+   "meaning": "小船",
+   "example": "The boat is on the lake.",
+   "example_cn": "小船在湖上。"
+  },
+  {
+   "grade": 2,
+   "word": "lake",
+   "phonetic": "/leɪk/",
+   "pos": "n.",
+   "meaning": "湖",
+   "example": "The lake is big.",
+   "example_cn": "这个湖很大。"
+  },
+  {
+   "grade": 2,
+   "word": "hill",
+   "phonetic": "/hɪl/",
+   "pos": "n.",
+   "meaning": "小山",
+   "example": "There is a house on the hill.",
+   "example_cn": "山丘上有一座房子。"
+  },
+  {
+   "grade": 2,
+   "word": "bridge",
+   "phonetic": "/brɪdʒ/",
+   "pos": "n.",
+   "meaning": "桥",
+   "example": "The bridge is long.",
+   "example_cn": "这座桥很长。"
+  },
+  {
+   "grade": 2,
+   "word": "street",
+   "phonetic": "/striːt/",
+   "pos": "n.",
+   "meaning": "街道",
+   "example": "This street is clean.",
+   "example_cn": "这条街道很干净。"
+  },
+  {
+   "grade": 2,
+   "word": "van",
+   "phonetic": "/væn/",
+   "pos": "n.",
+   "meaning": "厢式货车",
+   "example": "The van is white.",
+   "example_cn": "这辆货车是白色的。"
+  },
+  {
+   "grade": 2,
+   "word": "taxi",
+   "phonetic": "/ˈtæksi/",
+   "pos": "n.",
+   "meaning": "出租车",
+   "example": "Let's take a taxi.",
+   "example_cn": "我们坐出租车吧。"
+  },
+  {
+   "grade": 2,
+   "word": "bicycle",
+   "phonetic": "/ˈbaɪsɪkl/",
+   "pos": "n.",
+   "meaning": "自行车",
+   "example": "I can ride a bicycle.",
+   "example_cn": "我会骑自行车。"
+  },
+  {
+   "grade": 2,
+   "word": "subway",
+   "phonetic": "/ˈsʌbweɪ/",
+   "pos": "n.",
+   "meaning": "地铁",
+   "example": "We go by subway.",
+   "example_cn": "我们坐地铁去。"
+  },
+  {
+   "grade": 2,
+   "word": "traffic light",
+   "phonetic": "/ˈtræfɪk laɪt/",
+   "pos": "n.",
+   "meaning": "红绿灯",
+   "example": "Stop at the traffic light.",
+   "example_cn": "在红绿灯处停下。"
+  },
+  {
+   "grade": 2,
+   "word": "bus stop",
+   "phonetic": "/ˈbʌs stɒp/",
+   "pos": "n.",
+   "meaning": "公共汽车站",
+   "example": "The bus stop is over there.",
+   "example_cn": "公共汽车站在那边。"
+  },
+  {
+   "grade": 2,
+   "word": "stop",
+   "phonetic": "/stɒp/",
+   "pos": "v.",
+   "meaning": "停止；停下",
+   "example": "Stop here, please.",
+   "example_cn": "请停在这里。"
+  },
+  {
+   "grade": 2,
+   "word": "wait",
+   "phonetic": "/weɪt/",
+   "pos": "v.",
+   "meaning": "等待",
+   "example": "Wait for me, please.",
+   "example_cn": "请等等我。"
+  },
+  {
+   "grade": 2,
+   "word": "bee",
+   "phonetic": "/biː/",
+   "pos": "n.",
+   "meaning": "蜜蜂",
+   "example": "A bee is on the flower.",
+   "example_cn": "一只蜜蜂在花上。"
+  },
+  {
+   "grade": 2,
+   "word": "butterfly",
+   "phonetic": "/ˈbʌtəflaɪ/",
+   "pos": "n.",
+   "meaning": "蝴蝶",
+   "example": "The butterfly is beautiful.",
+   "example_cn": "这只蝴蝶很漂亮。"
+  },
+  {
+   "grade": 2,
+   "word": "bench",
+   "phonetic": "/bentʃ/",
+   "pos": "n.",
+   "meaning": "长凳",
+   "example": "Let's sit on the bench.",
+   "example_cn": "我们坐在长凳上吧。"
+  },
+  {
+   "grade": 2,
+   "word": "picture",
+   "phonetic": "/ˈpɪktʃə/",
+   "pos": "n.",
+   "meaning": "图画；照片",
+   "example": "This picture is nice.",
+   "example_cn": "这幅画很好看。"
+  },
+  {
+   "grade": 2,
+   "word": "beautiful",
+   "phonetic": "/ˈbjuːtɪfl/",
+   "pos": "adj.",
+   "meaning": "美丽的",
+   "example": "The park is beautiful.",
+   "example_cn": "这个公园很美丽。"
+  },
+  {
+   "grade": 2,
+   "word": "aunt",
+   "phonetic": "/ɑːnt/",
+   "pos": "n.",
+   "meaning": "姑姑；阿姨",
+   "example": "My aunt is a nurse.",
+   "example_cn": "我姑姑是护士。"
+  },
+  {
+   "grade": 2,
+   "word": "uncle",
+   "phonetic": "/ˈʌŋkl/",
+   "pos": "n.",
+   "meaning": "叔叔；舅舅",
+   "example": "My uncle has a van.",
+   "example_cn": "我叔叔有一辆货车。"
+  },
+  {
+   "grade": 2,
+   "word": "doctor",
+   "phonetic": "/ˈdɒktə/",
+   "pos": "n.",
+   "meaning": "医生",
+   "example": "The doctor is very kind.",
+   "example_cn": "这位医生很亲切。"
+  },
+  {
+   "grade": 2,
+   "word": "policeman",
+   "phonetic": "/pəˈliːsmən/",
+   "pos": "n.",
+   "meaning": "警察",
+   "example": "The policeman helps me.",
+   "example_cn": "这位警察帮助了我。"
+  },
+  {
+   "grade": 2,
+   "word": "engineer",
+   "phonetic": "/ˌendʒɪˈnɪə/",
+   "pos": "n.",
+   "meaning": "工程师",
+   "example": "My father is an engineer.",
+   "example_cn": "我父亲是工程师。"
+  },
+  {
+   "grade": 2,
+   "word": "China",
+   "phonetic": "/ˈtʃaɪnə/",
+   "pos": "n.",
+   "meaning": "中国",
+   "example": "I am from China.",
+   "example_cn": "我来自中国。"
+  },
+  {
+   "grade": 2,
+   "word": "Canada",
+   "phonetic": "/ˈkænədə/",
+   "pos": "n.",
+   "meaning": "加拿大",
+   "example": "She is from Canada.",
+   "example_cn": "她来自加拿大。"
+  },
+  {
+   "grade": 2,
+   "word": "Britain",
+   "phonetic": "/ˈbrɪtn/",
+   "pos": "n.",
+   "meaning": "英国",
+   "example": "My teacher is from Britain.",
+   "example_cn": "我的老师来自英国。"
+  },
+  {
+   "grade": 2,
+   "word": "Beijing",
+   "phonetic": "/ˌbeɪˈdʒɪŋ/",
+   "pos": "n.",
+   "meaning": "北京",
+   "example": "Beijing is a big city.",
+   "example_cn": "北京是一座大城市。"
+  },
+  {
+   "grade": 2,
+   "word": "great",
+   "phonetic": "/ɡreɪt/",
+   "pos": "adj.",
+   "meaning": "伟大的；很棒的",
+   "example": "The Great Wall is great.",
+   "example_cn": "长城很宏伟。"
+  },
+  {
+   "grade": 2,
+   "word": "from",
+   "phonetic": "/frɒm/",
+   "pos": "prep.",
+   "meaning": "来自",
+   "example": "I am from Beijing.",
+   "example_cn": "我来自北京。"
+  },
+  {
+   "grade": 2,
+   "word": "ugly",
+   "phonetic": "/ˈʌɡli/",
+   "pos": "adj.",
+   "meaning": "丑的",
+   "example": "The doll is ugly.",
+   "example_cn": "这个玩偶很丑。"
+  },
+  {
+   "grade": 2,
+   "word": "Christmas",
+   "phonetic": "/ˈkrɪsməs/",
+   "pos": "n.",
+   "meaning": "圣诞节",
+   "example": "Christmas is in December.",
+   "example_cn": "圣诞节在十二月。"
+  },
+  {
+   "grade": 2,
+   "word": "card",
+   "phonetic": "/kɑːd/",
+   "pos": "n.",
+   "meaning": "卡片；贺卡",
+   "example": "This card is for you.",
+   "example_cn": "这张卡片是给你的。"
+  },
+  {
+   "grade": 2,
+   "word": "present",
+   "phonetic": "/ˈpreznt/",
+   "pos": "n.",
+   "meaning": "礼物",
+   "example": "I have a present for you.",
+   "example_cn": "我有一个礼物给你。"
+  },
+  {
+   "grade": 2,
+   "word": "bell",
+   "phonetic": "/bel/",
+   "pos": "n.",
+   "meaning": "铃铛",
+   "example": "The bell is very big.",
+   "example_cn": "这个铃铛很大。"
+  },
+  {
+   "grade": 2,
+   "word": "merry",
+   "phonetic": "/ˈmeri/",
+   "pos": "adj.",
+   "meaning": "愉快的",
+   "example": "Merry Christmas!",
+   "example_cn": "圣诞快乐！"
+  },
+  {
+   "grade": 2,
+   "word": "happy",
+   "phonetic": "/ˈhæpi/",
+   "pos": "adj.",
+   "meaning": "快乐的",
+   "example": "I am happy today.",
+   "example_cn": "我今天很快乐。"
+  },
+  {
+   "grade": 2,
+   "word": "too",
+   "phonetic": "/tuː/",
+   "pos": "adv.",
+   "meaning": "也；太",
+   "example": "I like the bell too.",
+   "example_cn": "我也喜欢这个铃铛。"
+  },
+  {
+   "grade": 2,
+   "word": "here",
+   "phonetic": "/hɪə/",
+   "pos": "adv.",
+   "meaning": "这里",
+   "example": "Come here, please.",
+   "example_cn": "请到这里来。"
+  },
+  {
+   "grade": 2,
+   "word": "for",
+   "phonetic": "/fɔː/",
+   "pos": "prep.",
+   "meaning": "为了；给",
+   "example": "This is for you.",
+   "example_cn": "这是给你的。"
+  },
+  {
+   "grade": 2,
+   "word": "thank",
+   "phonetic": "/θæŋk/",
+   "pos": "v.",
+   "meaning": "感谢",
+   "example": "Thank you very much.",
+   "example_cn": "非常感谢你。"
+  },
+  {
+   "grade": 2,
+   "word": "New Year",
+   "phonetic": "/ˌnjuː ˈjɪə/",
+   "pos": "n.",
+   "meaning": "新年",
+   "example": "Happy New Year!",
+   "example_cn": "新年快乐！"
+  },
+  {
+   "grade": 2,
+   "word": "play football",
+   "phonetic": "/pleɪ ˈfʊtbɔːl/",
+   "pos": "phr.",
+   "meaning": "踢足球",
+   "example": "Let's play football.",
+   "example_cn": "我们踢足球吧。"
+  },
+  {
+   "grade": 2,
+   "word": "fly a kite",
+   "phonetic": "/flaɪ ə kaɪt/",
+   "pos": "phr.",
+   "meaning": "放风筝",
+   "example": "I can fly a kite.",
+   "example_cn": "我会放风筝。"
+  },
+  {
+   "grade": 2,
+   "word": "ride a bike",
+   "phonetic": "/raɪd ə baɪk/",
+   "pos": "phr.",
+   "meaning": "骑自行车",
+   "example": "He can ride a bike.",
+   "example_cn": "他会骑自行车。"
+  },
+  {
+   "grade": 2,
+   "word": "make a model plane",
+   "phonetic": "/meɪk ə ˈmɒdl pleɪn/",
+   "pos": "phr.",
+   "meaning": "做飞机模型",
+   "example": "I make a model plane.",
+   "example_cn": "我在做飞机模型。"
+  },
+  {
+   "grade": 2,
+   "word": "swim",
+   "phonetic": "/swɪm/",
+   "pos": "v.",
+   "meaning": "游泳",
+   "example": "Can you swim?",
+   "example_cn": "你会游泳吗？"
+  },
+  {
+   "grade": 2,
+   "word": "make a snowman",
+   "phonetic": "/meɪk ə ˈsnəʊmæn/",
+   "pos": "phr.",
+   "meaning": "堆雪人",
+   "example": "Let's make a snowman.",
+   "example_cn": "我们堆雪人吧。"
+  },
+  {
+   "grade": 2,
+   "word": "can't",
+   "phonetic": "/kɑːnt/",
+   "pos": "v.",
+   "meaning": "不能；不会",
+   "example": "I can't swim.",
+   "example_cn": "我不会游泳。"
+  },
+  {
+   "grade": 2,
+   "word": "rainy",
+   "phonetic": "/ˈreɪni/",
+   "pos": "adj.",
+   "meaning": "下雨的",
+   "example": "It is rainy today.",
+   "example_cn": "今天下雨。"
+  },
+  {
+   "grade": 2,
+   "word": "cloudy",
+   "phonetic": "/ˈklaʊdi/",
+   "pos": "adj.",
+   "meaning": "多云的",
+   "example": "It is cloudy now.",
+   "example_cn": "现在是多云。"
+  },
+  {
+   "grade": 2,
+   "word": "snowy",
+   "phonetic": "/ˈsnəʊi/",
+   "pos": "adj.",
+   "meaning": "下雪的",
+   "example": "It is snowy in winter.",
+   "example_cn": "冬天会下雪。"
+  },
+  {
+   "grade": 2,
+   "word": "windy",
+   "phonetic": "/ˈwɪndi/",
+   "pos": "adj.",
+   "meaning": "有风的",
+   "example": "It is windy today.",
+   "example_cn": "今天有风。"
+  },
+  {
+   "grade": 2,
+   "word": "sunny",
+   "phonetic": "/ˈsʌni/",
+   "pos": "adj.",
+   "meaning": "晴朗的",
+   "example": "It is sunny today.",
+   "example_cn": "今天晴朗。"
+  },
+  {
+   "grade": 2,
+   "word": "weather",
+   "phonetic": "/ˈweðə/",
+   "pos": "n.",
+   "meaning": "天气",
+   "example": "The weather is nice.",
+   "example_cn": "天气很好。"
+  },
+  {
+   "grade": 2,
+   "word": "umbrella",
+   "phonetic": "/ʌmˈbrelə/",
+   "pos": "n.",
+   "meaning": "雨伞",
+   "example": "Take your umbrella.",
+   "example_cn": "带上你的雨伞。"
+  },
+  {
+   "grade": 2,
+   "word": "wow",
+   "phonetic": "/waʊ/",
+   "pos": "int.",
+   "meaning": "哇",
+   "example": "Wow, a big lake!",
+   "example_cn": "哇，一个大湖！"
+  },
+  {
+   "grade": 2,
+   "word": "festival",
+   "phonetic": "/ˈfestɪvl/",
+   "pos": "n.",
+   "meaning": "节日",
+   "example": "It is a happy festival.",
+   "example_cn": "这是一个快乐的节日。"
+  },
+  {
+   "grade": 2,
+   "word": "lantern",
+   "phonetic": "/ˈlæntən/",
+   "pos": "n.",
+   "meaning": "灯笼",
+   "example": "The lantern is red.",
+   "example_cn": "这个灯笼是红色的。"
+  },
+  {
+   "grade": 2,
+   "word": "dragon",
+   "phonetic": "/ˈdræɡən/",
+   "pos": "n.",
+   "meaning": "龙",
+   "example": "I can see a dragon dance.",
+   "example_cn": "我能看到舞龙。"
+  },
+  {
+   "grade": 2,
+   "word": "sofa",
+   "phonetic": "/ˈsəʊfə/",
+   "pos": "n.",
+   "meaning": "沙发",
+   "example": "My cat is on the sofa.",
+   "example_cn": "我的猫在沙发上。"
+  },
+  {
+   "grade": 3,
+   "word": "pencil box",
+   "phonetic": "/ˈpensl bɒks/",
+   "pos": "n.",
+   "meaning": "铅笔盒",
+   "example": "My pencil box is blue.",
+   "example_cn": "我的铅笔盒是蓝色的。"
+  },
+  {
+   "grade": 3,
+   "word": "eraser",
+   "phonetic": "/ɪˈreɪzə/",
+   "pos": "n.",
+   "meaning": "橡皮",
+   "example": "Can I use your eraser?",
+   "example_cn": "我能用你的橡皮吗？"
+  },
+  {
+   "grade": 3,
+   "word": "crayon",
+   "phonetic": "/ˈkreɪən/",
+   "pos": "n.",
+   "meaning": "蜡笔",
+   "example": "I have ten crayons.",
+   "example_cn": "我有十支蜡笔。"
+  },
+  {
+   "grade": 3,
+   "word": "bag",
+   "phonetic": "/bæɡ/",
+   "pos": "n.",
+   "meaning": "包",
+   "example": "The bag is on the desk.",
+   "example_cn": "包在书桌上。"
+  },
+  {
+   "grade": 3,
+   "word": "storybook",
+   "phonetic": "/ˈstɔːribʊk/",
+   "pos": "n.",
+   "meaning": "故事书",
+   "example": "This storybook is funny.",
+   "example_cn": "这本故事书很有趣。"
+  },
+  {
+   "grade": 3,
+   "word": "Chinese book",
+   "phonetic": "/ˌtʃaɪˈniːz bʊk/",
+   "pos": "n.",
+   "meaning": "语文书",
+   "example": "Open your Chinese book.",
+   "example_cn": "打开你的语文书。"
+  },
+  {
+   "grade": 3,
+   "word": "English book",
+   "phonetic": "/ˈɪŋɡlɪʃ bʊk/",
+   "pos": "n.",
+   "meaning": "英语书",
+   "example": "My English book is new.",
+   "example_cn": "我的英语书是新的。"
+  },
+  {
+   "grade": 3,
+   "word": "maths book",
+   "phonetic": "/mæθs bʊk/",
+   "pos": "n.",
+   "meaning": "数学书",
+   "example": "Where is my maths book?",
+   "example_cn": "我的数学书在哪里？"
+  },
+  {
+   "grade": 3,
+   "word": "notebook",
+   "phonetic": "/ˈnəʊtbʊk/",
+   "pos": "n.",
+   "meaning": "笔记本",
+   "example": "I write in my notebook.",
+   "example_cn": "我在笔记本上写字。"
+  },
+  {
+   "grade": 3,
+   "word": "candy",
+   "phonetic": "/ˈkændi/",
+   "pos": "n.",
+   "meaning": "糖果",
+   "example": "Do you like candy?",
+   "example_cn": "你喜欢糖果吗？"
+  },
+  {
+   "grade": 3,
+   "word": "key",
+   "phonetic": "/kiː/",
+   "pos": "n.",
+   "meaning": "钥匙",
+   "example": "This is my key.",
+   "example_cn": "这是我的钥匙。"
+  },
+  {
+   "grade": 3,
+   "word": "lost",
+   "phonetic": "/lɒst/",
+   "pos": "adj.",
+   "meaning": "丢失的",
+   "example": "I lost my schoolbag.",
+   "example_cn": "我丢了书包。"
+  },
+  {
+   "grade": 3,
+   "word": "toy",
+   "phonetic": "/tɔɪ/",
+   "pos": "n.",
+   "meaning": "玩具",
+   "example": "This toy is for my sister.",
+   "example_cn": "这个玩具是给我妹妹的。"
+  },
+  {
+   "grade": 3,
+   "word": "brown",
+   "phonetic": "/braʊn/",
+   "pos": "adj.",
+   "meaning": "棕色的",
+   "example": "The bear is brown.",
+   "example_cn": "这只熊是棕色的。"
+  },
+  {
+   "grade": 3,
+   "word": "white",
+   "phonetic": "/waɪt/",
+   "pos": "adj.",
+   "meaning": "白色的",
+   "example": "My shoes are white.",
+   "example_cn": "我的鞋是白色的。"
+  },
+  {
+   "grade": 3,
+   "word": "pink",
+   "phonetic": "/pɪŋk/",
+   "pos": "adj.",
+   "meaning": "粉色的",
+   "example": "She likes pink.",
+   "example_cn": "她喜欢粉色。"
+  },
+  {
+   "grade": 3,
+   "word": "purple",
+   "phonetic": "/ˈpɜːpl/",
+   "pos": "adj.",
+   "meaning": "紫色的",
+   "example": "The flower is purple.",
+   "example_cn": "这朵花是紫色的。"
+  },
+  {
+   "grade": 3,
+   "word": "arm",
+   "phonetic": "/ɑːm/",
+   "pos": "n.",
+   "meaning": "胳膊",
+   "example": "Touch your arm.",
+   "example_cn": "摸摸你的胳膊。"
+  },
+  {
+   "grade": 3,
+   "word": "hand",
+   "phonetic": "/hænd/",
+   "pos": "n.",
+   "meaning": "手",
+   "example": "Wash your hands, please.",
+   "example_cn": "请洗手。"
+  },
+  {
+   "grade": 3,
+   "word": "head",
+   "phonetic": "/hed/",
+   "pos": "n.",
+   "meaning": "头",
+   "example": "My head hurts.",
+   "example_cn": "我头疼。"
+  },
+  {
+   "grade": 3,
+   "word": "leg",
+   "phonetic": "/leɡ/",
+   "pos": "n.",
+   "meaning": "腿",
+   "example": "The dog has four legs.",
+   "example_cn": "狗有四条腿。"
+  },
+  {
+   "grade": 3,
+   "word": "body",
+   "phonetic": "/ˈbɒdi/",
+   "pos": "n.",
+   "meaning": "身体",
+   "example": "My body is strong.",
+   "example_cn": "我的身体很强壮。"
+  },
+  {
+   "grade": 3,
+   "word": "foot",
+   "phonetic": "/fʊt/",
+   "pos": "n.",
+   "meaning": "脚",
+   "example": "My foot is cold.",
+   "example_cn": "我的脚很冷。"
+  },
+  {
+   "grade": 3,
+   "word": "finger",
+   "phonetic": "/ˈfɪŋɡə/",
+   "pos": "n.",
+   "meaning": "手指",
+   "example": "I have ten fingers.",
+   "example_cn": "我有十根手指。"
+  },
+  {
+   "grade": 3,
+   "word": "bread",
+   "phonetic": "/bred/",
+   "pos": "n.",
+   "meaning": "面包",
+   "example": "I have bread for breakfast.",
+   "example_cn": "我早餐吃面包。"
+  },
+  {
+   "grade": 3,
+   "word": "cake",
+   "phonetic": "/keɪk/",
+   "pos": "n.",
+   "meaning": "蛋糕",
+   "example": "The birthday cake is big.",
+   "example_cn": "生日蛋糕很大。"
+  },
+  {
+   "grade": 3,
+   "word": "hamburger",
+   "phonetic": "/ˈhæmbɜːɡə/",
+   "pos": "n.",
+   "meaning": "汉堡包",
+   "example": "I want a hamburger.",
+   "example_cn": "我想要一个汉堡包。"
+  },
+  {
+   "grade": 3,
+   "word": "hot dog",
+   "phonetic": "/ˈhɒt dɒɡ/",
+   "pos": "n.",
+   "meaning": "热狗",
+   "example": "This hot dog is nice.",
+   "example_cn": "这个热狗很好吃。"
+  },
+  {
+   "grade": 3,
+   "word": "ice cream",
+   "phonetic": "/ˌaɪs ˈkriːm/",
+   "pos": "n.",
+   "meaning": "冰淇淋",
+   "example": "I like ice cream.",
+   "example_cn": "我喜欢冰淇淋。"
+  },
+  {
+   "grade": 3,
+   "word": "coffee",
+   "phonetic": "/ˈkɒfi/",
+   "pos": "n.",
+   "meaning": "咖啡",
+   "example": "Dad drinks coffee.",
+   "example_cn": "爸爸喝咖啡。"
+  },
+  {
+   "grade": 3,
+   "word": "Coke",
+   "phonetic": "/kəʊk/",
+   "pos": "n.",
+   "meaning": "可乐",
+   "example": "Can I have some Coke?",
+   "example_cn": "我能喝点可乐吗？"
+  },
+  {
+   "grade": 3,
+   "word": "eleven",
+   "phonetic": "/ɪˈlevn/",
+   "pos": "num.",
+   "meaning": "十一",
+   "example": "I have eleven books.",
+   "example_cn": "我有十一本书。"
+  },
+  {
+   "grade": 3,
+   "word": "twelve",
+   "phonetic": "/twelv/",
+   "pos": "num.",
+   "meaning": "十二",
+   "example": "Twelve eggs are in the box.",
+   "example_cn": "盒子里有十二个鸡蛋。"
+  },
+  {
+   "grade": 3,
+   "word": "thirteen",
+   "phonetic": "/ˌθɜːˈtiːn/",
+   "pos": "num.",
+   "meaning": "十三",
+   "example": "My brother is thirteen.",
+   "example_cn": "我哥哥十三岁。"
+  },
+  {
+   "grade": 3,
+   "word": "fourteen",
+   "phonetic": "/ˌfɔːˈtiːn/",
+   "pos": "num.",
+   "meaning": "十四",
+   "example": "There are fourteen pens.",
+   "example_cn": "有十四支钢笔。"
+  },
+  {
+   "grade": 3,
+   "word": "fifteen",
+   "phonetic": "/ˌfɪfˈtiːn/",
+   "pos": "num.",
+   "meaning": "十五",
+   "example": "Fifteen birds are on the tree.",
+   "example_cn": "树上有十五只鸟。"
+  },
+  {
+   "grade": 3,
+   "word": "sixteen",
+   "phonetic": "/ˌsɪksˈtiːn/",
+   "pos": "num.",
+   "meaning": "十六",
+   "example": "I see sixteen cars.",
+   "example_cn": "我看见十六辆车。"
+  },
+  {
+   "grade": 3,
+   "word": "seventeen",
+   "phonetic": "/ˌsevnˈtiːn/",
+   "pos": "num.",
+   "meaning": "十七",
+   "example": "Seventeen boys are here.",
+   "example_cn": "十七个男孩在这里。"
+  },
+  {
+   "grade": 3,
+   "word": "eighteen",
+   "phonetic": "/ˌeɪˈtiːn/",
+   "pos": "num.",
+   "meaning": "十八",
+   "example": "She is eighteen.",
+   "example_cn": "她十八岁。"
+  },
+  {
+   "grade": 3,
+   "word": "nineteen",
+   "phonetic": "/ˌnaɪnˈtiːn/",
+   "pos": "num.",
+   "meaning": "十九",
+   "example": "Nineteen bags are new.",
+   "example_cn": "十九个包是新的。"
+  },
+  {
+   "grade": 3,
+   "word": "twenty",
+   "phonetic": "/ˈtwenti/",
+   "pos": "num.",
+   "meaning": "二十",
+   "example": "I have twenty crayons.",
+   "example_cn": "我有二十支蜡笔。"
+  },
+  {
+   "grade": 3,
+   "word": "how old",
+   "phonetic": "/haʊ əʊld/",
+   "pos": "phr.",
+   "meaning": "几岁",
+   "example": "How old are you?",
+   "example_cn": "你几岁了？"
+  },
+  {
+   "grade": 3,
+   "word": "birthday",
+   "phonetic": "/ˈbɜːθdeɪ/",
+   "pos": "n.",
+   "meaning": "生日",
+   "example": "Happy birthday to you!",
+   "example_cn": "祝你生日快乐！"
+  },
+  {
+   "grade": 3,
+   "word": "party",
+   "phonetic": "/ˈpɑːti/",
+   "pos": "n.",
+   "meaning": "聚会",
+   "example": "The party is at my home.",
+   "example_cn": "聚会在我的家里。"
+  },
+  {
+   "grade": 3,
+   "word": "gift",
+   "phonetic": "/ɡɪft/",
+   "pos": "n.",
+   "meaning": "礼物",
+   "example": "This gift is for you.",
+   "example_cn": "这个礼物是给你的。"
+  },
+  {
+   "grade": 3,
+   "word": "candle",
+   "phonetic": "/ˈkændl/",
+   "pos": "n.",
+   "meaning": "蜡烛",
+   "example": "Let's light the candles.",
+   "example_cn": "我们来点蜡烛吧。"
+  },
+  {
+   "grade": 3,
+   "word": "sweet",
+   "phonetic": "/swiːt/",
+   "pos": "adj.",
+   "meaning": "甜的",
+   "example": "The cake is sweet.",
+   "example_cn": "蛋糕是甜的。"
+  },
+  {
+   "grade": 3,
+   "word": "watermelon",
+   "phonetic": "/ˈwɔːtəmelən/",
+   "pos": "n.",
+   "meaning": "西瓜",
+   "example": "The watermelon is big.",
+   "example_cn": "这个西瓜很大。"
+  },
+  {
+   "grade": 3,
+   "word": "strawberry",
+   "phonetic": "/ˈstrɔːbəri/",
+   "pos": "n.",
+   "meaning": "草莓",
+   "example": "I like strawberries.",
+   "example_cn": "我喜欢草莓。"
+  },
+  {
+   "grade": 3,
+   "word": "grape",
+   "phonetic": "/ɡreɪp/",
+   "pos": "n.",
+   "meaning": "葡萄",
+   "example": "These grapes are sweet.",
+   "example_cn": "这些葡萄很甜。"
+  },
+  {
+   "grade": 3,
+   "word": "duck",
+   "phonetic": "/dʌk/",
+   "pos": "n.",
+   "meaning": "鸭子",
+   "example": "The duck can swim.",
+   "example_cn": "鸭子会游泳。"
+  },
+  {
+   "grade": 3,
+   "word": "pig",
+   "phonetic": "/pɪɡ/",
+   "pos": "n.",
+   "meaning": "猪",
+   "example": "The pig is fat.",
+   "example_cn": "这头猪很胖。"
+  },
+  {
+   "grade": 3,
+   "word": "panda",
+   "phonetic": "/ˈpændə/",
+   "pos": "n.",
+   "meaning": "熊猫",
+   "example": "The panda is black and white.",
+   "example_cn": "熊猫是黑白相间的。"
+  },
+  {
+   "grade": 3,
+   "word": "elephant",
+   "phonetic": "/ˈelɪfənt/",
+   "pos": "n.",
+   "meaning": "大象",
+   "example": "The elephant has a long nose.",
+   "example_cn": "大象有一个长鼻子。"
+  },
+  {
+   "grade": 3,
+   "word": "pupil",
+   "phonetic": "/ˈpjuːpl/",
+   "pos": "n.",
+   "meaning": "小学生",
+   "example": "I am a pupil.",
+   "example_cn": "我是一名小学生。"
+  },
+  {
+   "grade": 3,
+   "word": "student",
+   "phonetic": "/ˈstjuːdnt/",
+   "pos": "n.",
+   "meaning": "学生",
+   "example": "She is a good student.",
+   "example_cn": "她是个好学生。"
+  },
+  {
+   "grade": 3,
+   "word": "classroom",
+   "phonetic": "/ˈklɑːsruːm/",
+   "pos": "n.",
+   "meaning": "教室",
+   "example": "Our classroom is clean.",
+   "example_cn": "我们的教室很干净。"
+  },
+  {
+   "grade": 3,
+   "word": "window",
+   "phonetic": "/ˈwɪndəʊ/",
+   "pos": "n.",
+   "meaning": "窗户",
+   "example": "Open the window, please.",
+   "example_cn": "请打开窗户。"
+  },
+  {
+   "grade": 3,
+   "word": "wall",
+   "phonetic": "/wɔːl/",
+   "pos": "n.",
+   "meaning": "墙",
+   "example": "The picture is on the wall.",
+   "example_cn": "画在墙上。"
+  },
+  {
+   "grade": 3,
+   "word": "floor",
+   "phonetic": "/flɔː/",
+   "pos": "n.",
+   "meaning": "地板；楼层",
+   "example": "The ball is on the floor.",
+   "example_cn": "球在地板上。"
+  },
+  {
+   "grade": 3,
+   "word": "fan",
+   "phonetic": "/fæn/",
+   "pos": "n.",
+   "meaning": "风扇",
+   "example": "Turn on the fan.",
+   "example_cn": "打开风扇。"
+  },
+  {
+   "grade": 3,
+   "word": "computer",
+   "phonetic": "/kəmˈpjuːtə/",
+   "pos": "n.",
+   "meaning": "电脑",
+   "example": "My father has a computer.",
+   "example_cn": "我爸爸有一台电脑。"
+  },
+  {
+   "grade": 3,
+   "word": "TV",
+   "phonetic": "/ˌtiː ˈviː/",
+   "pos": "n.",
+   "meaning": "电视",
+   "example": "I watch TV at night.",
+   "example_cn": "我晚上看电视。"
+  },
+  {
+   "grade": 3,
+   "word": "clean",
+   "phonetic": "/kliːn/",
+   "pos": "v.",
+   "meaning": "打扫；干净的",
+   "example": "Let's clean the classroom.",
+   "example_cn": "我们来打扫教室吧。"
+  },
+  {
+   "grade": 3,
+   "word": "help",
+   "phonetic": "/help/",
+   "pos": "v.",
+   "meaning": "帮助",
+   "example": "Can you help me?",
+   "example_cn": "你能帮我吗？"
+  },
+  {
+   "grade": 3,
+   "word": "close",
+   "phonetic": "/kləʊz/",
+   "pos": "v.",
+   "meaning": "关",
+   "example": "Close the door, please.",
+   "example_cn": "请关门。"
+  },
+  {
+   "grade": 3,
+   "word": "open",
+   "phonetic": "/ˈəʊpən/",
+   "pos": "v.",
+   "meaning": "打开",
+   "example": "Open your books.",
+   "example_cn": "打开你们的书。"
+  },
+  {
+   "grade": 3,
+   "word": "cap",
+   "phonetic": "/kæp/",
+   "pos": "n.",
+   "meaning": "鸭舌帽",
+   "example": "My cap is black.",
+   "example_cn": "我的帽子是黑色的。"
+  },
+  {
+   "grade": 3,
+   "word": "hat",
+   "phonetic": "/hæt/",
+   "pos": "n.",
+   "meaning": "帽子",
+   "example": "This hat is too big.",
+   "example_cn": "这顶帽子太大了。"
+  },
+  {
+   "grade": 3,
+   "word": "map",
+   "phonetic": "/mæp/",
+   "pos": "n.",
+   "meaning": "地图",
+   "example": "Look at the map.",
+   "example_cn": "看这张地图。"
+  },
+  {
+   "grade": 3,
+   "word": "kite",
+   "phonetic": "/kaɪt/",
+   "pos": "n.",
+   "meaning": "风筝",
+   "example": "The kite is in the sky.",
+   "example_cn": "风筝在天上。"
+  },
+  {
+   "grade": 3,
+   "word": "fat",
+   "phonetic": "/fæt/",
+   "pos": "adj.",
+   "meaning": "胖的",
+   "example": "The cat is fat.",
+   "example_cn": "这只猫很胖。"
+  },
+  {
+   "grade": 3,
+   "word": "long",
+   "phonetic": "/lɒŋ/",
+   "pos": "adj.",
+   "meaning": "长的",
+   "example": "The ruler is long.",
+   "example_cn": "这把尺子很长。"
+  },
+  {
+   "grade": 3,
+   "word": "giraffe",
+   "phonetic": "/dʒəˈrɑːf/",
+   "pos": "n.",
+   "meaning": "长颈鹿",
+   "example": "The giraffe is very tall.",
+   "example_cn": "长颈鹿非常高。"
+  },
+  {
+   "grade": 3,
+   "word": "so",
+   "phonetic": "/səʊ/",
+   "pos": "adv.",
+   "meaning": "这么；那么",
+   "example": "It is so big!",
+   "example_cn": "它这么大！"
+  },
+  {
+   "grade": 3,
+   "word": "children",
+   "phonetic": "/ˈtʃɪldrən/",
+   "pos": "n.",
+   "meaning": "孩子们",
+   "example": "The children are happy.",
+   "example_cn": "孩子们很快乐。"
+  },
+  {
+   "grade": 3,
+   "word": "tail",
+   "phonetic": "/teɪl/",
+   "pos": "n.",
+   "meaning": "尾巴",
+   "example": "The monkey has a long tail.",
+   "example_cn": "猴子有一条长尾巴。"
+  },
+  {
+   "grade": 3,
+   "word": "Australia",
+   "phonetic": "/ɒˈstreɪliə/",
+   "pos": "n.",
+   "meaning": "澳大利亚",
+   "example": "She is from Australia.",
+   "example_cn": "她来自澳大利亚。"
+  },
+  {
+   "grade": 3,
+   "word": "UK",
+   "phonetic": "/ˌjuː ˈkeɪ/",
+   "pos": "n.",
+   "meaning": "英国",
+   "example": "My teacher is from the UK.",
+   "example_cn": "我的老师来自英国。"
+  },
+  {
+   "grade": 3,
+   "word": "USA",
+   "phonetic": "/ˌjuː es ˈeɪ/",
+   "pos": "n.",
+   "meaning": "美国",
+   "example": "The USA is a big country.",
+   "example_cn": "美国是一个大国。"
+  },
+  {
+   "grade": 3,
+   "word": "today",
+   "phonetic": "/təˈdeɪ/",
+   "pos": "adv.",
+   "meaning": "今天",
+   "example": "We have a new friend today.",
+   "example_cn": "我们今天有一位新朋友。"
+  },
+  {
+   "grade": 3,
+   "word": "welcome",
+   "phonetic": "/ˈwelkəm/",
+   "pos": "v.",
+   "meaning": "欢迎",
+   "example": "Welcome to my home.",
+   "example_cn": "欢迎来我家。"
+  },
+  {
+   "grade": 3,
+   "word": "fruit",
+   "phonetic": "/fruːt/",
+   "pos": "n.",
+   "meaning": "水果",
+   "example": "Fruit is good for us.",
+   "example_cn": "水果对我们有好处。"
+  },
+  {
+   "grade": 3,
+   "word": "buy",
+   "phonetic": "/baɪ/",
+   "pos": "v.",
+   "meaning": "买",
+   "example": "Let's buy some fruit.",
+   "example_cn": "我们买些水果吧。"
+  },
+  {
+   "grade": 3,
+   "word": "some",
+   "phonetic": "/sʌm/",
+   "pos": "adj.",
+   "meaning": "一些",
+   "example": "I want some water.",
+   "example_cn": "我想要一些水。"
+  },
+  {
+   "grade": 3,
+   "word": "how many",
+   "phonetic": "/haʊ ˈmeni/",
+   "pos": "phr.",
+   "meaning": "多少",
+   "example": "How many kites?",
+   "example_cn": "有多少只风筝？"
+  },
+  {
+   "grade": 4,
+   "word": "we",
+   "phonetic": "/wiː/",
+   "pos": "pron.",
+   "meaning": "我们",
+   "example": "We are good friends.",
+   "example_cn": "我们是好朋友。"
+  },
+  {
+   "grade": 4,
+   "word": "our",
+   "phonetic": "/aʊə/",
+   "pos": "pron.",
+   "meaning": "我们的",
+   "example": "Our classroom is big.",
+   "example_cn": "我们的教室很大。"
+  },
+  {
+   "grade": 4,
+   "word": "really",
+   "phonetic": "/ˈrɪəli/",
+   "pos": "adv.",
+   "meaning": "真的",
+   "example": "It is really nice.",
+   "example_cn": "它真的很好。"
+  },
+  {
+   "grade": 4,
+   "word": "teacher's desk",
+   "phonetic": "/ˈtiːtʃəz desk/",
+   "pos": "n.",
+   "meaning": "讲台",
+   "example": "Put the book on the teacher's desk.",
+   "example_cn": "把书放在讲台上。"
+  },
+  {
+   "grade": 4,
+   "word": "strong",
+   "phonetic": "/strɒŋ/",
+   "pos": "adj.",
+   "meaning": "强壮的",
+   "example": "My father is strong.",
+   "example_cn": "我父亲很强壮。"
+  },
+  {
+   "grade": 4,
+   "word": "friendly",
+   "phonetic": "/ˈfrendli/",
+   "pos": "adj.",
+   "meaning": "友好的",
+   "example": "Our teacher is friendly.",
+   "example_cn": "我们的老师很友好。"
+  },
+  {
+   "grade": 4,
+   "word": "quiet",
+   "phonetic": "/ˈkwaɪət/",
+   "pos": "adj.",
+   "meaning": "安静的",
+   "example": "The classroom is quiet.",
+   "example_cn": "教室里很安静。"
+  },
+  {
+   "grade": 4,
+   "word": "hair",
+   "phonetic": "/heə/",
+   "pos": "n.",
+   "meaning": "头发",
+   "example": "Her hair is long.",
+   "example_cn": "她的头发很长。"
+  },
+  {
+   "grade": 4,
+   "word": "shoe",
+   "phonetic": "/ʃuː/",
+   "pos": "n.",
+   "meaning": "鞋",
+   "example": "My shoe is under the bed.",
+   "example_cn": "我的鞋在床下。"
+  },
+  {
+   "grade": 4,
+   "word": "glasses",
+   "phonetic": "/ˈɡlɑːsɪz/",
+   "pos": "n.",
+   "meaning": "眼镜",
+   "example": "He has new glasses.",
+   "example_cn": "他戴新眼镜了。"
+  },
+  {
+   "grade": 4,
+   "word": "right",
+   "phonetic": "/raɪt/",
+   "pos": "adj.",
+   "meaning": "正确的；右边",
+   "example": "That is right.",
+   "example_cn": "那是正确的。"
+  },
+  {
+   "grade": 4,
+   "word": "so much",
+   "phonetic": "/səʊ mʌtʃ/",
+   "pos": "phr.",
+   "meaning": "那么多",
+   "example": "Thank you so much.",
+   "example_cn": "非常感谢。"
+  },
+  {
+   "grade": 4,
+   "word": "bedroom",
+   "phonetic": "/ˈbedruːm/",
+   "pos": "n.",
+   "meaning": "卧室",
+   "example": "My bedroom is small.",
+   "example_cn": "我的卧室很小。"
+  },
+  {
+   "grade": 4,
+   "word": "living room",
+   "phonetic": "/ˈlɪvɪŋ ruːm/",
+   "pos": "n.",
+   "meaning": "客厅",
+   "example": "We watch TV in the living room.",
+   "example_cn": "我们在客厅看电视。"
+  },
+  {
+   "grade": 4,
+   "word": "study",
+   "phonetic": "/ˈstʌdi/",
+   "pos": "n.",
+   "meaning": "书房；学习",
+   "example": "Dad is in the study.",
+   "example_cn": "爸爸在书房里。"
+  },
+  {
+   "grade": 4,
+   "word": "kitchen",
+   "phonetic": "/ˈkɪtʃɪn/",
+   "pos": "n.",
+   "meaning": "厨房",
+   "example": "Mum is in the kitchen.",
+   "example_cn": "妈妈在厨房里。"
+  },
+  {
+   "grade": 4,
+   "word": "bathroom",
+   "phonetic": "/ˈbɑːθruːm/",
+   "pos": "n.",
+   "meaning": "浴室",
+   "example": "The bathroom is next to my bedroom.",
+   "example_cn": "浴室在我卧室旁边。"
+  },
+  {
+   "grade": 4,
+   "word": "phone",
+   "phonetic": "/fəʊn/",
+   "pos": "n.",
+   "meaning": "电话",
+   "example": "My phone is on the table.",
+   "example_cn": "我的电话在桌子上。"
+  },
+  {
+   "grade": 4,
+   "word": "table",
+   "phonetic": "/ˈteɪbl/",
+   "pos": "n.",
+   "meaning": "桌子",
+   "example": "The cake is on the table.",
+   "example_cn": "蛋糕在桌子上。"
+  },
+  {
+   "grade": 4,
+   "word": "fridge",
+   "phonetic": "/frɪdʒ/",
+   "pos": "n.",
+   "meaning": "冰箱",
+   "example": "The milk is in the fridge.",
+   "example_cn": "牛奶在冰箱里。"
+  },
+  {
+   "grade": 4,
+   "word": "find",
+   "phonetic": "/faɪnd/",
+   "pos": "v.",
+   "meaning": "找到",
+   "example": "I can't find my key.",
+   "example_cn": "我找不到我的钥匙。"
+  },
+  {
+   "grade": 4,
+   "word": "them",
+   "phonetic": "/ðem/",
+   "pos": "pron.",
+   "meaning": "他们（宾格）",
+   "example": "I can see them.",
+   "example_cn": "我能看见他们。"
+  },
+  {
+   "grade": 4,
+   "word": "they",
+   "phonetic": "/ðeɪ/",
+   "pos": "pron.",
+   "meaning": "他们",
+   "example": "They are my parents.",
+   "example_cn": "他们是我的父母。"
+  },
+  {
+   "grade": 4,
+   "word": "beef",
+   "phonetic": "/biːf/",
+   "pos": "n.",
+   "meaning": "牛肉",
+   "example": "I'd like some beef.",
+   "example_cn": "我想要一些牛肉。"
+  },
+  {
+   "grade": 4,
+   "word": "soup",
+   "phonetic": "/suːp/",
+   "pos": "n.",
+   "meaning": "汤",
+   "example": "The soup is hot.",
+   "example_cn": "汤很烫。"
+  },
+  {
+   "grade": 4,
+   "word": "chopsticks",
+   "phonetic": "/ˈtʃɒpstɪks/",
+   "pos": "n.",
+   "meaning": "筷子",
+   "example": "I can use chopsticks.",
+   "example_cn": "我会用筷子。"
+  },
+  {
+   "grade": 4,
+   "word": "bowl",
+   "phonetic": "/bəʊl/",
+   "pos": "n.",
+   "meaning": "碗",
+   "example": "This bowl is for you.",
+   "example_cn": "这个碗给你。"
+  },
+  {
+   "grade": 4,
+   "word": "fork",
+   "phonetic": "/fɔːk/",
+   "pos": "n.",
+   "meaning": "叉子",
+   "example": "Pass me a fork, please.",
+   "example_cn": "请递给我一把叉子。"
+  },
+  {
+   "grade": 4,
+   "word": "knife",
+   "phonetic": "/naɪf/",
+   "pos": "n.",
+   "meaning": "刀",
+   "example": "Be careful with the knife.",
+   "example_cn": "小心刀。"
+  },
+  {
+   "grade": 4,
+   "word": "spoon",
+   "phonetic": "/spuːn/",
+   "pos": "n.",
+   "meaning": "勺子",
+   "example": "I need a spoon.",
+   "example_cn": "我需要一把勺子。"
+  },
+  {
+   "grade": 4,
+   "word": "dinner",
+   "phonetic": "/ˈdɪnə/",
+   "pos": "n.",
+   "meaning": "晚餐",
+   "example": "Dinner is ready.",
+   "example_cn": "晚饭好了。"
+  },
+  {
+   "grade": 4,
+   "word": "ready",
+   "phonetic": "/ˈredi/",
+   "pos": "adj.",
+   "meaning": "准备好的",
+   "example": "Are you ready?",
+   "example_cn": "你准备好了吗？"
+  },
+  {
+   "grade": 4,
+   "word": "help yourself",
+   "phonetic": "/help jɔːˈself/",
+   "pos": "phr.",
+   "meaning": "请自便",
+   "example": "Help yourself to the fish.",
+   "example_cn": "请随意吃鱼。"
+  },
+  {
+   "grade": 4,
+   "word": "pass",
+   "phonetic": "/pɑːs/",
+   "pos": "v.",
+   "meaning": "传递",
+   "example": "Pass me the bowl, please.",
+   "example_cn": "请把碗递给我。"
+  },
+  {
+   "grade": 4,
+   "word": "use",
+   "phonetic": "/juːz/",
+   "pos": "v.",
+   "meaning": "使用",
+   "example": "Can I use your pen?",
+   "example_cn": "我能用你的钢笔吗？"
+  },
+  {
+   "grade": 4,
+   "word": "try",
+   "phonetic": "/traɪ/",
+   "pos": "v.",
+   "meaning": "尝试",
+   "example": "Let me try again.",
+   "example_cn": "让我再试一次。"
+  },
+  {
+   "grade": 4,
+   "word": "parents",
+   "phonetic": "/ˈpeərənts/",
+   "pos": "n.",
+   "meaning": "父母",
+   "example": "My parents are teachers.",
+   "example_cn": "我父母是老师。"
+  },
+  {
+   "grade": 4,
+   "word": "baby",
+   "phonetic": "/ˈbeɪbi/",
+   "pos": "n.",
+   "meaning": "婴儿",
+   "example": "The baby is sleeping.",
+   "example_cn": "宝宝在睡觉。"
+  },
+  {
+   "grade": 4,
+   "word": "cousin",
+   "phonetic": "/ˈkʌzn/",
+   "pos": "n.",
+   "meaning": "堂（表）兄弟姐妹",
+   "example": "My cousin is nine.",
+   "example_cn": "我表弟九岁。"
+  },
+  {
+   "grade": 4,
+   "word": "football player",
+   "phonetic": "/ˈfʊtbɔːl ˈpleɪə/",
+   "pos": "n.",
+   "meaning": "足球运动员",
+   "example": "He is a football player.",
+   "example_cn": "他是足球运动员。"
+  },
+  {
+   "grade": 4,
+   "word": "basketball player",
+   "phonetic": "/ˈbɑːskɪtbɔːl ˈpleɪə/",
+   "pos": "n.",
+   "meaning": "篮球运动员",
+   "example": "She is a basketball player.",
+   "example_cn": "她是篮球运动员。"
+  },
+  {
+   "grade": 4,
+   "word": "driver",
+   "phonetic": "/ˈdraɪvə/",
+   "pos": "n.",
+   "meaning": "司机",
+   "example": "My uncle is a driver.",
+   "example_cn": "我叔叔是司机。"
+  },
+  {
+   "grade": 4,
+   "word": "farmer",
+   "phonetic": "/ˈfɑːmə/",
+   "pos": "n.",
+   "meaning": "农民",
+   "example": "The farmer works on the farm.",
+   "example_cn": "农民在农场工作。"
+  },
+  {
+   "grade": 4,
+   "word": "nurse",
+   "phonetic": "/nɜːs/",
+   "pos": "n.",
+   "meaning": "护士",
+   "example": "My aunt is a nurse.",
+   "example_cn": "我姑姑是护士。"
+  },
+  {
+   "grade": 4,
+   "word": "cook",
+   "phonetic": "/kʊk/",
+   "pos": "n.",
+   "meaning": "厨师",
+   "example": "My father is a good cook.",
+   "example_cn": "我父亲是个好厨师。"
+  },
+  {
+   "grade": 4,
+   "word": "job",
+   "phonetic": "/dʒɒb/",
+   "pos": "n.",
+   "meaning": "工作",
+   "example": "What is your job?",
+   "example_cn": "你的工作是什么？"
+  },
+  {
+   "grade": 4,
+   "word": "puppy",
+   "phonetic": "/ˈpʌpi/",
+   "pos": "n.",
+   "meaning": "小狗",
+   "example": "The puppy is very cute.",
+   "example_cn": "这只小狗很可爱。"
+  },
+  {
+   "grade": 4,
+   "word": "football",
+   "phonetic": "/ˈfʊtbɔːl/",
+   "pos": "n.",
+   "meaning": "足球",
+   "example": "I play football after school.",
+   "example_cn": "放学后我踢足球。"
+  },
+  {
+   "grade": 4,
+   "word": "basketball",
+   "phonetic": "/ˈbɑːskɪtbɔːl/",
+   "pos": "n.",
+   "meaning": "篮球",
+   "example": "He likes basketball.",
+   "example_cn": "他喜欢篮球。"
+  },
+  {
+   "grade": 4,
+   "word": "first floor",
+   "phonetic": "/ˌfɜːst ˈflɔː/",
+   "pos": "n.",
+   "meaning": "一楼",
+   "example": "Our classroom is on the first floor.",
+   "example_cn": "我们的教室在一楼。"
+  },
+  {
+   "grade": 4,
+   "word": "second floor",
+   "phonetic": "/ˌsekənd ˈflɔː/",
+   "pos": "n.",
+   "meaning": "二楼",
+   "example": "The library is on the second floor.",
+   "example_cn": "图书馆在二楼。"
+  },
+  {
+   "grade": 4,
+   "word": "teachers' office",
+   "phonetic": "/ˈtiːtʃəz ˈɒfɪs/",
+   "pos": "n.",
+   "meaning": "教师办公室",
+   "example": "The teachers' office is over there.",
+   "example_cn": "教师办公室在那边。"
+  },
+  {
+   "grade": 4,
+   "word": "library",
+   "phonetic": "/ˈlaɪbrəri/",
+   "pos": "n.",
+   "meaning": "图书馆",
+   "example": "I read books in the library.",
+   "example_cn": "我在图书馆看书。"
+  },
+  {
+   "grade": 4,
+   "word": "playground",
+   "phonetic": "/ˈpleɪɡraʊnd/",
+   "pos": "n.",
+   "meaning": "操场",
+   "example": "We run on the playground.",
+   "example_cn": "我们在操场上跑步。"
+  },
+  {
+   "grade": 4,
+   "word": "garden",
+   "phonetic": "/ˈɡɑːdn/",
+   "pos": "n.",
+   "meaning": "花园",
+   "example": "The garden is very beautiful.",
+   "example_cn": "花园非常美丽。"
+  },
+  {
+   "grade": 4,
+   "word": "art room",
+   "phonetic": "/ˈɑːt ruːm/",
+   "pos": "n.",
+   "meaning": "美术教室",
+   "example": "We draw in the art room.",
+   "example_cn": "我们在美术教室画画。"
+  },
+  {
+   "grade": 4,
+   "word": "computer room",
+   "phonetic": "/kəmˈpjuːtə ruːm/",
+   "pos": "n.",
+   "meaning": "计算机房",
+   "example": "The computer room is clean.",
+   "example_cn": "机房很干净。"
+  },
+  {
+   "grade": 4,
+   "word": "music room",
+   "phonetic": "/ˈmjuːzɪk ruːm/",
+   "pos": "n.",
+   "meaning": "音乐教室",
+   "example": "She sings in the music room.",
+   "example_cn": "她在音乐教室唱歌。"
+  },
+  {
+   "grade": 4,
+   "word": "gym",
+   "phonetic": "/dʒɪm/",
+   "pos": "n.",
+   "meaning": "体育馆",
+   "example": "Let's go to the gym.",
+   "example_cn": "我们去体育馆吧。"
+  },
+  {
+   "grade": 4,
+   "word": "next to",
+   "phonetic": "/ˈnekst tə/",
+   "pos": "prep.",
+   "meaning": "紧邻",
+   "example": "The gym is next to the library.",
+   "example_cn": "体育馆紧邻图书馆。"
+  },
+  {
+   "grade": 4,
+   "word": "homework",
+   "phonetic": "/ˈhəʊmwɜːk/",
+   "pos": "n.",
+   "meaning": "作业",
+   "example": "I do my homework at home.",
+   "example_cn": "我在家写作业。"
+  },
+  {
+   "grade": 4,
+   "word": "class",
+   "phonetic": "/klɑːs/",
+   "pos": "n.",
+   "meaning": "班级；课",
+   "example": "Our class has forty pupils.",
+   "example_cn": "我们班有四十名学生。"
+  },
+  {
+   "grade": 4,
+   "word": "forty",
+   "phonetic": "/ˈfɔːti/",
+   "pos": "num.",
+   "meaning": "四十",
+   "example": "There are forty desks.",
+   "example_cn": "有四十张书桌。"
+  },
+  {
+   "grade": 4,
+   "word": "way",
+   "phonetic": "/weɪ/",
+   "pos": "n.",
+   "meaning": "方向；路",
+   "example": "This way, please.",
+   "example_cn": "请这边走。"
+  },
+  {
+   "grade": 4,
+   "word": "breakfast",
+   "phonetic": "/ˈbrekfəst/",
+   "pos": "n.",
+   "meaning": "早餐",
+   "example": "I have breakfast at seven.",
+   "example_cn": "我七点吃早餐。"
+  },
+  {
+   "grade": 4,
+   "word": "lunch",
+   "phonetic": "/lʌntʃ/",
+   "pos": "n.",
+   "meaning": "午餐",
+   "example": "We have lunch at school.",
+   "example_cn": "我们在学校吃午饭。"
+  },
+  {
+   "grade": 4,
+   "word": "English class",
+   "phonetic": "/ˈɪŋɡlɪʃ klɑːs/",
+   "pos": "n.",
+   "meaning": "英语课",
+   "example": "It's time for English class.",
+   "example_cn": "该上英语课了。"
+  },
+  {
+   "grade": 4,
+   "word": "music class",
+   "phonetic": "/ˈmjuːzɪk klɑːs/",
+   "pos": "n.",
+   "meaning": "音乐课",
+   "example": "I like music class.",
+   "example_cn": "我喜欢音乐课。"
+  },
+  {
+   "grade": 4,
+   "word": "PE class",
+   "phonetic": "/ˌpiː ˈiː klɑːs/",
+   "pos": "n.",
+   "meaning": "体育课",
+   "example": "We run in PE class.",
+   "example_cn": "我们在体育课上跑步。"
+  },
+  {
+   "grade": 4,
+   "word": "get up",
+   "phonetic": "/ɡet ʌp/",
+   "pos": "phr.",
+   "meaning": "起床",
+   "example": "I get up at six.",
+   "example_cn": "我六点起床。"
+  },
+  {
+   "grade": 4,
+   "word": "go to school",
+   "phonetic": "/ɡəʊ tə skuːl/",
+   "pos": "phr.",
+   "meaning": "去上学",
+   "example": "I go to school by bus.",
+   "example_cn": "我坐公共汽车上学。"
+  },
+  {
+   "grade": 4,
+   "word": "go home",
+   "phonetic": "/ɡəʊ həʊm/",
+   "pos": "phr.",
+   "meaning": "回家",
+   "example": "Let's go home now.",
+   "example_cn": "我们现在回家吧。"
+  },
+  {
+   "grade": 4,
+   "word": "go to bed",
+   "phonetic": "/ɡəʊ tə bed/",
+   "pos": "phr.",
+   "meaning": "去睡觉",
+   "example": "I go to bed at nine.",
+   "example_cn": "我九点睡觉。"
+  },
+  {
+   "grade": 4,
+   "word": "over",
+   "phonetic": "/ˈəʊvə/",
+   "pos": "adv.",
+   "meaning": "结束",
+   "example": "School is over.",
+   "example_cn": "放学了。"
+  },
+  {
+   "grade": 4,
+   "word": "now",
+   "phonetic": "/naʊ/",
+   "pos": "adv.",
+   "meaning": "现在",
+   "example": "Let's go now.",
+   "example_cn": "我们现在走吧。"
+  },
+  {
+   "grade": 4,
+   "word": "o'clock",
+   "phonetic": "/əˈklɒk/",
+   "pos": "adv.",
+   "meaning": "……点钟",
+   "example": "It is seven o'clock.",
+   "example_cn": "现在七点钟。"
+  },
+  {
+   "grade": 4,
+   "word": "kid",
+   "phonetic": "/kɪd/",
+   "pos": "n.",
+   "meaning": "小孩",
+   "example": "The kids are playing.",
+   "example_cn": "孩子们在玩。"
+  },
+  {
+   "grade": 4,
+   "word": "time",
+   "phonetic": "/taɪm/",
+   "pos": "n.",
+   "meaning": "时间",
+   "example": "What time is it?",
+   "example_cn": "现在几点了？"
+  },
+  {
+   "grade": 4,
+   "word": "hurry",
+   "phonetic": "/ˈhʌri/",
+   "pos": "v.",
+   "meaning": "赶快",
+   "example": "Hurry up, please.",
+   "example_cn": "请快点。"
+  },
+  {
+   "grade": 4,
+   "word": "just a minute",
+   "phonetic": "/dʒʌst ə ˈmɪnɪt/",
+   "pos": "phr.",
+   "meaning": "稍等一会儿",
+   "example": "Just a minute, please.",
+   "example_cn": "请稍等一会儿。"
+  },
+  {
+   "grade": 4,
+   "word": "jacket",
+   "phonetic": "/ˈdʒækɪt/",
+   "pos": "n.",
+   "meaning": "夹克衫",
+   "example": "My jacket is blue.",
+   "example_cn": "我的夹克是蓝色的。"
+  },
+  {
+   "grade": 4,
+   "word": "sweater",
+   "phonetic": "/ˈswetə/",
+   "pos": "n.",
+   "meaning": "毛衣",
+   "example": "This sweater is warm.",
+   "example_cn": "这件毛衣很暖和。"
+  },
+  {
+   "grade": 4,
+   "word": "sock",
+   "phonetic": "/sɒk/",
+   "pos": "n.",
+   "meaning": "袜子",
+   "example": "One sock is lost.",
+   "example_cn": "一只袜子丢了。"
+  },
+  {
+   "grade": 4,
+   "word": "coat",
+   "phonetic": "/kəʊt/",
+   "pos": "n.",
+   "meaning": "外套",
+   "example": "Put on your coat.",
+   "example_cn": "穿上你的外套。"
+  },
+  {
+   "grade": 4,
+   "word": "gloves",
+   "phonetic": "/ɡlʌvz/",
+   "pos": "n.",
+   "meaning": "手套",
+   "example": "My gloves are red.",
+   "example_cn": "我的手套是红色的。"
+  },
+  {
+   "grade": 4,
+   "word": "scarf",
+   "phonetic": "/skɑːf/",
+   "pos": "n.",
+   "meaning": "围巾",
+   "example": "She has a long scarf.",
+   "example_cn": "她有一条长围巾。"
+  },
+  {
+   "grade": 4,
+   "word": "sunglasses",
+   "phonetic": "/ˈsʌnɡlɑːsɪz/",
+   "pos": "n.",
+   "meaning": "太阳镜",
+   "example": "Dad wears sunglasses.",
+   "example_cn": "爸爸戴太阳镜。"
+  },
+  {
+   "grade": 4,
+   "word": "expensive",
+   "phonetic": "/ɪkˈspensɪv/",
+   "pos": "adj.",
+   "meaning": "昂贵的",
+   "example": "The coat is too expensive.",
+   "example_cn": "这件外套太贵了。"
+  },
+  {
+   "grade": 4,
+   "word": "cheap",
+   "phonetic": "/tʃiːp/",
+   "pos": "adj.",
+   "meaning": "便宜的",
+   "example": "The socks are cheap.",
+   "example_cn": "这些袜子很便宜。"
+  },
+  {
+   "grade": 4,
+   "word": "nice",
+   "phonetic": "/naɪs/",
+   "pos": "adj.",
+   "meaning": "好的；漂亮的",
+   "example": "What a nice hat!",
+   "example_cn": "多漂亮的一顶帽子！"
+  },
+  {
+   "grade": 4,
+   "word": "try on",
+   "phonetic": "/traɪ ɒn/",
+   "pos": "phr.",
+   "meaning": "试穿",
+   "example": "Can I try on the shoes?",
+   "example_cn": "我能试穿这双鞋吗？"
+  },
+  {
+   "grade": 4,
+   "word": "size",
+   "phonetic": "/saɪz/",
+   "pos": "n.",
+   "meaning": "尺码",
+   "example": "What size are they?",
+   "example_cn": "它们是多大尺码？"
+  },
+  {
+   "grade": 4,
+   "word": "how much",
+   "phonetic": "/haʊ mʌtʃ/",
+   "pos": "phr.",
+   "meaning": "多少钱",
+   "example": "How much is the scarf?",
+   "example_cn": "这条围巾多少钱？"
+  },
+  {
+   "grade": 4,
+   "word": "eighty",
+   "phonetic": "/ˈeɪti/",
+   "pos": "num.",
+   "meaning": "八十",
+   "example": "It is eighty yuan.",
+   "example_cn": "它八十元。"
+  },
+  {
+   "grade": 4,
+   "word": "dollar",
+   "phonetic": "/ˈdɒlə/",
+   "pos": "n.",
+   "meaning": "美元",
+   "example": "It is ten dollars.",
+   "example_cn": "它十美元。"
+  },
+  {
+   "grade": 4,
+   "word": "sale",
+   "phonetic": "/seɪl/",
+   "pos": "n.",
+   "meaning": "特价销售",
+   "example": "The shoes are on sale.",
+   "example_cn": "这些鞋在特价销售。"
+  },
+  {
+   "grade": 4,
+   "word": "more",
+   "phonetic": "/mɔː/",
+   "pos": "adj.",
+   "meaning": "更多的",
+   "example": "I want more juice.",
+   "example_cn": "我想要更多果汁。"
+  },
+  {
+   "grade": 4,
+   "word": "of course",
+   "phonetic": "/əv ˈkɔːs/",
+   "pos": "phr.",
+   "meaning": "当然",
+   "example": "Of course you can.",
+   "example_cn": "你当然可以。"
+  },
+  {
+   "grade": 4,
+   "word": "tomato",
+   "phonetic": "/təˈmɑːtəʊ/",
+   "pos": "n.",
+   "meaning": "西红柿",
+   "example": "The tomato is red.",
+   "example_cn": "西红柿是红色的。"
+  },
+  {
+   "grade": 4,
+   "word": "potato",
+   "phonetic": "/pəˈteɪtəʊ/",
+   "pos": "n.",
+   "meaning": "土豆",
+   "example": "I like potatoes.",
+   "example_cn": "我喜欢土豆。"
+  },
+  {
+   "grade": 4,
+   "word": "green beans",
+   "phonetic": "/ˌɡriːn ˈbiːnz/",
+   "pos": "n.",
+   "meaning": "豆角",
+   "example": "The green beans are fresh.",
+   "example_cn": "豆角很新鲜。"
+  },
+  {
+   "grade": 4,
+   "word": "carrot",
+   "phonetic": "/ˈkærət/",
+   "pos": "n.",
+   "meaning": "胡萝卜",
+   "example": "Rabbits like carrots.",
+   "example_cn": "兔子喜欢胡萝卜。"
+  },
+  {
+   "grade": 4,
+   "word": "horse",
+   "phonetic": "/hɔːs/",
+   "pos": "n.",
+   "meaning": "马",
+   "example": "The horse can run fast.",
+   "example_cn": "这匹马跑得很快。"
+  },
+  {
+   "grade": 4,
+   "word": "cow",
+   "phonetic": "/kaʊ/",
+   "pos": "n.",
+   "meaning": "奶牛",
+   "example": "The cow is black and white.",
+   "example_cn": "这头奶牛是黑白相间的。"
+  },
+  {
+   "grade": 4,
+   "word": "sheep",
+   "phonetic": "/ʃiːp/",
+   "pos": "n.",
+   "meaning": "绵羊",
+   "example": "The sheep are on the hill.",
+   "example_cn": "绵羊在山丘上。"
+  },
+  {
+   "grade": 4,
+   "word": "hen",
+   "phonetic": "/hen/",
+   "pos": "n.",
+   "meaning": "母鸡",
+   "example": "The hen has ten eggs.",
+   "example_cn": "母鸡有十个鸡蛋。"
+  },
+  {
+   "grade": 4,
+   "word": "these",
+   "phonetic": "/ðiːz/",
+   "pos": "pron.",
+   "meaning": "这些",
+   "example": "These are my books.",
+   "example_cn": "这些是我的书。"
+  },
+  {
+   "grade": 4,
+   "word": "those",
+   "phonetic": "/ðəʊz/",
+   "pos": "pron.",
+   "meaning": "那些",
+   "example": "Those are cows.",
+   "example_cn": "那些是奶牛。"
+  },
+  {
+   "grade": 4,
+   "word": "animal",
+   "phonetic": "/ˈænɪml/",
+   "pos": "n.",
+   "meaning": "动物",
+   "example": "I like animals.",
+   "example_cn": "我喜欢动物。"
+  },
+  {
+   "grade": 4,
+   "word": "farm",
+   "phonetic": "/fɑːm/",
+   "pos": "n.",
+   "meaning": "农场",
+   "example": "My grandpa works on a farm.",
+   "example_cn": "我爷爷在农场工作。"
+  },
+  {
+   "grade": 4,
+   "word": "goat",
+   "phonetic": "/ɡəʊt/",
+   "pos": "n.",
+   "meaning": "山羊",
+   "example": "The goat is white.",
+   "example_cn": "这只山羊是白色的。"
+  },
+  {
+   "grade": 4,
+   "word": "eat",
+   "phonetic": "/iːt/",
+   "pos": "v.",
+   "meaning": "吃",
+   "example": "Let's eat some fruit.",
+   "example_cn": "我们吃点水果吧。"
+  },
+  {
+   "grade": 4,
+   "word": "clothes",
+   "phonetic": "/kləʊðz/",
+   "pos": "n.",
+   "meaning": "衣服",
+   "example": "These clothes are new.",
+   "example_cn": "这些衣服是新的。"
+  },
+  {
+   "grade": 4,
+   "word": "pants",
+   "phonetic": "/pænts/",
+   "pos": "n.",
+   "meaning": "裤子",
+   "example": "My pants are too long.",
+   "example_cn": "我的裤子太长了。"
+  },
+  {
+   "grade": 4,
+   "word": "whose",
+   "phonetic": "/huːz/",
+   "pos": "pron.",
+   "meaning": "谁的",
+   "example": "Whose socks are these?",
+   "example_cn": "这些是谁的袜子？"
+  },
+  {
+   "grade": 4,
+   "word": "mine",
+   "phonetic": "/maɪn/",
+   "pos": "pron.",
+   "meaning": "我的（东西）",
+   "example": "The red coat is mine.",
+   "example_cn": "那件红外套是我的。"
+  },
+  {
+   "grade": 4,
+   "word": "yours",
+   "phonetic": "/jɔːz/",
+   "pos": "pron.",
+   "meaning": "你的（东西）",
+   "example": "Is this scarf yours?",
+   "example_cn": "这条围巾是你的吗？"
+  },
+  {
+   "grade": 4,
+   "word": "pack",
+   "phonetic": "/pæk/",
+   "pos": "v.",
+   "meaning": "收拾；打包",
+   "example": "Pack your bag, please.",
+   "example_cn": "请收拾你的书包。"
+  },
+  {
+   "grade": 5,
+   "word": "young",
+   "phonetic": "/jʌŋ/",
+   "pos": "adj.",
+   "meaning": "年轻的",
+   "example": "Our English teacher is young.",
+   "example_cn": "我们的英语老师很年轻。"
+  },
+  {
+   "grade": 5,
+   "word": "funny",
+   "phonetic": "/ˈfʌni/",
+   "pos": "adj.",
+   "meaning": "有趣的",
+   "example": "He is a funny man.",
+   "example_cn": "他是个有趣的人。"
+  },
+  {
+   "grade": 5,
+   "word": "kind",
+   "phonetic": "/kaɪnd/",
+   "pos": "adj.",
+   "meaning": "亲切的",
+   "example": "My teacher is kind.",
+   "example_cn": "我的老师很亲切。"
+  },
+  {
+   "grade": 5,
+   "word": "Mr",
+   "phonetic": "/ˈmɪstə/",
+   "pos": "n.",
+   "meaning": "先生",
+   "example": "Mr Li is our teacher.",
+   "example_cn": "李先生是我们的老师。"
+  },
+  {
+   "grade": 5,
+   "word": "strict",
+   "phonetic": "/strɪkt/",
+   "pos": "adj.",
+   "meaning": "严格的",
+   "example": "Our maths teacher is strict.",
+   "example_cn": "我们的数学老师很严格。"
+  },
+  {
+   "grade": 5,
+   "word": "polite",
+   "phonetic": "/pəˈlaɪt/",
+   "pos": "adj.",
+   "meaning": "有礼貌的",
+   "example": "She is polite to everyone.",
+   "example_cn": "她对每个人都很有礼貌。"
+  },
+  {
+   "grade": 5,
+   "word": "hard-working",
+   "phonetic": "/ˌhɑːd ˈwɜːkɪŋ/",
+   "pos": "adj.",
+   "meaning": "勤奋的",
+   "example": "Tom is hard-working.",
+   "example_cn": "汤姆很勤奋。"
+  },
+  {
+   "grade": 5,
+   "word": "helpful",
+   "phonetic": "/ˈhelpfl/",
+   "pos": "adj.",
+   "meaning": "有帮助的",
+   "example": "He is very helpful.",
+   "example_cn": "他非常乐于助人。"
+  },
+  {
+   "grade": 5,
+   "word": "clever",
+   "phonetic": "/ˈklevə/",
+   "pos": "adj.",
+   "meaning": "聪明的",
+   "example": "The girl is clever.",
+   "example_cn": "这个女孩很聪明。"
+  },
+  {
+   "grade": 5,
+   "word": "shy",
+   "phonetic": "/ʃaɪ/",
+   "pos": "adj.",
+   "meaning": "害羞的",
+   "example": "The boy is a little shy.",
+   "example_cn": "这个男孩有点害羞。"
+  },
+  {
+   "grade": 5,
+   "word": "know",
+   "phonetic": "/nəʊ/",
+   "pos": "v.",
+   "meaning": "知道",
+   "example": "Do you know him?",
+   "example_cn": "你认识他吗？"
+  },
+  {
+   "grade": 5,
+   "word": "Ms",
+   "phonetic": "/mɪz/",
+   "pos": "n.",
+   "meaning": "女士",
+   "example": "Ms Wang is a doctor.",
+   "example_cn": "王女士是一名医生。"
+  },
+  {
+   "grade": 5,
+   "word": "will",
+   "phonetic": "/wɪl/",
+   "pos": "v.",
+   "meaning": "将要",
+   "example": "She will come tomorrow.",
+   "example_cn": "她明天会来。"
+  },
+  {
+   "grade": 5,
+   "word": "sometimes",
+   "phonetic": "/ˈsʌmtaɪmz/",
+   "pos": "adv.",
+   "meaning": "有时",
+   "example": "I sometimes play football.",
+   "example_cn": "我有时踢足球。"
+  },
+  {
+   "grade": 5,
+   "word": "robot",
+   "phonetic": "/ˈrəʊbɒt/",
+   "pos": "n.",
+   "meaning": "机器人",
+   "example": "This robot can talk.",
+   "example_cn": "这个机器人会说话。"
+  },
+  {
+   "grade": 5,
+   "word": "him",
+   "phonetic": "/hɪm/",
+   "pos": "pron.",
+   "meaning": "他（宾格）",
+   "example": "I like him.",
+   "example_cn": "我喜欢他。"
+  },
+  {
+   "grade": 5,
+   "word": "finish",
+   "phonetic": "/ˈfɪnɪʃ/",
+   "pos": "v.",
+   "meaning": "完成",
+   "example": "I finish my homework at six.",
+   "example_cn": "我六点完成作业。"
+  },
+  {
+   "grade": 5,
+   "word": "speak",
+   "phonetic": "/spiːk/",
+   "pos": "v.",
+   "meaning": "说",
+   "example": "Can you speak English?",
+   "example_cn": "你会说英语吗？"
+  },
+  {
+   "grade": 5,
+   "word": "email",
+   "phonetic": "/ˈiːmeɪl/",
+   "pos": "n.",
+   "meaning": "电子邮件",
+   "example": "I send an email to my friend.",
+   "example_cn": "我给朋友发了一封电子邮件。"
+  },
+  {
+   "grade": 5,
+   "word": "Monday",
+   "phonetic": "/ˈmʌndeɪ/",
+   "pos": "n.",
+   "meaning": "星期一",
+   "example": "We have music on Monday.",
+   "example_cn": "我们星期一有音乐课。"
+  },
+  {
+   "grade": 5,
+   "word": "Tuesday",
+   "phonetic": "/ˈtjuːzdeɪ/",
+   "pos": "n.",
+   "meaning": "星期二",
+   "example": "It is Tuesday today.",
+   "example_cn": "今天是星期二。"
+  },
+  {
+   "grade": 5,
+   "word": "Wednesday",
+   "phonetic": "/ˈwenzdeɪ/",
+   "pos": "n.",
+   "meaning": "星期三",
+   "example": "We have PE on Wednesday.",
+   "example_cn": "我们星期三有体育课。"
+  },
+  {
+   "grade": 5,
+   "word": "Thursday",
+   "phonetic": "/ˈθɜːzdeɪ/",
+   "pos": "n.",
+   "meaning": "星期四",
+   "example": "My birthday is on Thursday.",
+   "example_cn": "我的生日在星期四。"
+  },
+  {
+   "grade": 5,
+   "word": "Friday",
+   "phonetic": "/ˈfraɪdeɪ/",
+   "pos": "n.",
+   "meaning": "星期五",
+   "example": "Friday is my favourite day.",
+   "example_cn": "星期五是我最喜欢的一天。"
+  },
+  {
+   "grade": 5,
+   "word": "Saturday",
+   "phonetic": "/ˈsætədeɪ/",
+   "pos": "n.",
+   "meaning": "星期六",
+   "example": "I read books on Saturday.",
+   "example_cn": "我星期六看书。"
+  },
+  {
+   "grade": 5,
+   "word": "Sunday",
+   "phonetic": "/ˈsʌndeɪ/",
+   "pos": "n.",
+   "meaning": "星期日",
+   "example": "We go to the park on Sunday.",
+   "example_cn": "我们星期日去公园。"
+  },
+  {
+   "grade": 5,
+   "word": "weekend",
+   "phonetic": "/ˌwiːkˈend/",
+   "pos": "n.",
+   "meaning": "周末",
+   "example": "I often wash clothes at the weekend.",
+   "example_cn": "我经常在周末洗衣服。"
+  },
+  {
+   "grade": 5,
+   "word": "wash",
+   "phonetic": "/wɒʃ/",
+   "pos": "v.",
+   "meaning": "洗",
+   "example": "Wash your hands first.",
+   "example_cn": "先洗手。"
+  },
+  {
+   "grade": 5,
+   "word": "watch",
+   "phonetic": "/wɒtʃ/",
+   "pos": "v.",
+   "meaning": "观看",
+   "example": "We watch TV after dinner.",
+   "example_cn": "我们晚饭后看电视。"
+  },
+  {
+   "grade": 5,
+   "word": "read",
+   "phonetic": "/riːd/",
+   "pos": "v.",
+   "meaning": "读",
+   "example": "I read books every night.",
+   "example_cn": "我每晚读书。"
+  },
+  {
+   "grade": 5,
+   "word": "often",
+   "phonetic": "/ˈɒfn/",
+   "pos": "adv.",
+   "meaning": "经常",
+   "example": "I often play ping-pong.",
+   "example_cn": "我经常打乒乓球。"
+  },
+  {
+   "grade": 5,
+   "word": "sandwich",
+   "phonetic": "/ˈsænwɪdʒ/",
+   "pos": "n.",
+   "meaning": "三明治",
+   "example": "I'd like a sandwich.",
+   "example_cn": "我想要一个三明治。"
+  },
+  {
+   "grade": 5,
+   "word": "salad",
+   "phonetic": "/ˈsæləd/",
+   "pos": "n.",
+   "meaning": "蔬菜沙拉",
+   "example": "The salad is fresh.",
+   "example_cn": "沙拉很新鲜。"
+  },
+  {
+   "grade": 5,
+   "word": "fresh",
+   "phonetic": "/freʃ/",
+   "pos": "adj.",
+   "meaning": "新鲜的",
+   "example": "The vegetables are fresh.",
+   "example_cn": "蔬菜很新鲜。"
+  },
+  {
+   "grade": 5,
+   "word": "healthy",
+   "phonetic": "/ˈhelθi/",
+   "pos": "adj.",
+   "meaning": "健康的",
+   "example": "Milk is healthy.",
+   "example_cn": "牛奶是健康的。"
+  },
+  {
+   "grade": 5,
+   "word": "delicious",
+   "phonetic": "/dɪˈlɪʃəs/",
+   "pos": "adj.",
+   "meaning": "美味的",
+   "example": "The soup is delicious.",
+   "example_cn": "汤很美味。"
+  },
+  {
+   "grade": 5,
+   "word": "hot",
+   "phonetic": "/hɒt/",
+   "pos": "adj.",
+   "meaning": "热的；辣的",
+   "example": "The tea is too hot.",
+   "example_cn": "茶太烫了。"
+  },
+  {
+   "grade": 5,
+   "word": "drink",
+   "phonetic": "/drɪŋk/",
+   "pos": "v.",
+   "meaning": "喝",
+   "example": "Drink some water, please.",
+   "example_cn": "请喝点水。"
+  },
+  {
+   "grade": 5,
+   "word": "favourite",
+   "phonetic": "/ˈfeɪvərɪt/",
+   "pos": "adj.",
+   "meaning": "最喜爱的",
+   "example": "Apples are my favourite fruit.",
+   "example_cn": "苹果是我最爱的水果。"
+  },
+  {
+   "grade": 5,
+   "word": "food",
+   "phonetic": "/fuːd/",
+   "pos": "n.",
+   "meaning": "食物",
+   "example": "Chinese food is delicious.",
+   "example_cn": "中国菜很好吃。"
+  },
+  {
+   "grade": 5,
+   "word": "sing",
+   "phonetic": "/sɪŋ/",
+   "pos": "v.",
+   "meaning": "唱歌",
+   "example": "She can sing very well.",
+   "example_cn": "她唱得很好。"
+  },
+  {
+   "grade": 5,
+   "word": "song",
+   "phonetic": "/sɒŋ/",
+   "pos": "n.",
+   "meaning": "歌曲",
+   "example": "This song is nice.",
+   "example_cn": "这首歌很好听。"
+  },
+  {
+   "grade": 5,
+   "word": "dance",
+   "phonetic": "/dɑːns/",
+   "pos": "v.",
+   "meaning": "跳舞",
+   "example": "Let's dance together.",
+   "example_cn": "我们一起跳舞吧。"
+  },
+  {
+   "grade": 5,
+   "word": "kung fu",
+   "phonetic": "/ˌkʊŋ ˈfuː/",
+   "pos": "n.",
+   "meaning": "功夫",
+   "example": "He can do kung fu.",
+   "example_cn": "他会功夫。"
+  },
+  {
+   "grade": 5,
+   "word": "draw",
+   "phonetic": "/drɔː/",
+   "pos": "v.",
+   "meaning": "画画",
+   "example": "I can draw a panda.",
+   "example_cn": "我会画熊猫。"
+  },
+  {
+   "grade": 5,
+   "word": "cartoon",
+   "phonetic": "/kɑːˈtuːn/",
+   "pos": "n.",
+   "meaning": "动画片",
+   "example": "I like this cartoon.",
+   "example_cn": "我喜欢这部动画片。"
+  },
+  {
+   "grade": 5,
+   "word": "ping-pong",
+   "phonetic": "/ˈpɪŋ pɒŋ/",
+   "pos": "n.",
+   "meaning": "乒乓球",
+   "example": "We play ping-pong after class.",
+   "example_cn": "我们课后打乒乓球。"
+  },
+  {
+   "grade": 5,
+   "word": "next year",
+   "phonetic": "/nekst jɪə/",
+   "pos": "phr.",
+   "meaning": "明年",
+   "example": "I will go to a new school next year.",
+   "example_cn": "明年我会去新学校。"
+  },
+  {
+   "grade": 5,
+   "word": "wonderful",
+   "phonetic": "/ˈwʌndəfl/",
+   "pos": "adj.",
+   "meaning": "精彩的",
+   "example": "The party is wonderful.",
+   "example_cn": "这个聚会很精彩。"
+  },
+  {
+   "grade": 5,
+   "word": "learn",
+   "phonetic": "/lɜːn/",
+   "pos": "v.",
+   "meaning": "学习",
+   "example": "Let's learn English together.",
+   "example_cn": "我们一起学英语吧。"
+  },
+  {
+   "grade": 5,
+   "word": "any",
+   "phonetic": "/ˈeni/",
+   "pos": "adj.",
+   "meaning": "任何的",
+   "example": "Do you have any questions?",
+   "example_cn": "你还有什么问题吗？"
+  },
+  {
+   "grade": 5,
+   "word": "problem",
+   "phonetic": "/ˈprɒbləm/",
+   "pos": "n.",
+   "meaning": "问题",
+   "example": "No problem.",
+   "example_cn": "没问题。"
+  },
+  {
+   "grade": 5,
+   "word": "send",
+   "phonetic": "/send/",
+   "pos": "v.",
+   "meaning": "发送",
+   "example": "Please send me a photo.",
+   "example_cn": "请给我发一张照片。"
+  },
+  {
+   "grade": 5,
+   "word": "clock",
+   "phonetic": "/klɒk/",
+   "pos": "n.",
+   "meaning": "时钟",
+   "example": "The clock is on the wall.",
+   "example_cn": "钟在墙上。"
+  },
+  {
+   "grade": 5,
+   "word": "plant",
+   "phonetic": "/plɑːnt/",
+   "pos": "n.",
+   "meaning": "植物",
+   "example": "This plant is green.",
+   "example_cn": "这株植物是绿色的。"
+  },
+  {
+   "grade": 5,
+   "word": "bottle",
+   "phonetic": "/ˈbɒtl/",
+   "pos": "n.",
+   "meaning": "瓶子",
+   "example": "The bottle is on the desk.",
+   "example_cn": "瓶子在书桌上。"
+  },
+  {
+   "grade": 5,
+   "word": "bike",
+   "phonetic": "/baɪk/",
+   "pos": "n.",
+   "meaning": "自行车",
+   "example": "My bike is under the tree.",
+   "example_cn": "我的自行车在树下。"
+  },
+  {
+   "grade": 5,
+   "word": "photo",
+   "phonetic": "/ˈfəʊtəʊ/",
+   "pos": "n.",
+   "meaning": "照片",
+   "example": "There is a photo on the wall.",
+   "example_cn": "墙上有一张照片。"
+  },
+  {
+   "grade": 5,
+   "word": "front",
+   "phonetic": "/frʌnt/",
+   "pos": "n.",
+   "meaning": "前面",
+   "example": "The tree is in front of the house.",
+   "example_cn": "树在房子前面。"
+  },
+  {
+   "grade": 5,
+   "word": "above",
+   "phonetic": "/əˈbʌv/",
+   "pos": "prep.",
+   "meaning": "在……上方",
+   "example": "The light is above the table.",
+   "example_cn": "灯在桌子上方。"
+  },
+  {
+   "grade": 5,
+   "word": "beside",
+   "phonetic": "/bɪˈsaɪd/",
+   "pos": "prep.",
+   "meaning": "在……旁边",
+   "example": "The plant is beside the window.",
+   "example_cn": "植物在窗户旁边。"
+  },
+  {
+   "grade": 5,
+   "word": "between",
+   "phonetic": "/bɪˈtwiːn/",
+   "pos": "prep.",
+   "meaning": "在……之间",
+   "example": "The cat is between the boxes.",
+   "example_cn": "猫在两个盒子之间。"
+  },
+  {
+   "grade": 5,
+   "word": "there",
+   "phonetic": "/ðeə/",
+   "pos": "adv.",
+   "meaning": "那里；有",
+   "example": "There is a clock in my room.",
+   "example_cn": "我的房间里有一个钟。"
+  },
+  {
+   "grade": 5,
+   "word": "grandparent",
+   "phonetic": "/ˈɡrænpeərənt/",
+   "pos": "n.",
+   "meaning": "祖父母",
+   "example": "I live with my grandparents.",
+   "example_cn": "我和祖父母一起住。"
+  },
+  {
+   "grade": 5,
+   "word": "house",
+   "phonetic": "/haʊs/",
+   "pos": "n.",
+   "meaning": "房子",
+   "example": "My house is near the river.",
+   "example_cn": "我的房子在河边。"
+  },
+  {
+   "grade": 5,
+   "word": "mountain",
+   "phonetic": "/ˈmaʊntən/",
+   "pos": "n.",
+   "meaning": "山",
+   "example": "The mountain is very high.",
+   "example_cn": "这座山很高。"
+  },
+  {
+   "grade": 5,
+   "word": "forest",
+   "phonetic": "/ˈfɒrɪst/",
+   "pos": "n.",
+   "meaning": "森林",
+   "example": "There are many trees in the forest.",
+   "example_cn": "森林里有很多树。"
+  },
+  {
+   "grade": 5,
+   "word": "river",
+   "phonetic": "/ˈrɪvə/",
+   "pos": "n.",
+   "meaning": "河流",
+   "example": "A boat is on the river.",
+   "example_cn": "河上有一条船。"
+  },
+  {
+   "grade": 5,
+   "word": "path",
+   "phonetic": "/pɑːθ/",
+   "pos": "n.",
+   "meaning": "小路",
+   "example": "The path is near the lake.",
+   "example_cn": "小路在湖边。"
+  },
+  {
+   "grade": 5,
+   "word": "sky",
+   "phonetic": "/skaɪ/",
+   "pos": "n.",
+   "meaning": "天空",
+   "example": "The sky is blue today.",
+   "example_cn": "今天天空很蓝。"
+  },
+  {
+   "grade": 5,
+   "word": "cloud",
+   "phonetic": "/klaʊd/",
+   "pos": "n.",
+   "meaning": "云",
+   "example": "There are white clouds in the sky.",
+   "example_cn": "天上有白云。"
+  },
+  {
+   "grade": 5,
+   "word": "building",
+   "phonetic": "/ˈbɪldɪŋ/",
+   "pos": "n.",
+   "meaning": "建筑物",
+   "example": "That building is tall.",
+   "example_cn": "那座建筑很高。"
+  },
+  {
+   "grade": 5,
+   "word": "village",
+   "phonetic": "/ˈvɪlɪdʒ/",
+   "pos": "n.",
+   "meaning": "村庄",
+   "example": "My grandma lives in a village.",
+   "example_cn": "我奶奶住在村庄里。"
+  },
+  {
+   "grade": 5,
+   "word": "nature",
+   "phonetic": "/ˈneɪtʃə/",
+   "pos": "n.",
+   "meaning": "自然",
+   "example": "I love nature.",
+   "example_cn": "我热爱自然。"
+  },
+  {
+   "grade": 5,
+   "word": "air",
+   "phonetic": "/eə/",
+   "pos": "n.",
+   "meaning": "空气",
+   "example": "The air is fresh here.",
+   "example_cn": "这里空气很新鲜。"
+  },
+  {
+   "grade": 5,
+   "word": "eat breakfast",
+   "phonetic": "/iːt ˈbrekfəst/",
+   "pos": "phr.",
+   "meaning": "吃早餐",
+   "example": "I eat breakfast at seven.",
+   "example_cn": "我七点吃早餐。"
+  },
+  {
+   "grade": 5,
+   "word": "have English class",
+   "phonetic": "/hæv ˈɪŋɡlɪʃ klɑːs/",
+   "pos": "phr.",
+   "meaning": "上英语课",
+   "example": "We have English class on Monday.",
+   "example_cn": "我们星期一上英语课。"
+  },
+  {
+   "grade": 5,
+   "word": "play sports",
+   "phonetic": "/pleɪ spɔːts/",
+   "pos": "phr.",
+   "meaning": "进行体育运动",
+   "example": "Let's play sports together.",
+   "example_cn": "我们一起运动吧。"
+  },
+  {
+   "grade": 5,
+   "word": "exercise",
+   "phonetic": "/ˈeksəsaɪz/",
+   "pos": "n.",
+   "meaning": "锻炼",
+   "example": "Exercise is good for you.",
+   "example_cn": "锻炼对你有好处。"
+  },
+  {
+   "grade": 5,
+   "word": "do morning exercises",
+   "phonetic": "/duː ˈmɔːnɪŋ ˈeksəsaɪzɪz/",
+   "pos": "phr.",
+   "meaning": "做早操",
+   "example": "We do morning exercises at school.",
+   "example_cn": "我们在学校做早操。"
+  },
+  {
+   "grade": 5,
+   "word": "eat dinner",
+   "phonetic": "/iːt ˈdɪnə/",
+   "pos": "phr.",
+   "meaning": "吃晚饭",
+   "example": "We eat dinner at six.",
+   "example_cn": "我们六点吃晚饭。"
+  },
+  {
+   "grade": 5,
+   "word": "clean my room",
+   "phonetic": "/kliːn maɪ ruːm/",
+   "pos": "phr.",
+   "meaning": "打扫我的房间",
+   "example": "I clean my room on Sunday.",
+   "example_cn": "我星期日打扫自己的房间。"
+  },
+  {
+   "grade": 5,
+   "word": "go for a walk",
+   "phonetic": "/ɡəʊ fər ə wɔːk/",
+   "pos": "phr.",
+   "meaning": "散步",
+   "example": "Let's go for a walk.",
+   "example_cn": "我们去散步吧。"
+  },
+  {
+   "grade": 5,
+   "word": "go shopping",
+   "phonetic": "/ɡəʊ ˈʃɒpɪŋ/",
+   "pos": "phr.",
+   "meaning": "去购物",
+   "example": "Mum and I go shopping on Saturday.",
+   "example_cn": "我和妈妈星期六去购物。"
+  },
+  {
+   "grade": 5,
+   "word": "take",
+   "phonetic": "/teɪk/",
+   "pos": "v.",
+   "meaning": "上（课）；拿",
+   "example": "I take a dancing class.",
+   "example_cn": "我上舞蹈课。"
+  },
+  {
+   "grade": 5,
+   "word": "dancing",
+   "phonetic": "/ˈdɑːnsɪŋ/",
+   "pos": "n.",
+   "meaning": "跳舞",
+   "example": "She likes dancing.",
+   "example_cn": "她喜欢跳舞。"
+  },
+  {
+   "grade": 5,
+   "word": "when",
+   "phonetic": "/wen/",
+   "pos": "adv.",
+   "meaning": "什么时候",
+   "example": "When do you get up?",
+   "example_cn": "你什么时候起床？"
+  },
+  {
+   "grade": 5,
+   "word": "after",
+   "phonetic": "/ˈɑːftə/",
+   "pos": "prep.",
+   "meaning": "在……之后",
+   "example": "I play football after school.",
+   "example_cn": "放学后我踢足球。"
+  },
+  {
+   "grade": 5,
+   "word": "start",
+   "phonetic": "/stɑːt/",
+   "pos": "v.",
+   "meaning": "开始",
+   "example": "Class starts at eight.",
+   "example_cn": "八点开始上课。"
+  },
+  {
+   "grade": 5,
+   "word": "usually",
+   "phonetic": "/ˈjuːʒuəli/",
+   "pos": "adv.",
+   "meaning": "通常",
+   "example": "I usually go to bed at nine.",
+   "example_cn": "我通常九点睡觉。"
+  },
+  {
+   "grade": 5,
+   "word": "Spain",
+   "phonetic": "/speɪn/",
+   "pos": "n.",
+   "meaning": "西班牙",
+   "example": "She is from Spain.",
+   "example_cn": "她来自西班牙。"
+  },
+  {
+   "grade": 5,
+   "word": "late",
+   "phonetic": "/leɪt/",
+   "pos": "adj.",
+   "meaning": "晚的",
+   "example": "Don't be late for school.",
+   "example_cn": "上学别迟到。"
+  },
+  {
+   "grade": 5,
+   "word": "why",
+   "phonetic": "/waɪ/",
+   "pos": "adv.",
+   "meaning": "为什么",
+   "example": "Why are you so happy?",
+   "example_cn": "你为什么这么开心？"
+  },
+  {
+   "grade": 5,
+   "word": "shop",
+   "phonetic": "/ʃɒp/",
+   "pos": "v.",
+   "meaning": "购物",
+   "example": "We shop in the supermarket.",
+   "example_cn": "我们在超市购物。"
+  },
+  {
+   "grade": 5,
+   "word": "work",
+   "phonetic": "/wɜːk/",
+   "pos": "v.",
+   "meaning": "工作",
+   "example": "My parents work in a hospital.",
+   "example_cn": "我父母在医院工作。"
+  },
+  {
+   "grade": 5,
+   "word": "last",
+   "phonetic": "/lɑːst/",
+   "pos": "adj.",
+   "meaning": "上一个的",
+   "example": "I went to the zoo last week.",
+   "example_cn": "我上周去了动物园。"
+  },
+  {
+   "grade": 5,
+   "word": "sound",
+   "phonetic": "/saʊnd/",
+   "pos": "v.",
+   "meaning": "听起来",
+   "example": "That sounds good.",
+   "example_cn": "那听起来不错。"
+  },
+  {
+   "grade": 5,
+   "word": "also",
+   "phonetic": "/ˈɔːlsəʊ/",
+   "pos": "adv.",
+   "meaning": "也",
+   "example": "I also like music.",
+   "example_cn": "我也喜欢音乐。"
+  },
+  {
+   "grade": 5,
+   "word": "busy",
+   "phonetic": "/ˈbɪzi/",
+   "pos": "adj.",
+   "meaning": "忙碌的",
+   "example": "My father is busy today.",
+   "example_cn": "我父亲今天很忙。"
+  },
+  {
+   "grade": 5,
+   "word": "need",
+   "phonetic": "/niːd/",
+   "pos": "v.",
+   "meaning": "需要",
+   "example": "I need a new pen.",
+   "example_cn": "我需要一支新钢笔。"
+  },
+  {
+   "grade": 5,
+   "word": "letter",
+   "phonetic": "/ˈletə/",
+   "pos": "n.",
+   "meaning": "信",
+   "example": "I write a letter to my friend.",
+   "example_cn": "我给朋友写了一封信。"
+  },
+  {
+   "grade": 5,
+   "word": "live",
+   "phonetic": "/lɪv/",
+   "pos": "v.",
+   "meaning": "居住",
+   "example": "I live in Beijing.",
+   "example_cn": "我住在北京。"
+  },
+  {
+   "grade": 5,
+   "word": "island",
+   "phonetic": "/ˈaɪlənd/",
+   "pos": "n.",
+   "meaning": "岛屿",
+   "example": "There is an island in the sea.",
+   "example_cn": "海上有一座岛。"
+  },
+  {
+   "grade": 5,
+   "word": "always",
+   "phonetic": "/ˈɔːlweɪz/",
+   "pos": "adv.",
+   "meaning": "总是",
+   "example": "She is always happy.",
+   "example_cn": "她总是很快乐。"
+  },
+  {
+   "grade": 5,
+   "word": "cave",
+   "phonetic": "/keɪv/",
+   "pos": "n.",
+   "meaning": "山洞",
+   "example": "The bear lives in a cave.",
+   "example_cn": "熊住在山洞里。"
+  },
+  {
+   "grade": 5,
+   "word": "win",
+   "phonetic": "/wɪn/",
+   "pos": "v.",
+   "meaning": "获胜",
+   "example": "I want to win the game.",
+   "example_cn": "我想赢得比赛。"
+  },
+  {
+   "grade": 5,
+   "word": "spring",
+   "phonetic": "/sprɪŋ/",
+   "pos": "n.",
+   "meaning": "春天",
+   "example": "Flowers open in spring.",
+   "example_cn": "花在春天开放。"
+  },
+  {
+   "grade": 5,
+   "word": "summer",
+   "phonetic": "/ˈsʌmə/",
+   "pos": "n.",
+   "meaning": "夏天",
+   "example": "I swim in summer.",
+   "example_cn": "我在夏天游泳。"
+  },
+  {
+   "grade": 5,
+   "word": "autumn",
+   "phonetic": "/ˈɔːtəm/",
+   "pos": "n.",
+   "meaning": "秋天",
+   "example": "Leaves fall in autumn.",
+   "example_cn": "秋天树叶落下。"
+  },
+  {
+   "grade": 5,
+   "word": "winter",
+   "phonetic": "/ˈwɪntə/",
+   "pos": "n.",
+   "meaning": "冬天",
+   "example": "It is cold in winter.",
+   "example_cn": "冬天很冷。"
+  },
+  {
+   "grade": 5,
+   "word": "season",
+   "phonetic": "/ˈsiːzn/",
+   "pos": "n.",
+   "meaning": "季节",
+   "example": "Which season do you like best?",
+   "example_cn": "你最喜欢哪个季节？"
+  },
+  {
+   "grade": 5,
+   "word": "picnic",
+   "phonetic": "/ˈpɪknɪk/",
+   "pos": "n.",
+   "meaning": "野餐",
+   "example": "We have a picnic in the park.",
+   "example_cn": "我们在公园野餐。"
+  },
+  {
+   "grade": 5,
+   "word": "go on a picnic",
+   "phonetic": "/ɡəʊ ɒn ə ˈpɪknɪk/",
+   "pos": "phr.",
+   "meaning": "去野餐",
+   "example": "Let's go on a picnic.",
+   "example_cn": "我们去野餐吧。"
+  },
+  {
+   "grade": 5,
+   "word": "pick",
+   "phonetic": "/pɪk/",
+   "pos": "v.",
+   "meaning": "摘；挑选",
+   "example": "Let's pick apples.",
+   "example_cn": "我们去摘苹果吧。"
+  },
+  {
+   "grade": 5,
+   "word": "which",
+   "phonetic": "/wɪtʃ/",
+   "pos": "pron.",
+   "meaning": "哪一个",
+   "example": "Which one is yours?",
+   "example_cn": "哪一个是你的？"
+  },
+  {
+   "grade": 5,
+   "word": "best",
+   "phonetic": "/best/",
+   "pos": "adv.",
+   "meaning": "最",
+   "example": "I like spring best.",
+   "example_cn": "我最喜欢春天。"
+  },
+  {
+   "grade": 5,
+   "word": "snow",
+   "phonetic": "/snəʊ/",
+   "pos": "n.",
+   "meaning": "雪",
+   "example": "The snow is white.",
+   "example_cn": "雪是白色的。"
+  },
+  {
+   "grade": 5,
+   "word": "vacation",
+   "phonetic": "/vəˈkeɪʃn/",
+   "pos": "n.",
+   "meaning": "假期",
+   "example": "Summer vacation is long.",
+   "example_cn": "暑假很长。"
+  },
+  {
+   "grade": 5,
+   "word": "all",
+   "phonetic": "/ɔːl/",
+   "pos": "adj.",
+   "meaning": "全部的",
+   "example": "All the children are here.",
+   "example_cn": "所有的孩子都在这里。"
+  },
+  {
+   "grade": 5,
+   "word": "lovely",
+   "phonetic": "/ˈlʌvli/",
+   "pos": "adj.",
+   "meaning": "可爱的",
+   "example": "The baby is lovely.",
+   "example_cn": "这个宝宝很可爱。"
+  },
+  {
+   "grade": 5,
+   "word": "leaf",
+   "phonetic": "/liːf/",
+   "pos": "n.",
+   "meaning": "叶子",
+   "example": "One leaf is yellow.",
+   "example_cn": "一片叶子是黄色的。"
+  },
+  {
+   "grade": 5,
+   "word": "fall",
+   "phonetic": "/fɔːl/",
+   "pos": "v.",
+   "meaning": "落下",
+   "example": "Leaves fall from the trees.",
+   "example_cn": "树叶从树上落下。"
+  },
+  {
+   "grade": 5,
+   "word": "paint",
+   "phonetic": "/peɪnt/",
+   "pos": "v.",
+   "meaning": "绘画",
+   "example": "I paint a picture of a tree.",
+   "example_cn": "我画了一幅树的画。"
+  },
+  {
+   "grade": 5,
+   "word": "January",
+   "phonetic": "/ˈdʒænjuəri/",
+   "pos": "n.",
+   "meaning": "一月",
+   "example": "January is the first month.",
+   "example_cn": "一月是第一个月。"
+  },
+  {
+   "grade": 5,
+   "word": "February",
+   "phonetic": "/ˈfebruəri/",
+   "pos": "n.",
+   "meaning": "二月",
+   "example": "It is cold in February.",
+   "example_cn": "二月很冷。"
+  },
+  {
+   "grade": 5,
+   "word": "March",
+   "phonetic": "/mɑːtʃ/",
+   "pos": "n.",
+   "meaning": "三月",
+   "example": "Trees are green in March.",
+   "example_cn": "三月树木变绿。"
+  },
+  {
+   "grade": 5,
+   "word": "April",
+   "phonetic": "/ˈeɪprəl/",
+   "pos": "n.",
+   "meaning": "四月",
+   "example": "We have a sports meet in April.",
+   "example_cn": "我们四月开运动会。"
+  },
+  {
+   "grade": 5,
+   "word": "May",
+   "phonetic": "/meɪ/",
+   "pos": "n.",
+   "meaning": "五月",
+   "example": "May is a nice month.",
+   "example_cn": "五月是个好月份。"
+  },
+  {
+   "grade": 5,
+   "word": "June",
+   "phonetic": "/dʒuːn/",
+   "pos": "n.",
+   "meaning": "六月",
+   "example": "Children's Day is in June.",
+   "example_cn": "儿童节在六月。"
+  },
+  {
+   "grade": 5,
+   "word": "July",
+   "phonetic": "/dʒʊˈlaɪ/",
+   "pos": "n.",
+   "meaning": "七月",
+   "example": "We go swimming in July.",
+   "example_cn": "我们七月去游泳。"
+  },
+  {
+   "grade": 5,
+   "word": "August",
+   "phonetic": "/ˈɔːɡəst/",
+   "pos": "n.",
+   "meaning": "八月",
+   "example": "It is hot in August.",
+   "example_cn": "八月很热。"
+  },
+  {
+   "grade": 5,
+   "word": "September",
+   "phonetic": "/sepˈtembə/",
+   "pos": "n.",
+   "meaning": "九月",
+   "example": "School starts in September.",
+   "example_cn": "九月开学。"
+  },
+  {
+   "grade": 5,
+   "word": "October",
+   "phonetic": "/ɒkˈtəʊbə/",
+   "pos": "n.",
+   "meaning": "十月",
+   "example": "We have a holiday in October.",
+   "example_cn": "我们十月有假期。"
+  },
+  {
+   "grade": 5,
+   "word": "November",
+   "phonetic": "/nəʊˈvembə/",
+   "pos": "n.",
+   "meaning": "十一月",
+   "example": "It is cool in November.",
+   "example_cn": "十一月很凉爽。"
+  },
+  {
+   "grade": 5,
+   "word": "December",
+   "phonetic": "/dɪˈsembə/",
+   "pos": "n.",
+   "meaning": "十二月",
+   "example": "Christmas is in December.",
+   "example_cn": "圣诞节在十二月。"
+  },
+  {
+   "grade": 5,
+   "word": "few",
+   "phonetic": "/fjuː/",
+   "pos": "adj.",
+   "meaning": "不多的",
+   "example": "Few people are here.",
+   "example_cn": "这里人不多。"
+  },
+  {
+   "grade": 5,
+   "word": "a few",
+   "phonetic": "/ə fjuː/",
+   "pos": "phr.",
+   "meaning": "一些",
+   "example": "I have a few books.",
+   "example_cn": "我有一些书。"
+  },
+  {
+   "grade": 5,
+   "word": "thing",
+   "phonetic": "/θɪŋ/",
+   "pos": "n.",
+   "meaning": "事情；东西",
+   "example": "I have many things to do.",
+   "example_cn": "我有很多事要做。"
+  },
+  {
+   "grade": 5,
+   "word": "meet",
+   "phonetic": "/miːt/",
+   "pos": "v.",
+   "meaning": "遇见；集会",
+   "example": "Nice to meet you.",
+   "example_cn": "很高兴见到你。"
+  },
+  {
+   "grade": 5,
+   "word": "sports meet",
+   "phonetic": "/spɔːts miːt/",
+   "pos": "n.",
+   "meaning": "运动会",
+   "example": "The sports meet is in April.",
+   "example_cn": "运动会在四月。"
+  },
+  {
+   "grade": 5,
+   "word": "Easter",
+   "phonetic": "/ˈiːstə/",
+   "pos": "n.",
+   "meaning": "复活节",
+   "example": "Easter is in spring.",
+   "example_cn": "复活节在春天。"
+  },
+  {
+   "grade": 5,
+   "word": "trip",
+   "phonetic": "/trɪp/",
+   "pos": "n.",
+   "meaning": "旅行",
+   "example": "We have a school trip.",
+   "example_cn": "我们有学校旅行。"
+  },
+  {
+   "grade": 5,
+   "word": "year",
+   "phonetic": "/jɪə/",
+   "pos": "n.",
+   "meaning": "年",
+   "example": "This year I am ten.",
+   "example_cn": "今年我十岁。"
+  },
+  {
+   "grade": 5,
+   "word": "contest",
+   "phonetic": "/ˈkɒntest/",
+   "pos": "n.",
+   "meaning": "比赛",
+   "example": "She wins the singing contest.",
+   "example_cn": "她赢得了歌唱比赛。"
+  },
+  {
+   "grade": 5,
+   "word": "the Great Wall",
+   "phonetic": "/ðə ɡreɪt wɔːl/",
+   "pos": "n.",
+   "meaning": "长城",
+   "example": "We visit the Great Wall.",
+   "example_cn": "我们参观长城。"
+  },
+  {
+   "grade": 5,
+   "word": "national",
+   "phonetic": "/ˈnæʃnəl/",
+   "pos": "adj.",
+   "meaning": "国家的",
+   "example": "It is a national holiday.",
+   "example_cn": "这是一个国家假日。"
+  },
+  {
+   "grade": 5,
+   "word": "National Day",
+   "phonetic": "/ˈnæʃnəl deɪ/",
+   "pos": "n.",
+   "meaning": "国庆节",
+   "example": "National Day is in October.",
+   "example_cn": "国庆节在十月。"
+  },
+  {
+   "grade": 5,
+   "word": "American",
+   "phonetic": "/əˈmerɪkən/",
+   "pos": "adj.",
+   "meaning": "美国的",
+   "example": "This is an American car.",
+   "example_cn": "这是一辆美国车。"
+  },
+  {
+   "grade": 5,
+   "word": "Thanksgiving",
+   "phonetic": "/ˌθæŋksˈɡɪvɪŋ/",
+   "pos": "n.",
+   "meaning": "感恩节",
+   "example": "Thanksgiving is in November.",
+   "example_cn": "感恩节在十一月。"
+  },
+  {
+   "grade": 5,
+   "word": "holiday",
+   "phonetic": "/ˈhɒlədeɪ/",
+   "pos": "n.",
+   "meaning": "假日",
+   "example": "The holiday is fun.",
+   "example_cn": "这个假日很有趣。"
+  },
+  {
+   "grade": 5,
+   "word": "game",
+   "phonetic": "/ɡeɪm/",
+   "pos": "n.",
+   "meaning": "游戏",
+   "example": "Let's play a game.",
+   "example_cn": "我们玩个游戏吧。"
+  },
+  {
+   "grade": 5,
+   "word": "roll",
+   "phonetic": "/rəʊl/",
+   "pos": "v.",
+   "meaning": "滚动",
+   "example": "The ball rolls down.",
+   "example_cn": "球滚了下去。"
+  },
+  {
+   "grade": 5,
+   "word": "look for",
+   "phonetic": "/lʊk fɔː/",
+   "pos": "phr.",
+   "meaning": "寻找",
+   "example": "I look for my key.",
+   "example_cn": "我在找我的钥匙。"
+  },
+  {
+   "grade": 5,
+   "word": "chocolate",
+   "phonetic": "/ˈtʃɒklət/",
+   "pos": "n.",
+   "meaning": "巧克力",
+   "example": "She likes chocolate.",
+   "example_cn": "她喜欢巧克力。"
+  },
+  {
+   "grade": 5,
+   "word": "bunny",
+   "phonetic": "/ˈbʌni/",
+   "pos": "n.",
+   "meaning": "小兔子",
+   "example": "The bunny is white.",
+   "example_cn": "这只小兔子是白色的。"
+  },
+  {
+   "grade": 5,
+   "word": "by",
+   "phonetic": "/baɪ/",
+   "pos": "prep.",
+   "meaning": "在……之前；乘",
+   "example": "I go to school by bus.",
+   "example_cn": "我坐公共汽车上学。"
+  },
+  {
+   "grade": 5,
+   "word": "first",
+   "phonetic": "/fɜːst/",
+   "pos": "num.",
+   "meaning": "第一",
+   "example": "He is the first in the race.",
+   "example_cn": "他在比赛中是第一名。"
+  },
+  {
+   "grade": 5,
+   "word": "second",
+   "phonetic": "/ˈsekənd/",
+   "pos": "num.",
+   "meaning": "第二",
+   "example": "February is the second month.",
+   "example_cn": "二月是第二个月。"
+  },
+  {
+   "grade": 5,
+   "word": "third",
+   "phonetic": "/θɜːd/",
+   "pos": "num.",
+   "meaning": "第三",
+   "example": "March is the third month.",
+   "example_cn": "三月是第三个月。"
+  },
+  {
+   "grade": 5,
+   "word": "fourth",
+   "phonetic": "/fɔːθ/",
+   "pos": "num.",
+   "meaning": "第四",
+   "example": "My birthday is on the fourth of May.",
+   "example_cn": "我的生日在五月四日。"
+  },
+  {
+   "grade": 5,
+   "word": "fifth",
+   "phonetic": "/fɪfθ/",
+   "pos": "num.",
+   "meaning": "第五",
+   "example": "May is the fifth month.",
+   "example_cn": "五月是第五个月。"
+  },
+  {
+   "grade": 5,
+   "word": "twelfth",
+   "phonetic": "/twelfθ/",
+   "pos": "num.",
+   "meaning": "第十二",
+   "example": "December is the twelfth month.",
+   "example_cn": "十二月是第十二个月。"
+  },
+  {
+   "grade": 5,
+   "word": "twentieth",
+   "phonetic": "/ˈtwentiəθ/",
+   "pos": "num.",
+   "meaning": "第二十",
+   "example": "It is the twentieth of June.",
+   "example_cn": "今天是六月二十日。"
+  },
+  {
+   "grade": 5,
+   "word": "hers",
+   "phonetic": "/hɜːz/",
+   "pos": "pron.",
+   "meaning": "她的（东西）",
+   "example": "The dress is hers.",
+   "example_cn": "这条连衣裙是她的。"
+  },
+  {
+   "grade": 5,
+   "word": "theirs",
+   "phonetic": "/ðeəz/",
+   "pos": "pron.",
+   "meaning": "他们的（东西）",
+   "example": "The bikes are theirs.",
+   "example_cn": "这些自行车是他们的。"
+  },
+  {
+   "grade": 5,
+   "word": "ours",
+   "phonetic": "/ˈaʊəz/",
+   "pos": "pron.",
+   "meaning": "我们的（东西）",
+   "example": "The classroom is ours.",
+   "example_cn": "这间教室是我们的。"
+  },
+  {
+   "grade": 5,
+   "word": "climbing",
+   "phonetic": "/ˈklaɪmɪŋ/",
+   "pos": "v.",
+   "meaning": "正在爬",
+   "example": "The monkey is climbing.",
+   "example_cn": "猴子正在爬。"
+  },
+  {
+   "grade": 5,
+   "word": "eating",
+   "phonetic": "/ˈiːtɪŋ/",
+   "pos": "v.",
+   "meaning": "正在吃",
+   "example": "The panda is eating.",
+   "example_cn": "熊猫正在吃。"
+  },
+  {
+   "grade": 5,
+   "word": "playing",
+   "phonetic": "/ˈpleɪɪŋ/",
+   "pos": "v.",
+   "meaning": "正在玩",
+   "example": "The children are playing.",
+   "example_cn": "孩子们正在玩。"
+  },
+  {
+   "grade": 5,
+   "word": "jumping",
+   "phonetic": "/ˈdʒʌmpɪŋ/",
+   "pos": "v.",
+   "meaning": "正在跳",
+   "example": "The rabbit is jumping.",
+   "example_cn": "兔子正在跳。"
+  },
+  {
+   "grade": 5,
+   "word": "drinking",
+   "phonetic": "/ˈdrɪŋkɪŋ/",
+   "pos": "v.",
+   "meaning": "正在喝",
+   "example": "The baby is drinking milk.",
+   "example_cn": "宝宝正在喝奶。"
+  },
+  {
+   "grade": 5,
+   "word": "sleeping",
+   "phonetic": "/ˈsliːpɪŋ/",
+   "pos": "v.",
+   "meaning": "正在睡觉",
+   "example": "My cat is sleeping.",
+   "example_cn": "我的猫正在睡觉。"
+  },
+  {
+   "grade": 5,
+   "word": "each other",
+   "phonetic": "/iːtʃ ˈʌðə/",
+   "pos": "phr.",
+   "meaning": "互相",
+   "example": "We help each other.",
+   "example_cn": "我们互相帮助。"
+  },
+  {
+   "grade": 5,
+   "word": "excited",
+   "phonetic": "/ɪkˈsaɪtɪd/",
+   "pos": "adj.",
+   "meaning": "兴奋的",
+   "example": "I am excited about the trip.",
+   "example_cn": "我对这次旅行很兴奋。"
+  },
+  {
+   "grade": 5,
+   "word": "quietly",
+   "phonetic": "/ˈkwaɪətli/",
+   "pos": "adv.",
+   "meaning": "安静地",
+   "example": "Please talk quietly.",
+   "example_cn": "请小声说话。"
+  },
+  {
+   "grade": 6,
+   "word": "science",
+   "phonetic": "/ˈsaɪəns/",
+   "pos": "n.",
+   "meaning": "科学",
+   "example": "I like science very much.",
+   "example_cn": "我非常喜欢科学。"
+  },
+  {
+   "grade": 6,
+   "word": "museum",
+   "phonetic": "/mjuˈziːəm/",
+   "pos": "n.",
+   "meaning": "博物馆",
+   "example": "Let's go to the museum.",
+   "example_cn": "我们去博物馆吧。"
+  },
+  {
+   "grade": 6,
+   "word": "post office",
+   "phonetic": "/ˈpəʊst ɒfɪs/",
+   "pos": "n.",
+   "meaning": "邮局",
+   "example": "The post office is near here.",
+   "example_cn": "邮局就在附近。"
+  },
+  {
+   "grade": 6,
+   "word": "bookstore",
+   "phonetic": "/ˈbʊkstɔː/",
+   "pos": "n.",
+   "meaning": "书店",
+   "example": "I buy books in the bookstore.",
+   "example_cn": "我在书店买书。"
+  },
+  {
+   "grade": 6,
+   "word": "cinema",
+   "phonetic": "/ˈsɪnəmə/",
+   "pos": "n.",
+   "meaning": "电影院",
+   "example": "The cinema is next to the bank.",
+   "example_cn": "电影院在银行旁边。"
+  },
+  {
+   "grade": 6,
+   "word": "crossing",
+   "phonetic": "/ˈkrɒsɪŋ/",
+   "pos": "n.",
+   "meaning": "十字路口",
+   "example": "Turn left at the crossing.",
+   "example_cn": "在十字路口向左转。"
+  },
+  {
+   "grade": 6,
+   "word": "turn",
+   "phonetic": "/tɜːn/",
+   "pos": "v.",
+   "meaning": "转弯",
+   "example": "Turn right here.",
+   "example_cn": "在这里向右转。"
+  },
+  {
+   "grade": 6,
+   "word": "left",
+   "phonetic": "/left/",
+   "pos": "n.",
+   "meaning": "左边",
+   "example": "The shop is on the left.",
+   "example_cn": "商店在左边。"
+  },
+  {
+   "grade": 6,
+   "word": "straight",
+   "phonetic": "/streɪt/",
+   "pos": "adv.",
+   "meaning": "笔直地",
+   "example": "Go straight for five minutes.",
+   "example_cn": "一直走五分钟。"
+  },
+  {
+   "grade": 6,
+   "word": "ask",
+   "phonetic": "/ɑːsk/",
+   "pos": "v.",
+   "meaning": "问",
+   "example": "You can ask the policeman.",
+   "example_cn": "你可以问警察。"
+  },
+  {
+   "grade": 6,
+   "word": "sir",
+   "phonetic": "/sɜː/",
+   "pos": "n.",
+   "meaning": "先生",
+   "example": "Excuse me, sir.",
+   "example_cn": "打扰一下，先生。"
+  },
+  {
+   "grade": 6,
+   "word": "interesting",
+   "phonetic": "/ˈɪntrəstɪŋ/",
+   "pos": "adj.",
+   "meaning": "有趣的",
+   "example": "The story is interesting.",
+   "example_cn": "这个故事很有趣。"
+  },
+  {
+   "grade": 6,
+   "word": "Italian",
+   "phonetic": "/ɪˈtæliən/",
+   "pos": "adj.",
+   "meaning": "意大利的",
+   "example": "I like Italian food.",
+   "example_cn": "我喜欢意大利菜。"
+  },
+  {
+   "grade": 6,
+   "word": "restaurant",
+   "phonetic": "/ˈrestrɒnt/",
+   "pos": "n.",
+   "meaning": "餐馆",
+   "example": "The restaurant is over there.",
+   "example_cn": "餐馆在那边。"
+  },
+  {
+   "grade": 6,
+   "word": "pizza",
+   "phonetic": "/ˈpiːtsə/",
+   "pos": "n.",
+   "meaning": "比萨饼",
+   "example": "I want a pizza.",
+   "example_cn": "我想要一个比萨饼。"
+  },
+  {
+   "grade": 6,
+   "word": "get to",
+   "phonetic": "/ɡet tə/",
+   "pos": "phr.",
+   "meaning": "到达",
+   "example": "How can I get to the park?",
+   "example_cn": "我怎么去公园？"
+  },
+  {
+   "grade": 6,
+   "word": "next week",
+   "phonetic": "/nekst wiːk/",
+   "pos": "phr.",
+   "meaning": "下周",
+   "example": "We will visit the museum next week.",
+   "example_cn": "我们下周去参观博物馆。"
+  },
+  {
+   "grade": 6,
+   "word": "this morning",
+   "phonetic": "/ðɪs ˈmɔːnɪŋ/",
+   "pos": "phr.",
+   "meaning": "今天上午",
+   "example": "I read a book this morning.",
+   "example_cn": "今天上午我读了一本书。"
+  },
+  {
+   "grade": 6,
+   "word": "this afternoon",
+   "phonetic": "/ðɪs ˌɑːftəˈnuːn/",
+   "pos": "phr.",
+   "meaning": "今天下午",
+   "example": "We have a party this afternoon.",
+   "example_cn": "今天下午我们有聚会。"
+  },
+  {
+   "grade": 6,
+   "word": "this evening",
+   "phonetic": "/ðɪs ˈiːvnɪŋ/",
+   "pos": "phr.",
+   "meaning": "今天晚上",
+   "example": "I will do my homework this evening.",
+   "example_cn": "今晚我会写作业。"
+  },
+  {
+   "grade": 6,
+   "word": "comic book",
+   "phonetic": "/ˈkɒmɪk bʊk/",
+   "pos": "n.",
+   "meaning": "漫画书",
+   "example": "He likes comic books.",
+   "example_cn": "他喜欢漫画书。"
+  },
+  {
+   "grade": 6,
+   "word": "postcard",
+   "phonetic": "/ˈpəʊstkɑːd/",
+   "pos": "n.",
+   "meaning": "明信片",
+   "example": "I send a postcard to my friend.",
+   "example_cn": "我给朋友寄了一张明信片。"
+  },
+  {
+   "grade": 6,
+   "word": "newspaper",
+   "phonetic": "/ˈnjuːzpeɪpə/",
+   "pos": "n.",
+   "meaning": "报纸",
+   "example": "Dad reads the newspaper every day.",
+   "example_cn": "爸爸每天看报纸。"
+  },
+  {
+   "grade": 6,
+   "word": "on foot",
+   "phonetic": "/ɒn fʊt/",
+   "pos": "phr.",
+   "meaning": "步行",
+   "example": "I go to school on foot.",
+   "example_cn": "我步行上学。"
+  },
+  {
+   "grade": 6,
+   "word": "ship",
+   "phonetic": "/ʃɪp/",
+   "pos": "n.",
+   "meaning": "轮船",
+   "example": "The ship is very big.",
+   "example_cn": "这艘轮船很大。"
+  },
+  {
+   "grade": 6,
+   "word": "slow down",
+   "phonetic": "/sləʊ daʊn/",
+   "pos": "phr.",
+   "meaning": "减速",
+   "example": "Slow down at the crossing.",
+   "example_cn": "在路口要减速。"
+  },
+  {
+   "grade": 6,
+   "word": "must",
+   "phonetic": "/mʌst/",
+   "pos": "v.",
+   "meaning": "必须",
+   "example": "You must wait here.",
+   "example_cn": "你必须在这里等。"
+  },
+  {
+   "grade": 6,
+   "word": "mean",
+   "phonetic": "/miːn/",
+   "pos": "v.",
+   "meaning": "意思是",
+   "example": "What does it mean?",
+   "example_cn": "它是什么意思？"
+  },
+  {
+   "grade": 6,
+   "word": "traffic rule",
+   "phonetic": "/ˈtræfɪk ruːl/",
+   "pos": "n.",
+   "meaning": "交通规则",
+   "example": "We must follow the traffic rules.",
+   "example_cn": "我们必须遵守交通规则。"
+  },
+  {
+   "grade": 6,
+   "word": "visit",
+   "phonetic": "/ˈvɪzɪt/",
+   "pos": "v.",
+   "meaning": "参观；拜访",
+   "example": "We visit our grandparents on Sunday.",
+   "example_cn": "我们星期日去看望祖父母。"
+  },
+  {
+   "grade": 6,
+   "word": "film",
+   "phonetic": "/fɪlm/",
+   "pos": "n.",
+   "meaning": "电影",
+   "example": "The film is funny.",
+   "example_cn": "这部电影很有趣。"
+  },
+  {
+   "grade": 6,
+   "word": "see a film",
+   "phonetic": "/siː ə fɪlm/",
+   "pos": "phr.",
+   "meaning": "看电影",
+   "example": "Let's see a film tonight.",
+   "example_cn": "我们今晚看电影吧。"
+  },
+  {
+   "grade": 6,
+   "word": "evening",
+   "phonetic": "/ˈiːvnɪŋ/",
+   "pos": "n.",
+   "meaning": "晚上",
+   "example": "I read books in the evening.",
+   "example_cn": "我晚上读书。"
+  },
+  {
+   "grade": 6,
+   "word": "tonight",
+   "phonetic": "/təˈnaɪt/",
+   "pos": "adv.",
+   "meaning": "今晚",
+   "example": "We will have dinner together tonight.",
+   "example_cn": "我们今晚一起吃饭。"
+  },
+  {
+   "grade": 6,
+   "word": "tomorrow",
+   "phonetic": "/təˈmɒrəʊ/",
+   "pos": "adv.",
+   "meaning": "明天",
+   "example": "I will go to the zoo tomorrow.",
+   "example_cn": "我明天去动物园。"
+  },
+  {
+   "grade": 6,
+   "word": "dictionary",
+   "phonetic": "/ˈdɪkʃənri/",
+   "pos": "n.",
+   "meaning": "词典",
+   "example": "Look it up in the dictionary.",
+   "example_cn": "在词典里查一下。"
+  },
+  {
+   "grade": 6,
+   "word": "word",
+   "phonetic": "/wɜːd/",
+   "pos": "n.",
+   "meaning": "单词",
+   "example": "I learn ten new words today.",
+   "example_cn": "我今天学了十个新单词。"
+  },
+  {
+   "grade": 6,
+   "word": "lesson",
+   "phonetic": "/ˈlesn/",
+   "pos": "n.",
+   "meaning": "课",
+   "example": "This lesson is easy.",
+   "example_cn": "这一课很容易。"
+  },
+  {
+   "grade": 6,
+   "word": "space",
+   "phonetic": "/speɪs/",
+   "pos": "n.",
+   "meaning": "太空",
+   "example": "He wants to travel in space.",
+   "example_cn": "他想在太空旅行。"
+  },
+  {
+   "grade": 6,
+   "word": "travel",
+   "phonetic": "/ˈtrævl/",
+   "pos": "v.",
+   "meaning": "旅行",
+   "example": "We travel by train.",
+   "example_cn": "我们乘火车旅行。"
+  },
+  {
+   "grade": 6,
+   "word": "half",
+   "phonetic": "/hɑːf/",
+   "pos": "n.",
+   "meaning": "一半",
+   "example": "I eat half of the cake.",
+   "example_cn": "我吃了一半蛋糕。"
+  },
+  {
+   "grade": 6,
+   "word": "price",
+   "phonetic": "/praɪs/",
+   "pos": "n.",
+   "meaning": "价格",
+   "example": "The price is too high.",
+   "example_cn": "价格太高了。"
+  },
+  {
+   "grade": 6,
+   "word": "Mid-Autumn Festival",
+   "phonetic": "/ˌmɪd ˈɔːtəm ˈfestɪvl/",
+   "pos": "n.",
+   "meaning": "中秋节",
+   "example": "We eat mooncakes at the Mid-Autumn Festival.",
+   "example_cn": "我们在中秋节吃月饼。"
+  },
+  {
+   "grade": 6,
+   "word": "get together",
+   "phonetic": "/ɡet təˈɡeðə/",
+   "pos": "phr.",
+   "meaning": "聚会",
+   "example": "The family get together at the festival.",
+   "example_cn": "一家人在节日聚会。"
+  },
+  {
+   "grade": 6,
+   "word": "moon",
+   "phonetic": "/muːn/",
+   "pos": "n.",
+   "meaning": "月亮",
+   "example": "The moon is bright tonight.",
+   "example_cn": "今晚月亮很亮。"
+  },
+  {
+   "grade": 6,
+   "word": "mooncake",
+   "phonetic": "/ˈmuːnkeɪk/",
+   "pos": "n.",
+   "meaning": "月饼",
+   "example": "This mooncake is sweet.",
+   "example_cn": "这个月饼很甜。"
+  },
+  {
+   "grade": 6,
+   "word": "poem",
+   "phonetic": "/ˈpəʊɪm/",
+   "pos": "n.",
+   "meaning": "诗",
+   "example": "I can read this poem.",
+   "example_cn": "我会读这首诗。"
+  },
+  {
+   "grade": 6,
+   "word": "hobby",
+   "phonetic": "/ˈhɒbi/",
+   "pos": "n.",
+   "meaning": "爱好",
+   "example": "My hobby is reading.",
+   "example_cn": "我的爱好是读书。"
+  },
+  {
+   "grade": 6,
+   "word": "read stories",
+   "phonetic": "/riːd ˈstɔːriz/",
+   "pos": "phr.",
+   "meaning": "读故事",
+   "example": "She likes to read stories.",
+   "example_cn": "她喜欢读故事。"
+  },
+  {
+   "grade": 6,
+   "word": "play the piano",
+   "phonetic": "/pleɪ ðə piˈænəʊ/",
+   "pos": "phr.",
+   "meaning": "弹钢琴",
+   "example": "I can play the piano.",
+   "example_cn": "我会弹钢琴。"
+  },
+  {
+   "grade": 6,
+   "word": "teach",
+   "phonetic": "/tiːtʃ/",
+   "pos": "v.",
+   "meaning": "教",
+   "example": "My mother teaches English.",
+   "example_cn": "我母亲教英语。"
+  },
+  {
+   "grade": 6,
+   "word": "does",
+   "phonetic": "/dʌz/",
+   "pos": "v.",
+   "meaning": "做（第三人称单数）",
+   "example": "What does he do?",
+   "example_cn": "他是做什么的？"
+  },
+  {
+   "grade": 6,
+   "word": "doesn't",
+   "phonetic": "/ˈdʌznt/",
+   "pos": "v.",
+   "meaning": "不做",
+   "example": "He doesn't like coffee.",
+   "example_cn": "他不喜欢咖啡。"
+  },
+  {
+   "grade": 6,
+   "word": "factory worker",
+   "phonetic": "/ˈfæktəri ˈwɜːkə/",
+   "pos": "n.",
+   "meaning": "工厂工人",
+   "example": "My uncle is a factory worker.",
+   "example_cn": "我叔叔是工厂工人。"
+  },
+  {
+   "grade": 6,
+   "word": "postman",
+   "phonetic": "/ˈpəʊstmən/",
+   "pos": "n.",
+   "meaning": "邮递员",
+   "example": "The postman brings letters.",
+   "example_cn": "邮递员送信。"
+  },
+  {
+   "grade": 6,
+   "word": "businessman",
+   "phonetic": "/ˈbɪznəsmən/",
+   "pos": "n.",
+   "meaning": "商人",
+   "example": "He is a busy businessman.",
+   "example_cn": "他是一个忙碌的商人。"
+  },
+  {
+   "grade": 6,
+   "word": "police officer",
+   "phonetic": "/pəˈliːs ˈɒfɪsə/",
+   "pos": "n.",
+   "meaning": "警察",
+   "example": "The police officer helps the children.",
+   "example_cn": "警察帮助孩子们。"
+  },
+  {
+   "grade": 6,
+   "word": "fisherman",
+   "phonetic": "/ˈfɪʃəmən/",
+   "pos": "n.",
+   "meaning": "渔民",
+   "example": "The fisherman works at sea.",
+   "example_cn": "渔民在海上工作。"
+  },
+  {
+   "grade": 6,
+   "word": "scientist",
+   "phonetic": "/ˈsaɪəntɪst/",
+   "pos": "n.",
+   "meaning": "科学家",
+   "example": "I want to be a scientist.",
+   "example_cn": "我想成为科学家。"
+  },
+  {
+   "grade": 6,
+   "word": "pilot",
+   "phonetic": "/ˈpaɪlət/",
+   "pos": "n.",
+   "meaning": "飞行员",
+   "example": "My cousin is a pilot.",
+   "example_cn": "我表哥是飞行员。"
+  },
+  {
+   "grade": 6,
+   "word": "coach",
+   "phonetic": "/kəʊtʃ/",
+   "pos": "n.",
+   "meaning": "教练",
+   "example": "Our coach is very kind.",
+   "example_cn": "我们的教练很亲切。"
+  },
+  {
+   "grade": 6,
+   "word": "country",
+   "phonetic": "/ˈkʌntri/",
+   "pos": "n.",
+   "meaning": "国家",
+   "example": "China is a big country.",
+   "example_cn": "中国是一个大国。"
+  },
+  {
+   "grade": 6,
+   "word": "sea",
+   "phonetic": "/siː/",
+   "pos": "n.",
+   "meaning": "海",
+   "example": "The sea is blue.",
+   "example_cn": "大海是蓝色的。"
+  },
+  {
+   "grade": 6,
+   "word": "stay",
+   "phonetic": "/steɪ/",
+   "pos": "v.",
+   "meaning": "停留",
+   "example": "I stay at home on rainy days.",
+   "example_cn": "下雨天我待在家里。"
+  },
+  {
+   "grade": 6,
+   "word": "university",
+   "phonetic": "/ˌjuːnɪˈvɜːsəti/",
+   "pos": "n.",
+   "meaning": "大学",
+   "example": "My sister studies at a university.",
+   "example_cn": "我姐姐在大学读书。"
+  },
+  {
+   "grade": 6,
+   "word": "angry",
+   "phonetic": "/ˈæŋɡri/",
+   "pos": "adj.",
+   "meaning": "生气的",
+   "example": "Don't be angry.",
+   "example_cn": "别生气。"
+  },
+  {
+   "grade": 6,
+   "word": "afraid",
+   "phonetic": "/əˈfreɪd/",
+   "pos": "adj.",
+   "meaning": "害怕的",
+   "example": "I am afraid of the dark.",
+   "example_cn": "我怕黑。"
+  },
+  {
+   "grade": 6,
+   "word": "sad",
+   "phonetic": "/sæd/",
+   "pos": "adj.",
+   "meaning": "难过的",
+   "example": "She is sad today.",
+   "example_cn": "她今天很难过。"
+  },
+  {
+   "grade": 6,
+   "word": "worried",
+   "phonetic": "/ˈwʌrid/",
+   "pos": "adj.",
+   "meaning": "担心的",
+   "example": "Mum is worried about me.",
+   "example_cn": "妈妈担心我。"
+  },
+  {
+   "grade": 6,
+   "word": "wear",
+   "phonetic": "/weə/",
+   "pos": "v.",
+   "meaning": "穿；戴",
+   "example": "You should wear a coat.",
+   "example_cn": "你应该穿一件外套。"
+  },
+  {
+   "grade": 6,
+   "word": "see a doctor",
+   "phonetic": "/siː ə ˈdɒktə/",
+   "pos": "phr.",
+   "meaning": "看医生",
+   "example": "You should see a doctor.",
+   "example_cn": "你应该去看医生。"
+  },
+  {
+   "grade": 6,
+   "word": "take a deep breath",
+   "phonetic": "/teɪk ə diːp breθ/",
+   "pos": "phr.",
+   "meaning": "深呼吸",
+   "example": "Take a deep breath and count to ten.",
+   "example_cn": "深呼吸，数到十。"
+  },
+  {
+   "grade": 6,
+   "word": "count to ten",
+   "phonetic": "/kaʊnt tə ten/",
+   "pos": "phr.",
+   "meaning": "数到十",
+   "example": "Count to ten when you are angry.",
+   "example_cn": "生气时数到十。"
+  },
+  {
+   "grade": 6,
+   "word": "ill",
+   "phonetic": "/ɪl/",
+   "pos": "adj.",
+   "meaning": "生病的",
+   "example": "He is ill today.",
+   "example_cn": "他今天生病了。"
+  },
+  {
+   "grade": 6,
+   "word": "hurt",
+   "phonetic": "/hɜːt/",
+   "pos": "v.",
+   "meaning": "受伤；疼",
+   "example": "My leg hurts.",
+   "example_cn": "我的腿疼。"
+  },
+  {
+   "grade": 6,
+   "word": "deep",
+   "phonetic": "/diːp/",
+   "pos": "adj.",
+   "meaning": "深的",
+   "example": "The lake is very deep.",
+   "example_cn": "这个湖很深。"
+  },
+  {
+   "grade": 6,
+   "word": "breath",
+   "phonetic": "/breθ/",
+   "pos": "n.",
+   "meaning": "呼吸",
+   "example": "Take a deep breath.",
+   "example_cn": "做个深呼吸。"
+  },
+  {
+   "grade": 6,
+   "word": "again",
+   "phonetic": "/əˈɡen/",
+   "pos": "adv.",
+   "meaning": "再一次",
+   "example": "Please say it again.",
+   "example_cn": "请再说一遍。"
+  },
+  {
+   "grade": 6,
+   "word": "wrong",
+   "phonetic": "/rɒŋ/",
+   "pos": "adj.",
+   "meaning": "错误的",
+   "example": "What's wrong with you?",
+   "example_cn": "你怎么了？"
+  },
+  {
+   "grade": 6,
+   "word": "should",
+   "phonetic": "/ʃʊd/",
+   "pos": "v.",
+   "meaning": "应该",
+   "example": "You should drink more water.",
+   "example_cn": "你应该多喝水。"
+  },
+  {
+   "grade": 6,
+   "word": "feel",
+   "phonetic": "/fiːl/",
+   "pos": "v.",
+   "meaning": "感觉",
+   "example": "I feel happy today.",
+   "example_cn": "我今天感觉很快乐。"
+  },
+  {
+   "grade": 6,
+   "word": "check",
+   "phonetic": "/tʃek/",
+   "pos": "v.",
+   "meaning": "检查",
+   "example": "Check your homework, please.",
+   "example_cn": "请检查你的作业。"
+  },
+  {
+   "grade": 6,
+   "word": "well",
+   "phonetic": "/wel/",
+   "pos": "adv.",
+   "meaning": "好地",
+   "example": "She sings very well.",
+   "example_cn": "她唱得很好。"
+  },
+  {
+   "grade": 6,
+   "word": "taller",
+   "phonetic": "/ˈtɔːlə/",
+   "pos": "adj.",
+   "meaning": "更高的",
+   "example": "I am taller than you.",
+   "example_cn": "我比你高。"
+  },
+  {
+   "grade": 6,
+   "word": "shorter",
+   "phonetic": "/ˈʃɔːtə/",
+   "pos": "adj.",
+   "meaning": "更矮的",
+   "example": "He is shorter than his brother.",
+   "example_cn": "他比他哥哥矮。"
+  },
+  {
+   "grade": 6,
+   "word": "stronger",
+   "phonetic": "/ˈstrɒŋɡə/",
+   "pos": "adj.",
+   "meaning": "更强壮的",
+   "example": "You are stronger now.",
+   "example_cn": "你现在更强壮了。"
+  },
+  {
+   "grade": 6,
+   "word": "older",
+   "phonetic": "/ˈəʊldə/",
+   "pos": "adj.",
+   "meaning": "年龄更大的",
+   "example": "My sister is older than me.",
+   "example_cn": "我姐姐比我大。"
+  },
+  {
+   "grade": 6,
+   "word": "younger",
+   "phonetic": "/ˈjʌŋɡə/",
+   "pos": "adj.",
+   "meaning": "更年轻的",
+   "example": "He is younger than me.",
+   "example_cn": "他比我小。"
+  },
+  {
+   "grade": 6,
+   "word": "bigger",
+   "phonetic": "/ˈbɪɡə/",
+   "pos": "adj.",
+   "meaning": "更大的",
+   "example": "This box is bigger.",
+   "example_cn": "这个盒子更大。"
+  },
+  {
+   "grade": 6,
+   "word": "heavier",
+   "phonetic": "/ˈheviə/",
+   "pos": "adj.",
+   "meaning": "更重的",
+   "example": "The bag is heavier than that one.",
+   "example_cn": "这个包比那个重。"
+  },
+  {
+   "grade": 6,
+   "word": "longer",
+   "phonetic": "/ˈlɒŋɡə/",
+   "pos": "adj.",
+   "meaning": "更长的",
+   "example": "Her hair is longer.",
+   "example_cn": "她的头发更长。"
+  },
+  {
+   "grade": 6,
+   "word": "thinner",
+   "phonetic": "/ˈθɪnə/",
+   "pos": "adj.",
+   "meaning": "更瘦的",
+   "example": "The cat is thinner.",
+   "example_cn": "这只猫更瘦。"
+  },
+  {
+   "grade": 6,
+   "word": "smaller",
+   "phonetic": "/ˈsmɔːlə/",
+   "pos": "adj.",
+   "meaning": "更小的",
+   "example": "My room is smaller.",
+   "example_cn": "我的房间更小。"
+  },
+  {
+   "grade": 6,
+   "word": "dinosaur",
+   "phonetic": "/ˈdaɪnəsɔː/",
+   "pos": "n.",
+   "meaning": "恐龙",
+   "example": "The dinosaur is very tall.",
+   "example_cn": "这只恐龙很高。"
+  },
+  {
+   "grade": 6,
+   "word": "hall",
+   "phonetic": "/hɔːl/",
+   "pos": "n.",
+   "meaning": "大厅",
+   "example": "The hall is full of people.",
+   "example_cn": "大厅里满是人。"
+  },
+  {
+   "grade": 6,
+   "word": "both",
+   "phonetic": "/bəʊθ/",
+   "pos": "pron.",
+   "meaning": "两者都",
+   "example": "Both of them are tall.",
+   "example_cn": "他们两个都很高。"
+  },
+  {
+   "grade": 6,
+   "word": "ago",
+   "phonetic": "/əˈɡəʊ/",
+   "pos": "adv.",
+   "meaning": "以前",
+   "example": "I came here two years ago.",
+   "example_cn": "我两年前来过这里。"
+  },
+  {
+   "grade": 6,
+   "word": "metre",
+   "phonetic": "/ˈmiːtə/",
+   "pos": "n.",
+   "meaning": "米",
+   "example": "I am one metre five.",
+   "example_cn": "我一米五。"
+  },
+  {
+   "grade": 6,
+   "word": "than",
+   "phonetic": "/ðæn/",
+   "pos": "conj.",
+   "meaning": "比",
+   "example": "She is taller than me.",
+   "example_cn": "她比我高。"
+  },
+  {
+   "grade": 6,
+   "word": "kilogram",
+   "phonetic": "/ˈkɪləɡræm/",
+   "pos": "n.",
+   "meaning": "千克",
+   "example": "The bag is five kilograms.",
+   "example_cn": "这个包五千克。"
+  },
+  {
+   "grade": 6,
+   "word": "countryside",
+   "phonetic": "/ˈkʌntrisaɪd/",
+   "pos": "n.",
+   "meaning": "乡村",
+   "example": "The countryside is quiet.",
+   "example_cn": "乡村很安静。"
+  },
+  {
+   "grade": 6,
+   "word": "low",
+   "phonetic": "/ləʊ/",
+   "pos": "adj.",
+   "meaning": "低的",
+   "example": "The wall is low.",
+   "example_cn": "这堵墙很矮。"
+  },
+  {
+   "grade": 6,
+   "word": "shadow",
+   "phonetic": "/ˈʃædəʊ/",
+   "pos": "n.",
+   "meaning": "影子",
+   "example": "My shadow is long.",
+   "example_cn": "我的影子很长。"
+  },
+  {
+   "grade": 6,
+   "word": "smarter",
+   "phonetic": "/ˈsmɑːtə/",
+   "pos": "adj.",
+   "meaning": "更聪明的",
+   "example": "He is smarter than me.",
+   "example_cn": "他比我聪明。"
+  },
+  {
+   "grade": 6,
+   "word": "become",
+   "phonetic": "/bɪˈkʌm/",
+   "pos": "v.",
+   "meaning": "变成",
+   "example": "It becomes cold in winter.",
+   "example_cn": "冬天天气变冷。"
+  },
+  {
+   "grade": 6,
+   "word": "cleaned",
+   "phonetic": "/kliːnd/",
+   "pos": "v.",
+   "meaning": "打扫了（过去式）",
+   "example": "I cleaned my room yesterday.",
+   "example_cn": "我昨天打扫了房间。"
+  },
+  {
+   "grade": 6,
+   "word": "stayed",
+   "phonetic": "/steɪd/",
+   "pos": "v.",
+   "meaning": "待了（过去式）",
+   "example": "We stayed at home last night.",
+   "example_cn": "我们昨晚待在家里。"
+  },
+  {
+   "grade": 6,
+   "word": "washed",
+   "phonetic": "/wɒʃt/",
+   "pos": "v.",
+   "meaning": "洗了（过去式）",
+   "example": "She washed the clothes.",
+   "example_cn": "她洗了衣服。"
+  },
+  {
+   "grade": 6,
+   "word": "watched",
+   "phonetic": "/wɒtʃt/",
+   "pos": "v.",
+   "meaning": "看了（过去式）",
+   "example": "I watched TV last night.",
+   "example_cn": "我昨晚看了电视。"
+  },
+  {
+   "grade": 6,
+   "word": "had",
+   "phonetic": "/hæd/",
+   "pos": "v.",
+   "meaning": "有（过去式）",
+   "example": "I had a good weekend.",
+   "example_cn": "我周末过得很愉快。"
+  },
+  {
+   "grade": 6,
+   "word": "have a cold",
+   "phonetic": "/hæv ə kəʊld/",
+   "pos": "phr.",
+   "meaning": "感冒",
+   "example": "I have a cold today.",
+   "example_cn": "我今天感冒了。"
+  },
+  {
+   "grade": 6,
+   "word": "sleep",
+   "phonetic": "/sliːp/",
+   "pos": "v.",
+   "meaning": "睡觉",
+   "example": "I sleep eight hours a day.",
+   "example_cn": "我每天睡八小时。"
+  },
+  {
+   "grade": 6,
+   "word": "better",
+   "phonetic": "/ˈbetə/",
+   "pos": "adj.",
+   "meaning": "更好的",
+   "example": "I feel better now.",
+   "example_cn": "我现在感觉好些了。"
+  },
+  {
+   "grade": 6,
+   "word": "ache",
+   "phonetic": "/eɪk/",
+   "pos": "n.",
+   "meaning": "疼痛",
+   "example": "I have an ache in my leg.",
+   "example_cn": "我的腿疼。"
+  },
+  {
+   "grade": 6,
+   "word": "lie",
+   "phonetic": "/laɪ/",
+   "pos": "v.",
+   "meaning": "躺",
+   "example": "You should lie down.",
+   "example_cn": "你应该躺下。"
+  },
+  {
+   "grade": 6,
+   "word": "tired",
+   "phonetic": "/ˈtaɪəd/",
+   "pos": "adj.",
+   "meaning": "疲劳的",
+   "example": "I am tired after school.",
+   "example_cn": "放学后我很累。"
+  },
+  {
+   "grade": 6,
+   "word": "sore",
+   "phonetic": "/sɔː/",
+   "pos": "adj.",
+   "meaning": "疼的",
+   "example": "I have a sore throat.",
+   "example_cn": "我喉咙疼。"
+  },
+  {
+   "grade": 6,
+   "word": "fever",
+   "phonetic": "/ˈfiːvə/",
+   "pos": "n.",
+   "meaning": "发烧",
+   "example": "He has a fever.",
+   "example_cn": "他发烧了。"
+  },
+  {
+   "grade": 6,
+   "word": "toothache",
+   "phonetic": "/ˈtuːθeɪk/",
+   "pos": "n.",
+   "meaning": "牙疼",
+   "example": "I have a toothache.",
+   "example_cn": "我牙疼。"
+  },
+  {
+   "grade": 6,
+   "word": "headache",
+   "phonetic": "/ˈhedeɪk/",
+   "pos": "n.",
+   "meaning": "头疼",
+   "example": "She has a headache.",
+   "example_cn": "她头疼。"
+  },
+  {
+   "grade": 6,
+   "word": "take medicine",
+   "phonetic": "/teɪk ˈmedsn/",
+   "pos": "phr.",
+   "meaning": "吃药",
+   "example": "Take the medicine after dinner.",
+   "example_cn": "晚饭后吃药。"
+  },
+  {
+   "grade": 6,
+   "word": "stay in bed",
+   "phonetic": "/steɪ ɪn bed/",
+   "pos": "phr.",
+   "meaning": "卧床休息",
+   "example": "You should stay in bed.",
+   "example_cn": "你应该卧床休息。"
+  },
+  {
+   "grade": 6,
+   "word": "throat",
+   "phonetic": "/θrəʊt/",
+   "pos": "n.",
+   "meaning": "喉咙",
+   "example": "My throat hurts.",
+   "example_cn": "我的喉咙疼。"
+  },
+  {
+   "grade": 6,
+   "word": "went",
+   "phonetic": "/went/",
+   "pos": "v.",
+   "meaning": "去了（过去式）",
+   "example": "We went to the park.",
+   "example_cn": "我们去了公园。"
+  },
+  {
+   "grade": 6,
+   "word": "camp",
+   "phonetic": "/kæmp/",
+   "pos": "n.",
+   "meaning": "营地",
+   "example": "The camp is near the lake.",
+   "example_cn": "营地在湖边。"
+  },
+  {
+   "grade": 6,
+   "word": "went camping",
+   "phonetic": "/went ˈkæmpɪŋ/",
+   "pos": "phr.",
+   "meaning": "去野营",
+   "example": "We went camping last summer.",
+   "example_cn": "去年夏天我们去野营了。"
+  },
+  {
+   "grade": 6,
+   "word": "went fishing",
+   "phonetic": "/went ˈfɪʃɪŋ/",
+   "pos": "phr.",
+   "meaning": "去钓鱼",
+   "example": "Dad went fishing on Sunday.",
+   "example_cn": "爸爸星期日去钓鱼了。"
+  },
+  {
+   "grade": 6,
+   "word": "rode",
+   "phonetic": "/rəʊd/",
+   "pos": "v.",
+   "meaning": "骑了（过去式）",
+   "example": "I rode a horse yesterday.",
+   "example_cn": "我昨天骑了马。"
+  },
+  {
+   "grade": 6,
+   "word": "ate",
+   "phonetic": "/et/",
+   "pos": "v.",
+   "meaning": "吃了（过去式）",
+   "example": "We ate noodles for lunch.",
+   "example_cn": "我们午饭吃了面条。"
+  },
+  {
+   "grade": 6,
+   "word": "took",
+   "phonetic": "/tʊk/",
+   "pos": "v.",
+   "meaning": "拿了；拍了（过去式）",
+   "example": "She took many photos.",
+   "example_cn": "她拍了很多照片。"
+  },
+  {
+   "grade": 6,
+   "word": "bought",
+   "phonetic": "/bɔːt/",
+   "pos": "v.",
+   "meaning": "买了（过去式）",
+   "example": "I bought a gift for Mum.",
+   "example_cn": "我给妈妈买了一个礼物。"
+  },
+  {
+   "grade": 6,
+   "word": "fell",
+   "phonetic": "/fel/",
+   "pos": "v.",
+   "meaning": "摔了（过去式）",
+   "example": "He fell off his bike.",
+   "example_cn": "他从自行车上摔了下来。"
+  },
+  {
+   "grade": 6,
+   "word": "off",
+   "phonetic": "/ɒf/",
+   "pos": "prep.",
+   "meaning": "从……离开",
+   "example": "The cat jumped off the bed.",
+   "example_cn": "猫从床上跳下来。"
+  },
+  {
+   "grade": 6,
+   "word": "mule",
+   "phonetic": "/mjuːl/",
+   "pos": "n.",
+   "meaning": "骡子",
+   "example": "The mule is strong.",
+   "example_cn": "这头骡子很强壮。"
+  },
+  {
+   "grade": 6,
+   "word": "Labour Day",
+   "phonetic": "/ˈleɪbə deɪ/",
+   "pos": "n.",
+   "meaning": "劳动节",
+   "example": "We have a holiday on Labour Day.",
+   "example_cn": "劳动节我们放假。"
+  },
+  {
+   "grade": 6,
+   "word": "went swimming",
+   "phonetic": "/went ˈswɪmɪŋ/",
+   "pos": "phr.",
+   "meaning": "去游泳",
+   "example": "We went swimming in the sea.",
+   "example_cn": "我们去海里游泳了。"
+  },
+  {
+   "grade": 6,
+   "word": "went hiking",
+   "phonetic": "/went ˈhaɪkɪŋ/",
+   "pos": "phr.",
+   "meaning": "去远足",
+   "example": "They went hiking last weekend.",
+   "example_cn": "他们上周末去远足了。"
+  },
+  {
+   "grade": 6,
+   "word": "went boating",
+   "phonetic": "/went ˈbəʊtɪŋ/",
+   "pos": "phr.",
+   "meaning": "去划船",
+   "example": "We went boating on the lake.",
+   "example_cn": "我们去湖上划船了。"
+  },
+  {
+   "grade": 6,
+   "word": "saw",
+   "phonetic": "/sɔː/",
+   "pos": "v.",
+   "meaning": "看见（过去式）",
+   "example": "I saw a film last night.",
+   "example_cn": "我昨晚看了一部电影。"
+  },
+  {
+   "grade": 6,
+   "word": "slept",
+   "phonetic": "/slept/",
+   "pos": "v.",
+   "meaning": "睡了（过去式）",
+   "example": "I slept for nine hours.",
+   "example_cn": "我睡了九个小时。"
+  },
+  {
+   "grade": 6,
+   "word": "dining hall",
+   "phonetic": "/ˈdaɪnɪŋ hɔːl/",
+   "pos": "n.",
+   "meaning": "餐厅",
+   "example": "We have lunch in the dining hall.",
+   "example_cn": "我们在餐厅吃午饭。"
+  },
+  {
+   "grade": 6,
+   "word": "cycling",
+   "phonetic": "/ˈsaɪklɪŋ/",
+   "pos": "n.",
+   "meaning": "骑自行车运动",
+   "example": "My father likes cycling.",
+   "example_cn": "我父亲喜欢骑车。"
+  },
+  {
+   "grade": 6,
+   "word": "ice-skate",
+   "phonetic": "/ˈaɪs skeɪt/",
+   "pos": "v.",
+   "meaning": "滑冰",
+   "example": "I can ice-skate in winter.",
+   "example_cn": "冬天我会滑冰。"
+  },
+  {
+   "grade": 6,
+   "word": "badminton",
+   "phonetic": "/ˈbædmɪntən/",
+   "pos": "n.",
+   "meaning": "羽毛球",
+   "example": "We play badminton after school.",
+   "example_cn": "我们放学后打羽毛球。"
+  },
+  {
+   "grade": 6,
+   "word": "could",
+   "phonetic": "/kʊd/",
+   "pos": "v.",
+   "meaning": "能（过去式）",
+   "example": "I could swim at six.",
+   "example_cn": "我六岁就会游泳。"
+  },
+  {
+   "grade": 6,
+   "word": "couldn't",
+   "phonetic": "/ˈkʊdnt/",
+   "pos": "v.",
+   "meaning": "不能（过去式）",
+   "example": "I couldn't ride a bike before.",
+   "example_cn": "我以前不会骑自行车。"
+  },
+  {
+   "grade": 6,
+   "word": "easy",
+   "phonetic": "/ˈiːzi/",
+   "pos": "adj.",
+   "meaning": "容易的",
+   "example": "The question is easy.",
+   "example_cn": "这个问题很容易。"
+  },
+  {
+   "grade": 6,
+   "word": "look up",
+   "phonetic": "/lʊk ʌp/",
+   "pos": "phr.",
+   "meaning": "查阅",
+   "example": "Look up the word in the dictionary.",
+   "example_cn": "在词典里查这个单词。"
+  },
+  {
+   "grade": 6,
+   "word": "Internet",
+   "phonetic": "/ˈɪntənet/",
+   "pos": "n.",
+   "meaning": "互联网",
+   "example": "I look for information on the Internet.",
+   "example_cn": "我在网上查找信息。"
+  },
+  {
+   "grade": 6,
+   "word": "different",
+   "phonetic": "/ˈdɪfrənt/",
+   "pos": "adj.",
+   "meaning": "不同的",
+   "example": "We are in different classes.",
+   "example_cn": "我们在不同的班级。"
+  },
+  {
+   "grade": 6,
+   "word": "active",
+   "phonetic": "/ˈæktɪv/",
+   "pos": "adj.",
+   "meaning": "活跃的",
+   "example": "He is active in class.",
+   "example_cn": "他在课堂上很活跃。"
+  },
+  {
+   "grade": 6,
+   "word": "race",
+   "phonetic": "/reɪs/",
+   "pos": "n.",
+   "meaning": "比赛",
+   "example": "I win the race.",
+   "example_cn": "我赢了比赛。"
+  },
+  {
+   "grade": 6,
+   "word": "nothing",
+   "phonetic": "/ˈnʌθɪŋ/",
+   "pos": "pron.",
+   "meaning": "没有什么",
+   "example": "There is nothing in the box.",
+   "example_cn": "盒子里什么也没有。"
+  },
+  {
+   "grade": 6,
+   "word": "thought",
+   "phonetic": "/θɔːt/",
+   "pos": "v.",
+   "meaning": "想（过去式）",
+   "example": "I thought it was easy.",
+   "example_cn": "我以为这很容易。"
+  },
+  {
+   "grade": 6,
+   "word": "felt",
+   "phonetic": "/felt/",
+   "pos": "v.",
+   "meaning": "感觉（过去式）",
+   "example": "I felt happy yesterday.",
+   "example_cn": "我昨天感到很快乐。"
+  },
+  {
+   "grade": 6,
+   "word": "wake up",
+   "phonetic": "/weɪk ʌp/",
+   "pos": "phr.",
+   "meaning": "醒来",
+   "example": "I wake up at six.",
+   "example_cn": "我六点醒来。"
+  },
+  {
+   "grade": 6,
+   "word": "dream",
+   "phonetic": "/driːm/",
+   "pos": "n.",
+   "meaning": "梦；梦想",
+   "example": "I had a good dream.",
+   "example_cn": "我做了一个好梦。"
+  }
+ ]
+}

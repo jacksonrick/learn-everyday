@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { Download, History, Library, Loader2, PlugZap, Save, Sparkles } from 'lucide-react'
+import { Download, History, Library, Loader2, PlugZap, Save, Sparkles, Trash2, Volume2 } from 'lucide-react'
 import { api, downloadFile } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -10,27 +10,59 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/feedback'
 import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 const NUMBERS: { key: string; label: string; hint?: string }[] = [
-  { key: 'english_word_read', label: '英语单词朗读数量', hint: '默认 10 个，朗读卡不计分' },
-  { key: 'math_count', label: '数学每日题量', hint: '默认 20' },
-  { key: 'daily_point_cap', label: '每日积分上限', hint: '默认 100，防刷' },
+  // 语文
+  { key: 'chinese_read', label: '认读字数', hint: '默认 5，认读卡不计分；0 为关闭' },
+  { key: 'chinese_word', label: '组词题数', hint: '默认 5，补全词语选择题' },
+  { key: 'chinese_poem', label: '古诗数量', hint: '默认 1 首背诵录音，不计分；0 为关闭' },
+  // 数学
+  { key: 'math_calc', label: '计算题数量', hint: '默认 15，按出题规则现算' },
+  { key: 'math_app', label: '应用题数量', hint: '默认 2，从本年级学期题库抽取；0 为关闭' },
+  // 英语
+  { key: 'english_word_read', label: '单词朗读', hint: '默认 10，朗读卡不计分' },
+  { key: 'english_phoneme_read', label: '音标朗读', hint: '默认 2 个，不计分；0 为关闭' },
+  { key: 'english_phoneme_pick', label: '音标选词', hint: '默认 2 道；0 为关闭' },
+  { key: 'english_word_choice', label: '看中文选英文', hint: '默认 2 道' },
+  { key: 'english_meaning_choice', label: '看英文选中文', hint: '默认 2 道' },
+  { key: 'english_sentence_count', label: '单词组句', hint: '默认 1 道；0 为关闭' },
+  // 其它
+  { key: 'retry_count', label: '额外错题重练', hint: '默认 2 道，插在当天任务最前面；0 为关闭' },
   { key: 'point_per_subject', label: '单科完成积分', hint: '正确率 ≥60%' },
   { key: 'point_per_excellent', label: '正确率优秀加分', hint: '≥90% 额外加' },
   { key: 'point_checkin', label: '打卡积分', hint: '三科完成' },
   { key: 'point_wrong_fix', label: '错题订正积分', hint: '重练答对一道给多少' },
-  { key: 'point_wrong_fix_cap', label: '订正积分日上限', hint: '默认 20，防刷' },
+]
+
+const TAB_FIELDS: { value: string; label: string; keys: string[] }[] = [
+  { value: 'chinese', label: '语文', keys: ['chinese_read', 'chinese_word', 'chinese_poem'] },
+  { value: 'math', label: '数学', keys: ['math_calc', 'math_app'] },
+  {
+    value: 'english',
+    label: '英语',
+    keys: [
+      'english_word_read',
+      'english_phoneme_read',
+      'english_phoneme_pick',
+      'english_word_choice',
+      'english_meaning_choice',
+      'english_sentence_count',
+    ],
+  },
+  {
+    value: 'misc',
+    label: '其它',
+    keys: ['retry_count', 'point_per_subject', 'point_per_excellent', 'point_checkin', 'point_wrong_fix'],
+  },
 ]
 
 const SWITCHES: { key: string; label: string; hint: string }[] = [
-  { key: 'english_phoneme', label: '每日音标练习', hint: '2 个音标朗读 + 2 道音标选词' },
-  { key: 'english_sentence', label: '每日句子排序', hint: '1 道单词组句' },
-  { key: 'srs_enabled', label: '遗忘曲线复习', hint: '按 1/2/4/7/15/30 天安排复习；关掉后每天全库随机' },
+  { key: 'srs_enabled', label: '遗忘曲线复习', hint: '按 1/2/4/7/15/30 天安排复习；关掉后每天全库随机，不再安排旧内容回访' },
   { key: 'instant_feedback', label: '答题即时反馈', hint: '每题提交后立刻显示对错；关掉则交卷后才看结果' },
-  { key: 'audio_enabled', label: '语音朗读', hint: '客户端显示「听读音 / 播放」按钮' },
 ]
 
 export default function SettingsPage() {
@@ -42,7 +74,9 @@ export default function SettingsPage() {
   const [form, setForm] = useState<any>({})
   const [pwd, setPwd] = useState({ old_password: '', new_password: '' })
   const [aiBusy, setAiBusy] = useState<'save' | 'test' | ''>('')
+  const [taskBusy, setTaskBusy] = useState(false)
   const [callsOpen, setCallsOpen] = useState(false)
+  const [resetOpen, setResetOpen] = useState(false)
 
   useEffect(() => {
     if (data) setForm({ ...data, ai_api_key: '' })
@@ -61,8 +95,10 @@ export default function SettingsPage() {
     return payload
   }
 
+  /** 只保存「每日任务量与积分」卡片：各题型数量、积分规则与开关 */
   const save = async () => {
-    const payload: Record<string, any> = aiPayload()
+    setTaskBusy(true)
+    const payload: Record<string, any> = {}
     NUMBERS.forEach((n) => (payload[n.key] = Number(form[n.key]) || 0))
     SWITCHES.forEach((s) => (payload[s.key] = !!form[s.key]))
     try {
@@ -71,6 +107,8 @@ export default function SettingsPage() {
       qc.invalidateQueries({ queryKey: ['admin-settings'] })
     } catch (e) {
       toast.error(e instanceof Error ? e.message : '保存失败')
+    } finally {
+      setTaskBusy(false)
     }
   }
 
@@ -115,38 +153,62 @@ export default function SettingsPage() {
       </div>
 
       <Card className="p-5">
-        <p className="mb-4 text-sm font-medium">每日任务量</p>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {NUMBERS.map((n) => (
-            <div key={n.key} className="space-y-1.5">
-              <Label>{n.label}</Label>
-              <Input
-                type="number"
-                value={form[n.key] ?? 0}
-                onChange={(e) => setForm({ ...form, [n.key]: e.target.value })}
-              />
-              {n.hint && <p className="text-xs text-muted-foreground">{n.hint}</p>}
-            </div>
-          ))}
-        </div>
-        <p className="mt-4 rounded-xl bg-muted/60 px-3 py-2 text-xs leading-relaxed text-muted-foreground">
-          语文每天固定：认读 5 字 + 组词 5 题 + 古诗 1 首；英语固定：音标朗读 2 + 音标选词 2 + 看中文选英文 2 +
-          看英文选中文 2 + 组句 1；错题重练固定 2 道。朗读与认读只记录完成、不计入得分。
-        </p>
-      </Card>
-
-      <Card className="p-5">
-        <p className="mb-4 text-sm font-medium">学习模块开关</p>
-        <div className="space-y-4">
-          {SWITCHES.map((s) => (
-            <div key={s.key} className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm">{s.label}</p>
-                <p className="text-xs text-muted-foreground">{s.hint}</p>
+        <p className="mb-4 text-sm font-medium">每日任务量与积分</p>
+        <Tabs defaultValue="chinese">
+          <TabsList className="w-full sm:w-auto">
+            {TAB_FIELDS.map((tab) => (
+              <TabsTrigger key={tab.value} value={tab.value} className="flex-1 sm:flex-none">
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {TAB_FIELDS.map((tab) => (
+            <TabsContent key={tab.value} value={tab.value} className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {tab.keys.map((key) => {
+                  const field = NUMBERS.find((n) => n.key === key)
+                  if (!field) return null
+                  return (
+                    <div key={key} className="space-y-1.5">
+                      <Label>{field.label}</Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        value={form[key] ?? 0}
+                        onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                      />
+                      {field.hint && <p className="text-xs text-muted-foreground">{field.hint}</p>}
+                    </div>
+                  )
+                })}
               </div>
-              <Switch checked={!!form[s.key]} onCheckedChange={(v) => setForm({ ...form, [s.key]: v })} />
-            </div>
+              {tab.value === 'misc' && (
+                <div className="space-y-4 border-t border-border pt-4">
+                  {SWITCHES.map((s) => (
+                    <div key={s.key} className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-sm">{s.label}</p>
+                        <p className="text-xs text-muted-foreground">{s.hint}</p>
+                      </div>
+                      <Switch checked={!!form[s.key]} onCheckedChange={(v) => setForm({ ...form, [s.key]: v })} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </TabsContent>
           ))}
+        </Tabs>
+        <p className="mt-4 rounded-xl bg-muted/60 px-3 py-2 text-xs leading-relaxed text-muted-foreground">
+          各题型数量填 0 表示当天不出该题型。新题难度按 10/40/30/15/5 的比例抽取，复习题与错题重练不按比例
+          （该复习的必须复习）；开启「遗忘曲线复习」后，到期的旧字词会优先安排进每天的认读卡、朗读卡和选择题。
+          朗读与认读只记录完成、不计入得分。
+        </p>
+
+        <div className="mt-4 flex justify-end">
+          <Button onClick={save} disabled={taskBusy}>
+            {taskBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            保存任务量与积分
+          </Button>
         </div>
       </Card>
 
@@ -243,11 +305,7 @@ export default function SettingsPage() {
         </div>
       </Card>
 
-      <div className="flex">
-        <Button onClick={save}>
-          <Save className="h-4 w-4" /> 保存以上设置
-        </Button>
-      </div>
+      <VoiceCard form={form} setForm={setForm} />
 
       <BuiltinBankCard />
 
@@ -259,6 +317,21 @@ export default function SettingsPage() {
         <Button variant="outline" onClick={() => downloadFile('/admin/backup/download', 'db.sqlite')}>
           <Download className="h-4 w-4" /> 下载数据库
         </Button>
+
+        <div className="mt-5 border-t border-border pt-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-medium text-red-600">数据重置</p>
+              <p className="mt-1 max-w-xl text-xs text-muted-foreground">
+                清空题库以外的全部学习数据：学习记录、背诵录音、打卡与连击、积分流水、错题本、兑换记录。
+                题库、孩子资料、奖品配置和系统设置都会保留。执行前会自动备份当前数据库到 backups/ 目录。
+              </p>
+            </div>
+            <Button variant="outline" className="text-red-600 hover:text-red-600" onClick={() => setResetOpen(true)}>
+              <Trash2 className="h-4 w-4" /> 重置数据
+            </Button>
+          </div>
+        </div>
       </Card>
 
       <Card className="p-5">
@@ -287,13 +360,14 @@ export default function SettingsPage() {
       </Card>
 
       <AiCallsDialog open={callsOpen} onOpenChange={setCallsOpen} />
+      <ResetDataDialog open={resetOpen} onOpenChange={setResetOpen} />
     </div>
   )
 }
 
 function BuiltinBankCard() {
   const qc = useQueryClient()
-  const [busy, setBusy] = useState<'chars' | 'poems' | ''>('')
+  const [busy, setBusy] = useState<'chars' | 'poems' | 'words' | ''>('')
 
   const { data } = useQuery({
     queryKey: ['bank-builtin'],
@@ -303,9 +377,10 @@ function BuiltinBankCard() {
   const rows = [
     { kind: 'chars' as const, label: '识字库', unit: '字' },
     { kind: 'poems' as const, label: '古诗库', unit: '首' },
+    { kind: 'words' as const, label: '单词库', unit: '词' },
   ]
 
-  const run = async (kind: 'chars' | 'poems', label: string, total: number) => {
+  const run = async (kind: 'chars' | 'poems' | 'words', label: string, total: number) => {
     if (!confirm(`导入内置${label}（共 ${total} 条）？已存在的会跳过，不会覆盖你改过的内容。`)) return
     setBusy(kind)
     try {
@@ -331,7 +406,7 @@ function BuiltinBankCard() {
         <p className="text-sm font-medium">内置题库</p>
       </div>
       <p className="mb-4 text-xs text-muted-foreground">
-        随项目附带小学常用汉字与统编版课内古诗，一键导入就能开始，不用一条条录入。已存在的自动跳过，不会覆盖你改过的内容。
+        随项目附带小学常用汉字、统编版课内古诗与人教 PEP 小学英语单词，一键导入就能开始，不用一条条录入。已存在的自动跳过，不会覆盖你改过的内容。
         数据包里的年级会折算成等级：一、二年级容易，三年级较易，四年级中等，五年级较难，六年级困难。
       </p>
       <div className="space-y-2">
@@ -373,9 +448,346 @@ function BuiltinBankCard() {
         })}
       </div>
       <p className="mt-3 text-xs text-muted-foreground">
-        导入后语文题库从全库随机出题，不再按年级学期筛选；只有数学按孩子的年级学期出题。
+        导入后语文、英语题库从全库随机出题，不再按年级学期筛选；只有数学按孩子的年级学期出题。
       </p>
     </Card>
+  )
+}
+
+/** 语音配置：浏览器语音或豆包 TTS（火山引擎 HTTP 一次性合成）。 */
+function VoiceCard({
+  form,
+  setForm,
+}: {
+  form: any
+  setForm: (updater: any) => void
+}) {
+  const qc = useQueryClient()
+  const [busy, setBusy] = useState(false)
+  const [callsOpen, setCallsOpen] = useState(false)
+
+  const isApi = form.voice_mode === 'api'
+
+  const payload = () => {
+    const data: Record<string, any> = {
+      voice_mode: isApi ? 'api' : 'browser',
+      tts_app_id: String(form.tts_app_id ?? '').trim(),
+      tts_cluster: String(form.tts_cluster ?? 'volcano_tts').trim() || 'volcano_tts',
+      tts_voice_zh: String(form.tts_voice_zh ?? '').trim() || 'zh_female_cancan_mars_bigtts',
+      tts_voice_en: String(form.tts_voice_en ?? '').trim() || 'en_female_amanda_mars_bigtts',
+    }
+    const token = String(form.tts_access_token ?? '').trim()
+    if (token) data.tts_access_token = token
+    return data
+  }
+
+  const save = async () => {
+    setBusy(true)
+    try {
+      await api.put('/admin/settings', payload(), true)
+      toast.success('语音配置已保存')
+      setForm((f: any) => ({ ...f, tts_access_token: '' }))
+      qc.invalidateQueries({ queryKey: ['admin-settings'] })
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : '保存失败')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <Card className="p-5">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <Volume2 className="h-4 w-4 text-primary" />
+          <p className="text-sm font-medium">语音配置</p>
+          {isApi && (
+            form.tts_access_token_set ? <Badge variant="success">已配置</Badge> : <Badge variant="outline">未配置</Badge>
+          )}
+        </div>
+        <Button variant="outline" onClick={() => setCallsOpen(true)}>
+          <History className="h-4 w-4" /> 调用详情
+        </Button>
+      </div>
+
+      <p className="mb-4 text-xs text-muted-foreground">
+        语音只用在语文古诗朗读和英语朗读上。默认用浏览器自带发音（免费但效果一般）；
+        启用 API 模式后走火山引擎豆包语音合成 1.0，效果更好但按字计费——相同文本自动走缓存不重复计费，
+        超过 200 字只读前 200 字。
+      </p>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label>发音方式</Label>
+          <Select
+            options={[
+              { label: '浏览器语音（默认，免费）', value: 'browser' },
+              { label: '豆包语音合成 API（火山引擎）', value: 'api' },
+            ]}
+            value={form.voice_mode ?? 'browser'}
+            onChange={(e) => setForm((f: any) => ({ ...f, voice_mode: e.target.value }))}
+          />
+          <p className="text-xs text-muted-foreground">
+            API 模式需要在火山引擎控制台开通「语音合成大模型」，拿到 AppID 与 Access Token
+          </p>
+        </div>
+        <div className="space-y-1.5">
+          <Label>Cluster</Label>
+          <Input
+            placeholder="volcano_tts"
+            value={form.tts_cluster ?? ''}
+            onChange={(e) => setForm((f: any) => ({ ...f, tts_cluster: e.target.value }))}
+          />
+          <p className="text-xs text-muted-foreground">一般保持默认，控制台 FAQ 里有说明</p>
+        </div>
+
+        {isApi && (
+          <>
+            <div className="space-y-1.5">
+              <Label>AppID</Label>
+              <Input
+                placeholder="火山引擎语音应用的 AppID"
+                value={form.tts_app_id ?? ''}
+                onChange={(e) => setForm((f: any) => ({ ...f, tts_app_id: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Access Token</Label>
+              <Input
+                type="password"
+                placeholder={
+                  form.tts_access_token_set
+                    ? `已保存：${form.tts_access_token_masked}（留空表示不修改）`
+                    : '火山引擎语音应用的 Access Token'
+                }
+                value={form.tts_access_token ?? ''}
+                onChange={(e) => setForm((f: any) => ({ ...f, tts_access_token: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>中文音色（古诗朗读）</Label>
+              <Input
+                placeholder="zh_female_cancan_mars_bigtts"
+                value={form.tts_voice_zh ?? ''}
+                onChange={(e) => setForm((f: any) => ({ ...f, tts_voice_zh: e.target.value }))}
+              />
+              <p className="text-xs text-muted-foreground">音色代号见火山引擎「音色列表」文档</p>
+            </div>
+            <div className="space-y-1.5">
+              <Label>英文音色（英语朗读）</Label>
+              <Input
+                placeholder="en_female_amanda_mars_bigtts"
+                value={form.tts_voice_en ?? ''}
+                onChange={(e) => setForm((f: any) => ({ ...f, tts_voice_en: e.target.value }))}
+              />
+              <p className="text-xs text-muted-foreground">英文朗读统一用这个音色</p>
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="mt-4 flex justify-end">
+        <Button variant="outline" onClick={save} disabled={busy}>
+          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+          保存语音配置
+        </Button>
+      </div>
+
+      <TtsCallsDialog open={callsOpen} onOpenChange={setCallsOpen} />
+    </Card>
+  )
+}
+
+function TtsCallsDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const qc = useQueryClient()
+  const [page, setPage] = useState(1)
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['tts-calls', page],
+    queryFn: () => api.get<any>(`/admin/tts/calls?page=${page}&page_size=20`, true),
+    enabled: open,
+  })
+
+  const items: any[] = data?.items ?? []
+  const total = data?.total ?? 0
+  const pageCount = Math.max(1, Math.ceil(total / 20))
+
+  const fmtDuration = (ms: number) => (ms >= 1000 ? `${(ms / 1000).toFixed(1)} 秒` : `${ms} ms`)
+
+  const clear = async () => {
+    if (!confirm('清空全部语音调用记录？只删日志，不影响已缓存的音频')) return
+    try {
+      await api.del('/admin/tts/calls', true)
+      toast.success('调用记录已清空')
+      setPage(1)
+      qc.invalidateQueries({ queryKey: ['tts-calls'] })
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : '清空失败')
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>语音合成调用详情</DialogTitle>
+        </DialogHeader>
+
+        <div className="grid grid-cols-3 gap-3 mb-2">
+          {[
+            { label: '调用次数', value: data?.total_calls ?? 0 },
+            { label: '累计字数', value: data?.total_chars ?? 0 },
+            { label: '累计音频时长', value: fmtDuration(data?.total_duration_ms ?? 0) },
+          ].map((s) => (
+            <div key={s.label} className="rounded-xl border border-border bg-muted/30 px-4 py-3">
+              <p className="text-xs text-muted-foreground">{s.label}</p>
+              <p className="mt-1 text-lg font-semibold tabular-nums">
+                {typeof s.value === 'number' ? Number(s.value).toLocaleString() : s.value}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="max-h-[52vh] overflow-auto rounded-xl border border-border">
+          {isLoading ? (
+            <Skeleton className="h-40 w-full" />
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-40 whitespace-nowrap">时间</TableHead>
+                  <TableHead>文本</TableHead>
+                  <TableHead className="w-20 text-right whitespace-nowrap">字数</TableHead>
+                  <TableHead className="w-28 text-right whitespace-nowrap">音频时长</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {items.length === 0 ? (
+                  <TableEmpty colSpan={4}>还没有调用记录，客户端在 API 模式下播放语音会产生</TableEmpty>
+                ) : (
+                  items.map((row) => (
+                    <TableRow key={row.id}>
+                      <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
+                        {String(row.created_at ?? '').replace('T', ' ').slice(0, 19)}
+                      </TableCell>
+                      <TableCell>
+                        <span className="line-clamp-2 text-xs">{row.text}</span>
+                        {row.ok === false && row.message && (
+                          <span className="ml-1 text-xs text-red-500">失败：{row.message}</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-right text-xs tabular-nums">{row.char_count}</TableCell>
+                      <TableCell className="text-right text-xs tabular-nums">
+                        {row.ok === false ? '—' : fmtDuration(row.duration_ms ?? 0)}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </div>
+
+        <DialogFooter className="justify-between">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              上一页
+            </Button>
+            <span>
+              {page} / {pageCount}
+            </span>
+            <Button variant="outline" size="sm" disabled={page >= pageCount} onClick={() => setPage(page + 1)}>
+              下一页
+            </Button>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={clear} disabled={total === 0}>
+              清空记录
+            </Button>
+            <Button onClick={() => onOpenChange(false)}>关闭</Button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function ResetDataDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const qc = useQueryClient()
+  const [password, setPassword] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  const run = async () => {
+    if (!password || busy) return
+    if (!confirm('确认重置？学习记录、录音、打卡、积分、错题、兑换记录将被清空，且无法撤销！')) return
+    setBusy(true)
+    try {
+      await api.post('/admin/reset', { password }, true)
+      toast.success('数据已重置，题库与配置保持不变')
+      setPassword('')
+      onOpenChange(false)
+      qc.invalidateQueries()
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : '重置失败')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => { if (!busy) onOpenChange(v) }}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>重置学习数据</DialogTitle>
+        </DialogHeader>
+
+        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs leading-relaxed text-red-700">
+          将清空：学习记录、每日任务、背诵录音、打卡与连击、积分流水、错题本、兑换记录。
+          <br />
+          将保留：题库、孩子资料、奖品配置、系统设置。重置前会自动备份当前数据库。
+        </div>
+
+        <div className="space-y-1.5">
+          <Label>管理员密码</Label>
+          <Input
+            type="password"
+            placeholder="输入管理员密码以确认"
+            value={password}
+            autoFocus
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') run()
+            }}
+          />
+        </div>
+
+        <DialogFooter>
+          <Button variant="outline" disabled={busy} onClick={() => onOpenChange(false)}>
+            取消
+          </Button>
+          <Button
+            className="bg-red-600 text-white hover:bg-red-700"
+            disabled={!password || busy}
+            onClick={run}
+          >
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+            确认重置
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

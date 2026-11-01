@@ -4,22 +4,29 @@ from ..extensions import db
 from ..models import Setting
 
 DEFAULTS = {
-    # 每日题量：语文固定 认读 5 / 组词 5 / 古诗 1，英语固定 音标朗读 2 /
-    # 音标选词 2 / 组句 1，这里只留真正需要家长调的项
-    "english_word_read": 10,
-    # 数学题量默认 20，与 taskgen 的兜底值和设置页提示保持一致
-    "math_count": 20,
-    "english_phoneme": True,
-    "english_sentence": True,
-    "daily_point_cap": 100,
+    # —— 每日任务量：按科目分别配置，0 表示当天不出该题型 ——
+    # 语文
+    "chinese_read": 5,  # 认读字数（认读卡，不计分）
+    "chinese_word": 5,  # 补全词语题数
+    "chinese_poem": 1,  # 古诗背诵首数（不计分）
+    # 数学
+    "math_calc": 15,  # 计算题（按出题规则现算）
+    "math_app": 2,  # 应用题（从同年级学期题库抽取）
+    # 英语
+    "english_word_read": 10,  # 单词朗读（朗读卡，不计分）
+    "english_phoneme_read": 2,  # 音标朗读（不计分）
+    "english_phoneme_pick": 2,  # 音标选词
+    "english_word_choice": 2,  # 看中文选英文
+    "english_meaning_choice": 2,  # 看英文选中文
+    "english_sentence_count": 1,  # 单词组句
+    # 其它
+    "retry_count": 2,  # 每天插在最前面的错题重练条数
     "instant_feedback": True,
     "srs_enabled": True,
-    "audio_enabled": True,
     "point_per_subject": 10,
     "point_per_excellent": 5,
     "point_checkin": 20,
-    "point_wrong_fix": 1,
-    "point_wrong_fix_cap": 20,
+    "point_wrong_fix": 2,
     "streak_milestones": {"3": 10, "7": 30, "14": 60, "30": 150, "100": 500},
     # 大模型（当前仅 DeepSeek，兼容 OpenAI 协议）
     "ai_enabled": False,
@@ -29,9 +36,16 @@ DEFAULTS = {
     "ai_model": "deepseek-flash",
     "ai_temperature": 0.7,
     "ai_thinking": False,
+    # 语音配置：browser=浏览器 speechSynthesis，api=火山引擎豆包语音合成（HTTP 一次性合成 V1）
+    "voice_mode": "browser",
+    "tts_app_id": "",
+    "tts_access_token": "",
+    "tts_cluster": "volcano_tts",
+    "tts_voice_zh": "zh_female_cancan_mars_bigtts",
+    "tts_voice_en": "en_female_amanda_mars_bigtts",
 }
 
-SECRET_KEYS = ("ai_api_key",)
+SECRET_KEYS = ("ai_api_key", "tts_access_token")
 
 _cache = {}
 

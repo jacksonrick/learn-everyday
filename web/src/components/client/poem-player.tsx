@@ -68,7 +68,10 @@ export function PoemPlayer({
   }, [audioUrl])
 
   const readAll = () =>
-    speak(poem.content.replace(/\n/g, '，'), { lang: 'zh-CN', rate: 0.9 })
+    speak(
+      `《${poem.title}》，${poem.dynasty} ${poem.author}。${poem.content.replace(/\n/g, '，')}`,
+      { lang: 'zh-CN', rate: 0.9 },
+    )
 
   const startRecord = async () => {
     setMicError('')
@@ -146,13 +149,7 @@ export function PoemPlayer({
           {poem.lines.map((line) => (
             <p
               key={line}
-              onClick={masked ? undefined : () => speak(line, { lang: 'zh-CN', rate: 0.85 })}
-              className={cn(
-                'rounded-lg transition duration-300',
-                masked
-                  ? 'cursor-default select-none blur-[7px]'
-                  : 'cursor-pointer hover:bg-muted/60',
-              )}
+              className={cn('rounded-lg transition duration-300 select-none', masked && 'blur-[7px]')}
               aria-hidden={masked}
             >
               {line}
@@ -181,7 +178,7 @@ export function PoemPlayer({
               <Volume2 className="h-4 w-4" /> 整首朗读
             </Button>
             <div className="space-y-2 rounded-2xl bg-paper-deep/60 px-4 py-3 text-sm text-ink-soft">
-              {poem.translation ? <p>{poem.translation}</p> : <p>点卡片里的每一句，可以单独听读音。</p>}
+              {poem.translation ? <p>{poem.translation}</p> : <p>点上面的「整首朗读」，听题目、诗人和全诗。</p>}
               <p className="text-xs">先听两遍，再小声跟着念，最后到「背诵」里录给爸爸妈妈听。</p>
             </div>
             <div className="flex items-center justify-center gap-2 pt-1 text-xs text-muted-foreground">

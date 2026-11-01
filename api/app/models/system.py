@@ -27,3 +27,15 @@ class AiCallLog(BaseModel):
     input_tokens = db.Column(db.Integer, default=0)
     output_tokens = db.Column(db.Integer, default=0)
     ok = db.Column(db.Boolean, default=True)
+
+
+class TtsCallLog(BaseModel):
+    """语音合成调用流水：只记时间、文本、字数与音频时长，供「调用详情」展示。"""
+
+    __tablename__ = "tts_call_log"
+
+    text = db.Column(db.Text, default="")
+    char_count = db.Column(db.Integer, default=0)
+    duration_ms = db.Column(db.Integer, default=0)
+    ok = db.Column(db.Boolean, default=True)
+    message = db.Column(db.String(200), default="")

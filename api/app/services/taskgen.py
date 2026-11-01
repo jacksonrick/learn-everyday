@@ -28,7 +28,7 @@ from ..models import (
     WrongItem,
 )
 from ..utils.dates import today_str
-from . import level, mathgen, srs
+from . import homophone, level, mathgen, srs
 from .settings import get_setting
 
 SUBJECTS = ("chinese", "math", "english")
@@ -43,16 +43,16 @@ NO_SCORE_TYPES = ("word_read", "phoneme_read", "char_read")
 READ_TYPES = NO_SCORE_TYPES
 READ_ANSWER = "__read__"
 
-# 语文每天固定：认读 5 字 + 组词 5 题 + 古诗 1 首
-CHINESE_READ_N = 5
-CHINESE_WORD_N = 5
-# 英语固定：音标朗读 2 + 音标选词 2 + 词义选择各 2 + 组句 1（单词朗读数量由后台配）
-ENGLISH_PHONEME_READ_N = 2
-ENGLISH_PHONEME_PICK_N = 2
-ENGLISH_WORD_CHOICE_N = 2
-ENGLISH_MEANING_CHOICE_N = 2
-# 错题重练固定 2 道，不再开放配置
-RETRY_LIMIT = 2
+# 各题型数量全部来自后台「系统设置」，按语/数/英三科分别配置；
+# 0 表示当天不出该题型（见 services/settings.py 的 DEFAULTS）。
+
+
+def _num(key: str) -> int:
+    """读一个数量型配置，负数/脏值按 0 处理。"""
+    try:
+        return max(0, int(get_setting(key) or 0))
+    except (TypeError, ValueError):
+        return 0
 
 
 def _json_list(value):
@@ -103,26 +103,146 @@ def _pick_learned(model, learned: set, used: set, n: int, rng, id_attr: str = "i
     return rng.sample(rows, min(n, len(rows)))
 
 
+def _due_rows(model, child, subject: str, item_type: str, limit: int, today: str) -> list:
+    """按遗忘曲线到期记录，取回对应的题库行（最多 limit 条）。
+
+    这些是「以前学过、到了该再见面时间」的内容。出题时优先塞进当天的
+    朗读卡 / 选择题，让孩子隔几天能自然刷到旧内容；srs_enabled 关掉时为空。
+    """
+    if limit <= 0:
+        return []
+    rows = []
+    seen = set()
+    for r in srs.due_items(child.id, subject, item_type, limit * 2, today):
+        if r.item_id in seen:
+            continue
+        seen.add(r.item_id)
+        row = model.query.get(r.item_id)
+        if row is not None:
+            rows.append(row)
+        if len(rows) >= limit:
+            break
+    return rows
+
+
 # ---------------------------------------------------------------- 语文
 
+def _fill_word(row, by_char):
+    """给一个汉字挑一条能出「补全词语」题的组词。
+
+    只收二字词，且另一个字也得在字库里（不然没法给它算同音干扰项）。
+    组词列表本身按常用度排（斤 → 斤两 / 公斤 / 台斤），顺序遍历就能先命中常用词，
+    不至于拿「台斤」这种长尾词去考孩子。
+    """
+    for word in _json_list(row.words_json):
+        if len(word) != 2 or row.char not in word:
+            continue
+        rest = [x for x in word if x != row.char]
+        if len(rest) == 1 and rest[0] in by_char:
+            return word, rest[0]
+    return None
+
+
+def _fill_pairs(all_chars, learned, read_ids, by_char, rng, n=5, due_ids=frozenset()):
+    """选出 n 个（字, 目标词, 答案字）。
+
+    题字优先取「学过的字」——认读卡负责新字，补全题负责复习，孩子才有抓手；
+    其中遗忘曲线到期的字排最前面（组词是判分题，复习效果比认读卡更好）；
+    学过的字不够（刚开始打卡、字库被清过）再从全库补，兜底时仍排除当天认读的字。
+    """
+    def collect(rows):
+        rng.shuffle(rows)
+        got = []
+        for row in rows:
+            pair = _fill_word(row, by_char)
+            if pair:
+                got.append((row, pair[0], pair[1]))
+        return got
+
+    known = [c for c in all_chars if c.id in learned and c.id not in read_ids]
+    due = [c for c in known if c.id in due_ids]
+    rest = [c for c in known if c.id not in due_ids]
+    picked = collect(due + rest)[:n]
+    if len(picked) < n:
+        used = {p[0].id for p in picked}
+        extra = [c for c in all_chars if c.id not in used and c.id not in read_ids]
+        picked += collect(extra)[: n - len(picked)]
+    return picked
+
+
+def _fill_options(answer, char, word, by_char, char_tuple, word_set, rng, size=4):
+    """补全题选项：同音字优先（同调 → 异调），不够补同部首，最后随便挑。
+
+    关键约束：凡是能和题字拼成词的候选都得踢掉。比如题字「花」、干扰项「园」，
+    「花园」本身是词，照着选也说得通，题就变成两个答案。
+    """
+    def usable(ch):
+        if not ch or ch in (answer, char):
+            return False
+        return (char + ch) not in word_set and (ch + char) not in word_set
+
+    same, loose = homophone.candidates(answer, word, char_tuple)
+    rng.shuffle(same)
+    rng.shuffle(loose)
+    picks = [d for d in same + loose if usable(d)][: size - 1]
+
+    if len(picks) < size - 1:
+        radical = getattr(by_char.get(answer), "radical", "") or ""
+        near = [c for c in char_tuple
+                if c not in picks and usable(c) and (by_char[c].radical or "") == radical]
+        rng.shuffle(near)
+        picks += near[: size - 1 - len(picks)]
+
+    if len(picks) < size - 1:
+        # 最后兜底：只要有组词就算常用字，别再让某道题只剩三个选项
+        rest = [c for c in char_tuple
+                if c not in picks and usable(c) and _json_list(by_char[c].words_json)]
+        rng.shuffle(rest)
+        picks += rest[: size - 1 - len(picks)]
+
+    options = picks + [answer]
+    rng.shuffle(options)
+    return options
+
+
 def _build_chinese(child, today, rng):
-    """语文每天固定：认读 5 字 + 组词 5 题 + 古诗 1 首。
+    """语文：认读 N 字 + 补全词语 N 题 + 古诗 N 首（数量由后台配置，0 可关闭）。
 
     认读卡（char_read）只展示字形/拼音/部首/笔画/结构/组词/例句，支持发音，
-    点「下一个」即可，不计分；组词题（word_choice）才是要判分的客观题。
+    点「下一个」即可，不计分；补全题（fill_char）才是要判分的客观题。
+    新字由认读卡负责；复习优先——遗忘曲线到期的字先占认读卡约四成名额，
+    并在组词题里优先出现。
     """
+    read_n = _num("chinese_read")
+    word_n = _num("chinese_word")
+    poem_n = _num("chinese_poem")
+    if read_n <= 0 and word_n <= 0 and poem_n <= 0:
+        return {"subject": "chinese", "items": []}
+
     all_chars = ChineseChar.query.all()
     if not all_chars:
         return {"subject": "chinese", "items": []}
 
     learned = srs.learned_ids(child.id, "chinese", "char")
-    read_chars = _pick_unlearned(ChineseChar, learned, CHINESE_READ_N, rng)
-    if len(read_chars) < CHINESE_READ_N:
-        used = {c.id for c in read_chars}
-        read_chars += _pick_learned(ChineseChar, learned, used, CHINESE_READ_N - len(read_chars), rng)
+    due_chars = _due_rows(ChineseChar, child, "chinese", "char", max(read_n, 1), today)
+    due_ids = {c.id for c in due_chars}
+
+    read_chars = []
+    if read_n > 0:
+        # 到期复习的字最多占认读卡约四成，剩下的出全新字，控制每天的重复率
+        rev_cap = max(1, read_n * 2 // 5)
+        read_chars = due_chars[: min(rev_cap, read_n)]
+        used = {c.id for c in read_chars} | learned
+        if len(read_chars) < read_n:
+            read_chars += _pick_unlearned(ChineseChar, used, read_n - len(read_chars), rng)
+        if len(read_chars) < read_n:
+            used = {c.id for c in read_chars}
+            read_chars += _pick_learned(ChineseChar, learned, used, read_n - len(read_chars), rng)
     read_ids = {c.id for c in read_chars}
 
-    word_pool = [w for c in all_chars for w in _json_list(c.words_json)]
+    by_char = {c.char: c for c in all_chars}
+    char_tuple = tuple(sorted(by_char))
+    word_set = {w for c in all_chars for w in _json_list(c.words_json)}
 
     items = []
     for c in read_chars:
@@ -146,51 +266,56 @@ def _build_chinese(child, today, rng):
             }
         )
 
-    # 组词题：全库随机，跳过今天刚认读过的字，免得「刚看完就考」
-    pool = [c for c in all_chars if c.id not in read_ids and _json_list(c.words_json)]
-    rng.shuffle(pool)
-    for c in pool[:CHINESE_WORD_N]:
-        correct = rng.choice(_json_list(c.words_json))
+    # 补全词语：题字照常给出来，答案换成词里的另一个字。
+    # 「花 ＿」选“朵”，四个选项都是同音字，光对字形对不出来，必须知道这个词怎么组。
+    for c, word, answer in _fill_pairs(all_chars, learned, read_ids, by_char, rng, n=word_n, due_ids=due_ids):
         items.append(
             {
                 "item_id": len(items) + 1,
                 "ref_id": c.id,
                 "kind": "char",
-                "type": "word_choice",
+                "type": "fill_char",
                 "is_new": False,
+                # 只下发字形，不下发组词/例句——words 里就写着答案
                 "char": c.char,
-                "pinyin": c.pinyin,
-                "radical": c.radical,
-                "strokes": c.strokes,
-                "structure": c.structure,
-                "words": _json_list(c.words_json),
-                "sentence": c.sentence,
+                # 空框在题字的哪一边：组「不算」要显示「＿ 算」，不能反过来
+                "blank": "right" if word.index(c.char) == 0 else "left",
                 "level": level.normalize(c.level),
-                "stem": f"「{c.char}」可以组成下面哪个词？",
-                "options": _options(correct, word_pool, rng),
-                "answer": correct,
+                "stem": f"补一个字，和「{c.char}」组成词语",
+                "options": _fill_options(answer, c.char, word, by_char, char_tuple, word_set, rng),
+                "answer": answer,
             }
         )
 
-    poem_item = _build_poem(child, today, rng)
-    if poem_item:
+    # 古诗：数量可配，0 表示当天不背诗；多首时互不重复
+    seen_poems = set()
+    for _ in range(poem_n):
+        poem_item = _build_poem(child, today, rng, exclude=seen_poems)
+        if not poem_item:
+            break
+        seen_poems.add(poem_item["poem_id"])
         poem_item["item_id"] = len(items) + 1
         items.append(poem_item)
 
     return {"subject": "chinese", "items": items}
 
 
-def _build_poem(child, today, rng):
-    # 每天固定 1 首，不再开放配置
+def _build_poem(child, today, rng, exclude=()):
     learned = srs.learned_ids(child.id, "chinese", "poem")
-    pool = Poem.query.all()
+    pool = [p for p in Poem.query.all() if p.id not in exclude]
     if not pool:
         return None
 
-    due = srs.due_items(child.id, "chinese", "poem", 1, today)
+    due = [
+        d
+        for d in srs.due_items(child.id, "chinese", "poem", len(exclude) + 1, today)
+        if d.item_id not in exclude
+    ]
     poem = None
     if due:
-        poem = Poem.query.get(due[0].item_id)
+        candidate = Poem.query.get(due[0].item_id)
+        if candidate is not None and candidate.id not in exclude:
+            poem = candidate
     if poem is None:
         # 全库随机，优先挑还没背过的；难度按 10/40/30/15/5 加权选档
         fresh = [p for p in pool if p.id not in learned]
@@ -228,12 +353,13 @@ def _build_poem(child, today, rng):
 # ---------------------------------------------------------------- 数学
 
 def _build_math(child, today, rng):
-    total = int(get_setting("math_count") or 20)
+    """数学：计算题 N 道 + 应用题 N 道，数量由后台分别配置，0 可关闭。"""
+    calc_n = _num("math_calc")
+    app_n = _num("math_app")
 
-    # 应用题：从同年级同学期的题库里按等级比例抽，最多占 1/5
+    # 应用题：从同年级同学期的题库里按等级比例抽
     app_pool = MathQuestion.query.filter_by(grade_id=child.grade_id, term=child.term).all()
-    app_n = min(len(app_pool), max(0, total // 5))
-    apps = level.split(app_pool, app_n, rng)
+    apps = level.split(app_pool, min(len(app_pool), app_n), rng)
 
     # 数学严格按「年级 + 学期」出题：只取同年级同学期的规则，不会串到其他年级。
     # 唯一例外是该学期一条规则都没配（比如刚升级还没配好），此时退到本年级
@@ -242,12 +368,12 @@ def _build_math(child, today, rng):
     if not rules:
         rules = MathRule.query.filter_by(grade_id=child.grade_id).all()
 
-    gen_total = total - len(apps)
+    gen_total = calc_n
     items = []
     emitted = set()
     if rules and gen_total > 0:
         # 计算题也按 10/40/30/15/5 分配：每个等级挑对应数量的规则来出题。
-        # 某档没配规则时，缺口统一从全部规则里补，保证 20 道凑齐。
+        # 某档没配规则时，缺口统一从全部规则里补，保证凑齐。
         buckets = {lv: [] for lv in level.LEVELS}
         for rule in rules:
             buckets[level.normalize(rule.level)].append(rule)
@@ -327,63 +453,72 @@ def _gen_rule_items(candidates, count: int, rng, emitted: set, offset: int) -> l
 # ---------------------------------------------------------------- 英语
 
 def _build_english(child, today, rng):
-    """英语每天：单词朗读 N + 音标朗读 2 + 词义选择 2+2 + 音标选词 2 + 组句 1。
+    """英语：单词朗读 N + 音标朗读 N + 音标选词 N + 看中文选英文 N +
+    看英文选中文 N + 组句 N，数量全部由后台配置，0 可关闭对应题型。
 
     朗读卡（word_read / phoneme_read）支持发音、展示全部信息，点「下一个」即可，
-    不计分；词义选择与音标选词才判分。当天朗读过的单词不再拿去出选择题，避免
-    刚看完释义就考同一个词。
+    不计分；其余题型判分。当天朗读过的单词不再拿去出选择题，避免刚看完释义
+    就考同一个词。新词由朗读卡负责；遗忘曲线到期的词优先占朗读卡约四成名额，
+    剩下的到期词在选择题里优先出现（选择题判分，复习效果更好）。
     """
-    read_n = max(0, int(get_setting("english_word_read") or 0))
+    read_n = _num("english_word_read")
+    phoneme_read_n = _num("english_phoneme_read")
+    phoneme_pick_n = _num("english_phoneme_pick")
+    word_choice_n = _num("english_word_choice")
+    meaning_choice_n = _num("english_meaning_choice")
+    sentence_n = _num("english_sentence_count")
 
-    # 英语题库同样不关联年级学期：全库随机
     all_words = EnglishWord.query.all()
-    if not all_words:
-        return {"subject": "english", "items": []}
-
-    # 题库太小的时候先给选择题留出 4 个词，否则朗读卡会把整个库读光、后面没题可考
-    choice_slots = ENGLISH_WORD_CHOICE_N + ENGLISH_MEANING_CHOICE_N
-    read_n = min(read_n, max(0, len(all_words) - choice_slots))
-
-    learned = srs.learned_ids(child.id, "english", "word")
-    read_words = _pick_unlearned(EnglishWord, learned, read_n, rng)
-    if len(read_words) < read_n:
-        # 没学过的词不够（题库还小）时，用学过的词补满朗读卡，别让孩子某天只有两三张卡
-        used = {w.id for w in read_words}
-        read_words += _pick_learned(EnglishWord, learned, used, read_n - len(read_words), rng)
-    read_ids = {w.id for w in read_words}
-
-    meaning_pool = list({w.meaning for w in all_words if w.meaning})
-    word_pool = [w.word for w in all_words]
+    learned = srs.learned_ids(child.id, "english", "word") if all_words else set()
 
     items = []
 
     # 1) 单词朗读：认读卡，点「下一个」即完成，不计分但要记「学过」，明天才会进复习
-    for w in read_words:
-        items.append(
-            {
-                "item_id": len(items) + 1,
-                "ref_id": w.id,
-                "kind": "word",
-                "type": "word_read",
-                "is_new": w.id not in learned,
-                "word": w.word,
-                "phonetic": w.phonetic,
-                "pos": w.pos,
-                "meaning": w.meaning,
-                "example": w.example,
-                "example_cn": w.example_cn,
-                "audio_url": w.audio_url or "",
-                "level": level.normalize(w.level),
-                "stem": f"读一读：{w.word}",
-                "answer": READ_ANSWER,
-            }
-        )
+    read_ids = set()
+    if all_words and read_n > 0:
+        # 题库太小的时候先给选择题留出空位，否则朗读卡会把整个库读光、后面没题可考
+        choice_slots = word_choice_n + meaning_choice_n
+        read_limit = min(read_n, max(0, len(all_words) - choice_slots))
+        read_words = []
+        if read_limit > 0:
+            # 到期复习的词最多占朗读卡约四成，剩下的出全新词，控制每天的重复率
+            rev_cap = max(1, read_limit * 2 // 5)
+            due_rows = _due_rows(EnglishWord, child, "english", "word", min(rev_cap, read_limit), today)
+            read_words = list(due_rows)
+            used = {w.id for w in read_words} | learned
+            if len(read_words) < read_limit:
+                read_words += _pick_unlearned(EnglishWord, used, read_limit - len(read_words), rng)
+            if len(read_words) < read_limit:
+                used = {w.id for w in read_words}
+                read_words += _pick_learned(EnglishWord, learned, used, read_limit - len(read_words), rng)
 
-    # 2) 音标朗读：固定 2 个，展示音标/类型/发音要点/例词
-    phonemes = EnglishPhoneme.query.all() if get_setting("english_phoneme") else []
+        for w in read_words:
+            read_ids.add(w.id)
+            items.append(
+                {
+                    "item_id": len(items) + 1,
+                    "ref_id": w.id,
+                    "kind": "word",
+                    "type": "word_read",
+                    "is_new": w.id not in learned,
+                    "word": w.word,
+                    "phonetic": w.phonetic,
+                    "pos": w.pos,
+                    "meaning": w.meaning,
+                    "example": w.example,
+                    "example_cn": w.example_cn,
+                    "audio_url": w.audio_url or "",
+                    "level": level.normalize(w.level),
+                    "stem": f"读一读：{w.word}",
+                    "answer": READ_ANSWER,
+                }
+            )
+
+    # 2) 音标朗读：数量可配，0 关闭；展示音标/类型/发音要点/例词
+    phonemes = EnglishPhoneme.query.all() if phoneme_read_n + phoneme_pick_n > 0 else []
     read_phoneme_ids = set()
-    if phonemes:
-        for p in rng.sample(phonemes, min(ENGLISH_PHONEME_READ_N, len(phonemes))):
+    if phonemes and phoneme_read_n > 0:
+        for p in rng.sample(phonemes, min(phoneme_read_n, len(phonemes))):
             read_phoneme_ids.add(p.id)
             items.append(
                 {
@@ -401,55 +536,67 @@ def _build_english(child, today, rng):
                 }
             )
 
-    # 3) 词义选择：看中文选英文 2 道 + 看英文选中文 2 道
-    pool = [w for w in all_words if w.id not in read_ids and w.meaning]
-    rng.shuffle(pool)
-    plan = ["word_choice", "meaning_choice", "word_choice", "meaning_choice"][:choice_slots]
-    for w, mode in zip(pool[: len(plan)], plan):
-        if mode == "word_choice":
-            # 看中文选英文：题目问的就是这个单词，所以任何「含单词本身」的字段都不能下发
-            # （word / phonetic / audio_url / example 里都有答案），否则题目上直接把答案印出来。
-            items.append(
-                {
-                    "item_id": len(items) + 1,
-                    "ref_id": w.id,
-                    "kind": "word",
-                    "type": "word_choice",
-                    "is_new": w.id not in learned,
-                    "pos": w.pos,
-                    "meaning": w.meaning,
-                    "level": level.normalize(w.level),
-                    "stem": f"「{w.meaning}」的英文是？",
-                    "options": _options(w.word, word_pool, rng),
-                    "answer": w.word,
-                }
-            )
-        else:
-            items.append(
-                {
-                    "item_id": len(items) + 1,
-                    "ref_id": w.id,
-                    "kind": "word",
-                    "type": "meaning_choice",
-                    "is_new": w.id not in learned,
-                    "word": w.word,
-                    "phonetic": w.phonetic,
-                    "pos": w.pos,
-                    "meaning": w.meaning,
-                    "example": w.example,
-                    "example_cn": w.example_cn,
-                    "audio_url": w.audio_url or "",
-                    "level": level.normalize(w.level),
-                    "stem": f"「{w.word}」的意思是？",
-                    "options": _options(w.meaning, meaning_pool, rng),
-                    "answer": w.meaning,
-                }
-            )
+    # 3) 词义选择：看中文选英文 N 道 + 看英文选中文 N 道，题型顺序打乱；
+    # 到期该复习的词排最前面（这里判分，复习效果比朗读卡好）
+    if all_words and word_choice_n + meaning_choice_n > 0:
+        pool = [w for w in all_words if w.id not in read_ids and w.meaning]
+        due_word_ids = {r.id for r in _due_rows(EnglishWord, child, "english", "word", word_choice_n + meaning_choice_n, today)}
+        due_pool = [w for w in pool if w.id in due_word_ids]
+        rest_pool = [w for w in pool if w.id not in due_word_ids]
+        rng.shuffle(due_pool)
+        rng.shuffle(rest_pool)
+        pool = due_pool + rest_pool
 
-    # 4) 音标选词：固定 2 道，跳过刚朗读过的音标
-    if phonemes:
+        meaning_pool = list({w.meaning for w in all_words if w.meaning})
+        word_pool = [w.word for w in all_words]
+
+        plan = ["word_choice"] * word_choice_n + ["meaning_choice"] * meaning_choice_n
+        rng.shuffle(plan)
+        for w, mode in zip(pool[: len(plan)], plan):
+            if mode == "word_choice":
+                # 看中文选英文：题目问的就是这个单词，所以任何「含单词本身」的字段都不能下发
+                # （word / phonetic / audio_url / example 里都有答案），否则题目上直接把答案印出来。
+                items.append(
+                    {
+                        "item_id": len(items) + 1,
+                        "ref_id": w.id,
+                        "kind": "word",
+                        "type": "word_choice",
+                        "is_new": w.id not in learned,
+                        "pos": w.pos,
+                        "meaning": w.meaning,
+                        "level": level.normalize(w.level),
+                        "stem": f"「{w.meaning}」的英文是？",
+                        "options": _options(w.word, word_pool, rng),
+                        "answer": w.word,
+                    }
+                )
+            else:
+                items.append(
+                    {
+                        "item_id": len(items) + 1,
+                        "ref_id": w.id,
+                        "kind": "word",
+                        "type": "meaning_choice",
+                        "is_new": w.id not in learned,
+                        "word": w.word,
+                        "phonetic": w.phonetic,
+                        "pos": w.pos,
+                        "meaning": w.meaning,
+                        "example": w.example,
+                        "example_cn": w.example_cn,
+                        "audio_url": w.audio_url or "",
+                        "level": level.normalize(w.level),
+                        "stem": f"「{w.word}」的意思是？",
+                        "options": _options(w.meaning, meaning_pool, rng),
+                        "answer": w.meaning,
+                    }
+                )
+
+    # 4) 音标选词：数量可配，跳过刚朗读过的音标
+    if phonemes and phoneme_pick_n > 0:
         used = set(read_phoneme_ids)
-        for _ in range(ENGLISH_PHONEME_PICK_N):
+        for _ in range(phoneme_pick_n):
             phoneme = _build_phoneme(rng, exclude=used)
             if not phoneme:
                 break
@@ -457,18 +604,21 @@ def _build_english(child, today, rng):
             phoneme["item_id"] = len(items) + 1
             items.append(phoneme)
 
-    # 5) 单词组句：固定 1 道
-    if get_setting("english_sentence"):
-        sentence = _build_sentence(rng)
-        if sentence:
-            sentence["item_id"] = len(items) + 1
-            items.append(sentence)
+    # 5) 单词组句：数量可配，0 关闭；多道时互不重复
+    seen_sentences = set()
+    for _ in range(sentence_n):
+        sentence = _build_sentence(rng, exclude=seen_sentences)
+        if not sentence:
+            break
+        seen_sentences.add(sentence["ref_id"])
+        sentence["item_id"] = len(items) + 1
+        items.append(sentence)
 
     return {"subject": "english", "items": items}
 
 
-def _build_sentence(rng):
-    pool = EnglishSentence.query.all()
+def _build_sentence(rng, exclude=()):
+    pool = [s for s in EnglishSentence.query.all() if s.id not in exclude]
     if not pool:
         return None
     sentence = level.pick_one(pool, rng)
@@ -578,9 +728,9 @@ def _dedupe_key(item):
 def _prepend_retries(child, subject: str, payload: dict, rng):
     """错题重练排在当天最前面；同一天本来要复习到的同一道题，用重练版本替换掉。
 
-    数量固定 2 道（``RETRY_LIMIT``），不再做成后台配置。
+    数量由后台配置（``retry_count``，默认 2，0 表示当天不重练）。
     """
-    limit = RETRY_LIMIT
+    limit = _num("retry_count")
     items = payload.get("items", [])
     retries = _retry_items(child, subject, rng, limit)
     if not retries:

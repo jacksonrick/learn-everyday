@@ -112,7 +112,7 @@ export default function ChinesePage() {
 
   const hint =
     resumeHint(total + resumed, resumed) ||
-    (phase === 'quiz' ? `第 1 步 · 认读与组词 ${chars.length} 题` : '第 2 步 · 古诗背诵')
+    (phase === 'quiz' ? `第 1 步 · 认读与补字 ${chars.length} 题` : '第 2 步 · 古诗背诵')
 
   return (
     <div>

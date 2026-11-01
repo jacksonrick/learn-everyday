@@ -92,7 +92,7 @@ function SubjectCard({ item, index }: { item: any; index: number }) {
                 : item.subject === 'math'
                   ? '每日计算题，做完自动判分'
                   : item.subject === 'chinese'
-                    ? '识字 + 古诗背诵'
+                    ? '认读 + 补字 + 古诗'
                     : '单词 + 音标 + 句子'}
             </p>
           </div>

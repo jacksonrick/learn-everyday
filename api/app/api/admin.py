@@ -1,13 +1,17 @@
 import json
-from datetime import date, timedelta
+import shutil
+from datetime import date, datetime, timedelta
+from pathlib import Path
 
-from flask import Blueprint, request, send_file
-from flask_jwt_extended import jwt_required
-from sqlalchemy import Boolean, Integer, func
+from flask import Blueprint, current_app, request, send_file
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from sqlalchemy import Boolean, Integer, func, text
 
 from ..extensions import db
 from ..models import (
+    AdminUser,
     AiCallLog,
+    TtsCallLog,
     Checkin,
     Child,
     ChineseChar,
@@ -25,12 +29,14 @@ from ..models import (
     Recitation,
     Reward,
     StudyRecord,
+    SrsItem,
     TaskAnswer,
     WrongItem,
 )
 from ..services import ai, bank_import, level as level_svc, mathgen, points, settings as settings_svc, storage
 from ..utils.dates import now_iso, shift_date, today_str
 from ..utils.responses import fail, ok, paginated, parse_page
+from .auth import check_password
 
 bp = Blueprint("admin", __name__)
 
@@ -73,8 +79,8 @@ def _coerce(model, data: dict, fields: list[str]) -> dict:
 
 
 # 题库检索的可选过滤列：模型上有这一列、且前端传了值，就按值精确过滤。
-# level = 难度等级（音标库没有这一列，所以自动跳过）；pos = 词性；type/kind/category/genre 是各类标签。
-_FILTER_COLUMNS = ("level", "pos", "kind", "type", "category", "genre")
+# level = 难度等级（音标库没有这一列，所以自动跳过）；pos = 词性；type/category/genre 是各类标签。
+_FILTER_COLUMNS = ("level", "pos", "type", "category", "genre")
 
 
 def _filtered(model, fields, search):
@@ -307,8 +313,7 @@ _register_bank(
 _register_bank(
     "words",
     EnglishWord,
-    ["word", "phonetic", "pos", "meaning", "example", "example_cn", "kind",
-     "level", "audio_url"],
+    ["word", "phonetic", "pos", "meaning", "example", "example_cn", "level", "audio_url"],
     ["word", "meaning", "phonetic"],
     unique=["word"],
     unique_ci=True,
@@ -471,6 +476,40 @@ def ai_calls():
 @jwt_required()
 def ai_calls_clear():
     deleted = AiCallLog.query.delete(synchronize_session=False)
+    db.session.commit()
+    return ok({"deleted": deleted})
+
+
+@bp.get("/tts/calls")
+@jwt_required()
+def tts_calls():
+    """语音合成调用历史：时间、文本、字数与音频时长，并给出累计用量。"""
+    page, page_size = parse_page(request.args)
+    query = TtsCallLog.query.order_by(TtsCallLog.id.desc())
+    total = query.count()
+    rows = query.offset((page - 1) * page_size).limit(page_size).all()
+    sums = db.session.query(
+        func.count(TtsCallLog.id),
+        func.sum(TtsCallLog.char_count),
+        func.sum(TtsCallLog.duration_ms),
+    ).one()
+    return paginated(
+        [r.to_dict() for r in rows],
+        total,
+        page,
+        page_size,
+        {
+            "total_calls": int(sums[0] or 0),
+            "total_chars": int(sums[1] or 0),
+            "total_duration_ms": int(sums[2] or 0),
+        },
+    )
+
+
+@bp.delete("/tts/calls")
+@jwt_required()
+def tts_calls_clear():
+    deleted = TtsCallLog.query.delete(synchronize_session=False)
     db.session.commit()
     return ok({"deleted": deleted})
 
@@ -927,6 +966,62 @@ def backup_download():
     )
 
 
+# ------------------------------------------------------------------ 数据重置
+
+# 重置范围：题库以外的所有运营数据。题库（汉字/古诗/单词/音标/组句/数学规则与题）、
+# 孩子、年级、奖品配置、系统设置、管理员账号与大模型调用日志都保留。
+_RESET_MODELS = (
+    TaskAnswer,
+    StudyRecord,
+    Recitation,
+    DailyTask,
+    SrsItem,
+    WrongItem,
+    Checkin,
+    PointsLedger,
+    Redemption,
+)
+
+
+@bp.post("/reset")
+@jwt_required()
+def reset_data():
+    """重置题库以外的全部数据：学习记录、录音、打卡、积分、错题、兑换记录。
+
+    必须携带管理员密码二次确认；执行前会先把当前数据库备份一份到 backups/ 目录。
+    """
+    data = request.get_json(silent=True) or {}
+    password = data.get("password") or ""
+    user = AdminUser.query.get(int(get_jwt_identity()))
+    if user is None or not check_password(password, user.password_hash):
+        return fail("AUTH_FAILED", "管理员密码不正确", 400)
+
+    # 重置前先落一份备份，给家长留反悔的余地
+    db_path = Path(current_app.config["DB_PATH"])
+    if db_path.exists():
+        backup_dir = Path(current_app.config["BACKUP_DIR"])
+        backup_dir.mkdir(parents=True, exist_ok=True)
+        stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        try:
+            # WAL 模式下先落盘，避免备份缺最近的数据
+            db.session.execute(text("PRAGMA wal_checkpoint(TRUNCATE)"))
+            db.session.commit()
+            shutil.copy2(db_path, backup_dir / f"db-before-reset-{stamp}.sqlite")
+        except OSError as exc:
+            db.session.rollback()
+            return fail("BACKUP_FAILED", f"重置前备份失败，已中止：{exc}", 500)
+
+    # 先删录音文件，再清表
+    for row in Recitation.query.all():
+        storage.delete_recite(row.file_path)
+
+    deleted = {}
+    for model in _RESET_MODELS:
+        deleted[model.__tablename__] = model.query.delete(synchronize_session=False)
+    db.session.commit()
+    return ok({"deleted": deleted, "backup": f"db-before-reset-{stamp}.sqlite"})
+
+
 @bp.get("/stats/summary")
 @jwt_required()
 def stats_summary():
@@ -955,10 +1050,10 @@ def bank_builtin():
 def bank_import_run():
     """一键导入内置题库。已存在的按唯一键跳过，不覆盖家长改过的内容。"""
     data = request.get_json(silent=True) or {}
-    kinds = data.get("kinds") or ["chars", "poems"]
+    kinds = data.get("kinds") or ["chars", "poems", "words"]
     if isinstance(kinds, str):
         kinds = [kinds]
-    allowed = {"chars", "poems"}
+    allowed = {"chars", "poems", "words"}
     unknown = [k for k in kinds if k not in allowed]
     if unknown:
         return fail("BAD_KIND", f"不支持导入的类型：{'、'.join(unknown)}", 400)
@@ -968,4 +1063,6 @@ def bank_import_run():
         result["chars"] = bank_import.import_chars()
     if "poems" in kinds:
         result["poems"] = bank_import.import_poems()
+    if "words" in kinds:
+        result["words"] = bank_import.import_words()
     return ok(result)

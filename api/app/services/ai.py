@@ -422,7 +422,6 @@ def _clean_word(it: dict) -> dict | None:
     phonetic = str(it.get("phonetic") or "").strip()
     if phonetic and not phonetic.startswith("/"):
         phonetic = f"/{phonetic.strip('/')}/"
-    kind = str(it.get("kind") or "单词").strip()
     return {
         "word": word[:60],
         "phonetic": phonetic[:80],
@@ -430,7 +429,6 @@ def _clean_word(it: dict) -> dict | None:
         "meaning": str(it.get("meaning") or "").strip()[:120],
         "example": str(it.get("example") or "").strip()[:200],
         "example_cn": str(it.get("example_cn") or "").strip()[:200],
-        "kind": "短语" if kind in ("短语", "phrase") else "单词",
         "level": _norm_level(it.get("level")),
     }
 
@@ -450,10 +448,9 @@ def _gen_word(context: dict, extra: str = "") -> dict:
    如果有多个词性，选最常见的那一个。
 3. 释义 2-8 个中文字，有多个义项时用分号分隔。
 4. 例句不超过 8 个单词，必须包含「{word}」，并配中文翻译。
-5. kind 只能是「单词」或「短语」；「{word}」是多词组成时填「短语」。
-6. level 按这个词在教材里出现的年级判断。
+5. level 按这个词在教材里出现的年级判断。
 输出 JSON：
-{{"word":"{word}","phonetic":"/…/","pos":"n.","meaning":"","example":"","example_cn":"","kind":"单词","level":"容易"}}
+{{"word":"{word}","phonetic":"/…/","pos":"n.","meaning":"","example":"","example_cn":"","level":"容易"}}
 只输出这个 JSON。""",
         max_tokens=600,
     )
@@ -481,8 +478,8 @@ def _gen_words(grade: str, count: int, exclude: list, extra: str = "") -> list[d
 5. 例句不超过 8 个单词，配套中文翻译。
 输出 JSON：
 {{"items":[{{"word":"","phonetic":"/…/","pos":"n.","meaning":"中文释义，2-6 字",
-  "example":"","example_cn":"","kind":"单词","level":"容易"}}]}}
-kind 只能是「单词」或「短语」。items 里必须有 {count} 个元素。只输出这个 JSON。""",
+  "example":"","example_cn":"","level":"容易"}}]}}
+items 里必须有 {count} 个元素。只输出这个 JSON。""",
         max_tokens=max(2500, 250 * count),
     )
     items = data.get("items") if isinstance(data, dict) else data

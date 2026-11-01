@@ -11,7 +11,7 @@ from .bank import (
 )
 from .study import Checkin, DailyTask, Recitation, SrsItem, StudyRecord, TaskAnswer, WrongItem
 from .reward import PointsLedger, Redemption, Reward
-from .system import AdminUser, AiCallLog, Setting
+from .system import AdminUser, AiCallLog, Setting, TtsCallLog
 
 __all__ = [
     "BaseModel",
@@ -37,4 +37,5 @@ __all__ = [
     "AdminUser",
     "Setting",
     "AiCallLog",
+    "TtsCallLog",
 ]

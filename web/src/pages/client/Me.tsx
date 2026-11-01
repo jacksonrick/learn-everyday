@@ -3,7 +3,21 @@ import { useSearchParams } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import type { ComponentType } from 'react'
-import { ChevronLeft, ChevronRight, Flame, Gift, Star, CalendarCheck, Target, Sparkles } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Flame,
+  Gift,
+  Star,
+  CalendarCheck,
+  Target,
+  Sparkles,
+  Check,
+  CircleDashed,
+  PenLine,
+  FileQuestion
+} from 'lucide-react'
 import { api } from '@/lib/api'
 import { useChildStore } from '@/stores/child'
 import { useSession } from '@/lib/hooks'
@@ -54,6 +68,37 @@ export default function MePage() {
     </div>
   )
 }
+
+type DayMark = {
+  Icon: LucideIcon
+  label: string
+  tone: string
+}
+
+/**
+ * 日历格子里的小图标：一眼看出当天是三科全完成、只完成部分、家长补录还是没做。
+ * 未来的日子还没有发生，不显示图标，避免被误读成「未完成」。
+ */
+function dayMark(d: any): DayMark | null {
+  if (d.status === 'full') {
+    return d.is_makeup
+      ? { Icon: PenLine, label: '家长补录', tone: 'opacity-95' }
+      : { Icon: Check, label: '三科完成', tone: 'opacity-95' }
+  }
+  if (d.status === 'partial') {
+    const done = (d.subjects ?? []).length
+    return { Icon: CircleDashed, label: `部分完成 ${done}/3`, tone: '' }
+  }
+  if (d.is_future) return null
+  return { Icon: FileQuestion, label: '未完成', tone: 'opacity-45' }
+}
+
+const CALENDAR_LEGEND: { Icon: LucideIcon; label: string; swatch: string }[] = [
+  { Icon: Check, label: '三科完成', swatch: 'bg-persimmon-deep text-white' },
+  { Icon: CircleDashed, label: '部分完成', swatch: 'bg-persimmon text-persimmon-deep' },
+  { Icon: PenLine, label: '家长补录', swatch: 'bg-persimmon-deep text-white' },
+  { Icon: FileQuestion, label: '未完成', swatch: 'border border-dashed border-line/80 text-ink-soft' },
+]
 
 function CalendarTab({ childId }: { childId: number | null }) {
   const [month, setMonth] = useState(currentMonth())
@@ -112,27 +157,37 @@ function CalendarTab({ childId }: { childId: number | null }) {
           {Array.from({ length: offset }).map((_, i) => (
             <div key={`empty-${i}`} />
           ))}
-          {(data?.days ?? []).map((d: any) => (
-            <div
-              key={d.date}
-              className={cn(
-                'flex h-11 flex-col items-center justify-center rounded-xl text-sm transition-colors',
-                d.status === 'full' && 'bg-persimmon-deep font-semibold text-white shadow-sticker',
-                d.status === 'partial' && 'bg-persimmon font-medium text-persimmon-deep',
-                d.status === 'none' && 'border border-dashed border-line/80',
-                d.status === 'none' && d.is_future && 'text-ink-soft/35',
-                d.status === 'none' && !d.is_future && 'text-ink-soft/60',
-                d.is_today && 'ring-2 ring-persimmon-deep/60',
-              )}
-            >
-              <span className="leading-none">{d.day}</span>
-              {d.status === 'full' && d.is_makeup && (
-                <span className="mt-0.5 text-[9px] leading-none opacity-90">补</span>
-              )}
-              {d.status === 'partial' && (
-                <span className="mt-1 h-1 w-1 rounded-full bg-persimmon-deep" />
-              )}
-            </div>
+          {(data?.days ?? []).map((d: any) => {
+            const mark = dayMark(d)
+            return (
+              <div
+                key={d.date}
+                title={mark ? `${d.date} · ${mark.label}` : `${d.date} · 还没到`}
+                className={cn(
+                  'flex h-11 flex-col items-center justify-center gap-0.5 rounded-xl text-sm transition-colors',
+                  d.status === 'full' && 'bg-persimmon-deep font-semibold text-white shadow-sticker',
+                  d.status === 'partial' && 'bg-persimmon font-medium text-persimmon-deep',
+                  d.status === 'none' && 'border border-dashed border-line/80',
+                  d.status === 'none' && d.is_future && 'text-ink-soft/35',
+                  d.status === 'none' && !d.is_future && 'text-ink-soft/60',
+                  d.is_today && 'ring-2 ring-persimmon-deep/60',
+                )}
+              >
+                <span className="leading-none">{d.day}</span>
+                {mark && <mark.Icon className={cn('h-3 w-3 shrink-0', mark.tone)} strokeWidth={3} />}
+              </div>
+            )
+          })}
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-line/60 pt-3">
+          {CALENDAR_LEGEND.map(({ Icon, label, swatch }) => (
+            <span key={label} className="flex items-center gap-1 text-[11px] text-ink-soft">
+              <span className={cn('grid h-4 w-4 place-items-center rounded', swatch)}>
+                <Icon className="h-2.5 w-2.5" strokeWidth={3} />
+              </span>
+              {label}
+            </span>
           ))}
         </div>
       </Card>
@@ -168,7 +223,7 @@ function CalendarTab({ childId }: { childId: number | null }) {
             <p className="text-sm">
               本月最长连续 <span className="font-num font-semibold text-persimmon-deep">{bestStreak}</span> 天
             </p>
-            <p className="text-[11px] text-ink-soft">实心 = 三科完成 · 半透明 = 部分完成 · 「补」= 家长补录</p>
+            <p className="text-[11px] text-ink-soft">看左边格子下面的小图标就知道当天完成了没</p>
           </div>
         </Card>
       </div>
@@ -310,18 +365,42 @@ function PointsTab({ childId }: { childId: number | null }) {
           <p className="mb-3 flex items-center gap-1.5 text-sm font-medium">
             <Gift className="h-4 w-4 text-rose-400" /> 可以兑换
           </p>
-          <div className="space-y-2">
+          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {rewardsQuery.data.items.map((r: any) => (
-              <div key={r.id} className="flex items-center gap-3 rounded-xl bg-muted/50 px-3 py-2">
-                <span className="text-xl">{r.icon}</span>
-                <div className="flex-1">
-                  <p className="text-sm">{r.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {r.cost} 积分{r.affordable ? '' : ` · 还差 ${r.gap}`}
-                  </p>
+              <div
+                key={r.id}
+                className={cn(
+                  'flex flex-col rounded-2xl border p-3 transition-colors',
+                  r.affordable
+                    ? 'border-persimmon/40 bg-paper-card shadow-sm'
+                    : 'border-line/70 bg-paper-deep/50',
+                )}
+              >
+                <div
+                  className={cn(
+                    'grid h-14 place-items-center rounded-xl text-3xl',
+                    r.affordable ? 'bg-persimmon-soft' : 'bg-paper-deep opacity-70',
+                  )}
+                >
+                  {r.icon}
                 </div>
-                <Button size="sm" disabled={!r.affordable} onClick={() => redeem(r.id, r.cost)}>
-                  兑换
+                <p className="mt-2 line-clamp-2 text-sm font-medium leading-snug">{r.name}</p>
+                <p
+                  className={cn(
+                    'mt-0.5 font-num text-xs',
+                    r.affordable ? 'font-semibold text-persimmon-deep' : 'text-ink-soft',
+                  )}
+                >
+                  {r.cost} 积分
+                </p>
+                <Button
+                  size="sm"
+                  variant={r.affordable ? 'default' : 'outline'}
+                  className="mt-2.5 w-full"
+                  disabled={!r.affordable}
+                  onClick={() => redeem(r.id, r.cost)}
+                >
+                  {r.affordable ? '兑换' : `还差 ${r.gap}`}
                 </Button>
               </div>
             ))}

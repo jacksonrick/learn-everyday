@@ -7,7 +7,6 @@
  "items": [
   {
    "grade": 1,
-   "term": "上",
    "title": "金木水火土",
    "author": "",
    "dynasty": "",
@@ -16,7 +15,6 @@
   },
   {
    "grade": 1,
-   "term": "上",
    "title": "咏鹅",
    "author": "骆宾王",
    "dynasty": "唐",
@@ -25,7 +23,6 @@
   },
   {
    "grade": 1,
-   "term": "上",
    "title": "画",
    "author": "",
    "dynasty": "唐",
@@ -34,7 +31,6 @@
   },
   {
    "grade": 1,
-   "term": "上",
    "title": "悯农（其二）",
    "author": "李绅",
    "dynasty": "唐",
@@ -43,7 +39,6 @@
   },
   {
    "grade": 1,
-   "term": "上",
    "title": "江南",
    "author": "",
    "dynasty": "汉",
@@ -52,7 +47,6 @@
   },
   {
    "grade": 1,
-   "term": "上",
    "title": "对韵歌",
    "author": "",
    "dynasty": "",
@@ -61,7 +55,6 @@
   },
   {
    "grade": 1,
-   "term": "上",
    "title": "古朗月行（节选）",
    "author": "李白",
    "dynasty": "唐",
@@ -70,7 +63,6 @@
   },
   {
    "grade": 1,
-   "term": "上",
    "title": "风",
    "author": "李峤",
    "dynasty": "唐",
@@ -79,7 +71,6 @@
   },
   {
    "grade": 1,
-   "term": "下",
    "title": "春晓",
    "author": "孟浩然",
    "dynasty": "唐",
@@ -88,7 +79,6 @@
   },
   {
    "grade": 1,
-   "term": "下",
    "title": "寻隐者不遇",
    "author": "贾岛",
    "dynasty": "唐",
@@ -97,7 +87,6 @@
   },
   {
    "grade": 1,
-   "term": "下",
    "title": "赠汪伦",
    "author": "李白",
    "dynasty": "唐",
@@ -106,7 +95,6 @@
   },
   {
    "grade": 1,
-   "term": "下",
    "title": "静夜思",
    "author": "李白",
    "dynasty": "唐",
@@ -115,7 +103,6 @@
   },
   {
    "grade": 1,
-   "term": "下",
    "title": "古对今",
    "author": "",
    "dynasty": "",
@@ -124,7 +111,6 @@
   },
   {
    "grade": 1,
-   "term": "下",
    "title": "人之初",
    "author": "",
    "dynasty": "",
@@ -133,7 +119,6 @@
   },
   {
    "grade": 1,
-   "term": "下",
    "title": "池上",
    "author": "白居易",
    "dynasty": "唐",
@@ -142,7 +127,6 @@
   },
   {
    "grade": 1,
-   "term": "下",
    "title": "小池",
    "author": "杨万里",
    "dynasty": "宋",
@@ -151,7 +135,6 @@
   },
   {
    "grade": 1,
-   "term": "下",
    "title": "画鸡",
    "author": "唐寅",
    "dynasty": "明",
@@ -160,7 +143,6 @@
   },
   {
    "grade": 2,
-   "term": "上",
    "title": "梅花",
    "author": "王安石",
    "dynasty": "宋",
@@ -169,7 +151,6 @@
   },
   {
    "grade": 2,
-   "term": "上",
    "title": "数九歌",
    "author": "",
    "dynasty": "",
@@ -178,7 +159,6 @@
   },
   {
    "grade": 2,
-   "term": "上",
    "title": "十二月花名歌",
    "author": "",
    "dynasty": "",
@@ -187,7 +167,6 @@
   },
   {
    "grade": 2,
-   "term": "上",
    "title": "小儿垂钓",
    "author": "胡令能",
    "dynasty": "唐",
@@ -196,7 +175,6 @@
   },
   {
    "grade": 2,
-   "term": "上",
    "title": "登鹳雀楼",
    "author": "王之涣",
    "dynasty": "唐",
@@ -205,7 +183,6 @@
   },
   {
    "grade": 2,
-   "term": "上",
    "title": "望庐山瀑布",
    "author": "李白",
    "dynasty": "唐",
@@ -214,7 +191,6 @@
   },
   {
    "grade": 2,
-   "term": "上",
    "title": "江雪",
    "author": "柳宗元",
    "dynasty": "唐",
@@ -223,7 +199,6 @@
   },
   {
    "grade": 2,
-   "term": "上",
    "title": "敕勒歌",
    "author": "",
    "dynasty": "北朝",
@@ -232,7 +207,6 @@
   },
   {
    "grade": 2,
-   "term": "上",
    "title": "夜宿山寺",
    "author": "李白",
    "dynasty": "唐",
@@ -241,7 +215,6 @@
   },
   {
    "grade": 2,
-   "term": "下",
    "title": "咏柳",
    "author": "贺知章",
    "dynasty": "唐",
@@ -250,7 +223,6 @@
   },
   {
    "grade": 2,
-   "term": "下",
    "title": "村居",
    "author": "高鼎",
    "dynasty": "清",
@@ -259,7 +231,6 @@
   },
   {
    "grade": 2,
-   "term": "下",
    "title": "赋得古原草送别（节选）",
    "author": "白居易",
    "dynasty": "唐",
@@ -268,7 +239,6 @@
   },
   {
    "grade": 2,
-   "term": "下",
    "title": "绝句（两个黄鹂鸣翠柳）",
    "author": "杜甫",
    "dynasty": "唐",
@@ -277,7 +247,6 @@
   },
   {
    "grade": 2,
-   "term": "下",
    "title": "晓出净慈寺送林子方",
    "author": "杨万里",
    "dynasty": "宋",
@@ -286,7 +255,6 @@
   },
   {
    "grade": 2,
-   "term": "下",
    "title": "悯农（其一）",
    "author": "李绅",
    "dynasty": "唐",
@@ -295,7 +263,6 @@
   },
   {
    "grade": 2,
-   "term": "下",
    "title": "江上渔者",
    "author": "范仲淹",
    "dynasty": "宋",
@@ -304,7 +271,6 @@
   },
   {
    "grade": 3,
-   "term": "上",
    "title": "所见",
    "author": "袁枚",
    "dynasty": "清",
@@ -313,7 +279,6 @@
   },
   {
    "grade": 3,
-   "term": "上",
    "title": "望洞庭",
    "author": "刘禹锡",
    "dynasty": "唐",
@@ -322,7 +287,6 @@
   },
   {
    "grade": 3,
-   "term": "上",
    "title": "山行",
    "author": "杜牧",
    "dynasty": "唐",
@@ -331,7 +295,6 @@
   },
   {
    "grade": 3,
-   "term": "上",
    "title": "夜书所见",
    "author": "叶绍翁",
    "dynasty": "宋",
@@ -340,7 +303,6 @@
   },
   {
    "grade": 3,
-   "term": "上",
    "title": "舟夜书所见",
    "author": "查慎行",
    "dynasty": "清",
@@ -349,7 +311,6 @@
   },
   {
    "grade": 3,
-   "term": "上",
    "title": "早发白帝城",
    "author": "李白",
    "dynasty": "唐",
@@ -358,7 +319,6 @@
   },
   {
    "grade": 3,
-   "term": "上",
    "title": "鹿柴",
    "author": "王维",
    "dynasty": "唐",
@@ -367,7 +327,6 @@
   },
   {
    "grade": 3,
-   "term": "上",
    "title": "望天门山",
    "author": "李白",
    "dynasty": "唐",
@@ -376,7 +335,6 @@
   },
   {
    "grade": 3,
-   "term": "上",
    "title": "饮湖上初晴后雨",
    "author": "苏轼",
    "dynasty": "宋",
@@ -385,7 +343,6 @@
   },
   {
    "grade": 3,
-   "term": "上",
    "title": "采莲曲",
    "author": "王昌龄",
    "dynasty": "唐",
@@ -394,7 +351,6 @@
   },
   {
    "grade": 3,
-   "term": "下",
    "title": "绝句（迟日江山丽）",
    "author": "杜甫",
    "dynasty": "唐",
@@ -403,7 +359,6 @@
   },
   {
    "grade": 3,
-   "term": "下",
    "title": "惠崇春江晚景",
    "author": "苏轼",
    "dynasty": "宋",
@@ -412,7 +367,6 @@
   },
   {
    "grade": 3,
-   "term": "下",
    "title": "三衢道中",
    "author": "曾几",
    "dynasty": "宋",
@@ -421,7 +375,6 @@
   },
   {
    "grade": 3,
-   "term": "下",
    "title": "忆江南",
    "author": "白居易",
    "dynasty": "唐",
@@ -430,7 +383,6 @@
   },
   {
    "grade": 3,
-   "term": "下",
    "title": "滁州西涧",
    "author": "韦应物",
    "dynasty": "唐",
@@ -439,7 +391,6 @@
   },
   {
    "grade": 3,
-   "term": "下",
    "title": "元日",
    "author": "王安石",
    "dynasty": "宋",
@@ -448,7 +399,6 @@
   },
   {
    "grade": 3,
-   "term": "下",
    "title": "清明",
    "author": "杜牧",
    "dynasty": "唐",
@@ -457,7 +407,6 @@
   },
   {
    "grade": 3,
-   "term": "下",
    "title": "九月九日忆山东兄弟",
    "author": "王维",
    "dynasty": "唐",
@@ -466,7 +415,6 @@
   },
   {
    "grade": 3,
-   "term": "下",
    "title": "大林寺桃花",
    "author": "白居易",
    "dynasty": "唐",
@@ -475,7 +423,6 @@
   },
   {
    "grade": 4,
-   "term": "上",
    "title": "赠刘景文",
    "author": "苏轼",
    "dynasty": "宋",
@@ -484,7 +431,6 @@
   },
   {
    "grade": 4,
-   "term": "上",
    "title": "暮江吟",
    "author": "白居易",
    "dynasty": "唐",
@@ -493,7 +439,6 @@
   },
   {
    "grade": 4,
-   "term": "上",
    "title": "题西林壁",
    "author": "苏轼",
    "dynasty": "宋",
@@ -502,7 +447,6 @@
   },
   {
    "grade": 4,
-   "term": "上",
    "title": "雪梅",
    "author": "卢钺",
    "dynasty": "宋",
@@ -511,7 +455,6 @@
   },
   {
    "grade": 4,
-   "term": "上",
    "title": "嫦娥",
    "author": "李商隐",
    "dynasty": "唐",
@@ -520,7 +463,6 @@
   },
   {
    "grade": 4,
-   "term": "上",
    "title": "黄鹤楼送孟浩然之广陵",
    "author": "李白",
    "dynasty": "唐",
@@ -529,7 +471,6 @@
   },
   {
    "grade": 4,
-   "term": "上",
    "title": "凉州词（葡萄美酒夜光杯）",
    "author": "王翰",
    "dynasty": "唐",
@@ -538,7 +479,6 @@
   },
   {
    "grade": 4,
-   "term": "上",
    "title": "出塞",
    "author": "王昌龄",
    "dynasty": "唐",
@@ -547,7 +487,6 @@
   },
   {
    "grade": 4,
-   "term": "上",
    "title": "夏日绝句",
    "author": "李清照",
    "dynasty": "宋",
@@ -556,7 +495,6 @@
   },
   {
    "grade": 4,
-   "term": "上",
    "title": "别董大",
    "author": "高适",
    "dynasty": "唐",
@@ -565,7 +503,6 @@
   },
   {
    "grade": 4,
-   "term": "下",
    "title": "四时田园杂兴（其二十五）",
    "author": "范成大",
    "dynasty": "宋",
@@ -574,7 +511,6 @@
   },
   {
    "grade": 4,
-   "term": "下",
    "title": "宿新市徐公店",
    "author": "杨万里",
    "dynasty": "宋",
@@ -583,7 +519,6 @@
   },
   {
    "grade": 4,
-   "term": "下",
    "title": "清平乐·村居",
    "author": "辛弃疾",
    "dynasty": "宋",
@@ -592,7 +527,6 @@
   },
   {
    "grade": 4,
-   "term": "下",
    "title": "卜算子·咏梅",
    "author": "毛泽东",
    "dynasty": "近现代",
@@ -601,7 +535,6 @@
   },
   {
    "grade": 4,
-   "term": "下",
    "title": "江畔独步寻花",
    "author": "杜甫",
    "dynasty": "唐",
@@ -610,7 +543,6 @@
   },
   {
    "grade": 4,
-   "term": "下",
    "title": "蜂",
    "author": "罗隐",
    "dynasty": "唐",
@@ -619,7 +551,6 @@
   },
   {
    "grade": 4,
-   "term": "下",
    "title": "独坐敬亭山",
    "author": "李白",
    "dynasty": "唐",
@@ -628,7 +559,6 @@
   },
   {
    "grade": 4,
-   "term": "下",
    "title": "芙蓉楼送辛渐",
    "author": "王昌龄",
    "dynasty": "唐",
@@ -637,7 +567,6 @@
   },
   {
    "grade": 4,
-   "term": "下",
    "title": "塞下曲",
    "author": "卢纶",
    "dynasty": "唐",
@@ -646,7 +575,6 @@
   },
   {
    "grade": 4,
-   "term": "下",
    "title": "墨梅",
    "author": "王冕",
    "dynasty": "元",
@@ -655,7 +583,6 @@
   },
   {
    "grade": 5,
-   "term": "上",
    "title": "乞巧",
    "author": "林杰",
    "dynasty": "唐",
@@ -664,7 +591,6 @@
   },
   {
    "grade": 5,
-   "term": "上",
    "title": "示儿",
    "author": "陆游",
    "dynasty": "宋",
@@ -673,7 +599,6 @@
   },
   {
    "grade": 5,
-   "term": "上",
    "title": "题临安邸",
    "author": "林升",
    "dynasty": "宋",
@@ -682,7 +607,6 @@
   },
   {
    "grade": 5,
-   "term": "上",
    "title": "己亥杂诗",
    "author": "龚自珍",
    "dynasty": "清",
@@ -691,7 +615,6 @@
   },
   {
    "grade": 5,
-   "term": "上",
    "title": "山居秋暝",
    "author": "王维",
    "dynasty": "唐",
@@ -700,7 +623,6 @@
   },
   {
    "grade": 5,
-   "term": "上",
    "title": "枫桥夜泊",
    "author": "张继",
    "dynasty": "唐",
@@ -709,7 +631,6 @@
   },
   {
    "grade": 5,
-   "term": "上",
    "title": "早春呈水部张十八员外",
    "author": "韩愈",
    "dynasty": "唐",
@@ -718,7 +639,6 @@
   },
   {
    "grade": 5,
-   "term": "上",
    "title": "渔歌子",
    "author": "张志和",
    "dynasty": "唐",
@@ -727,7 +647,6 @@
   },
   {
    "grade": 5,
-   "term": "下",
    "title": "观书有感（其一）",
    "author": "朱熹",
    "dynasty": "宋",
@@ -736,7 +655,6 @@
   },
   {
    "grade": 5,
-   "term": "下",
    "title": "四时田园杂兴（其三十一）",
    "author": "范成大",
    "dynasty": "宋",
@@ -745,7 +663,6 @@
   },
   {
    "grade": 5,
-   "term": "下",
    "title": "稚子弄冰",
    "author": "杨万里",
    "dynasty": "宋",
@@ -754,7 +671,6 @@
   },
   {
    "grade": 5,
-   "term": "下",
    "title": "村晚",
    "author": "雷震",
    "dynasty": "宋",
@@ -763,7 +679,6 @@
   },
   {
    "grade": 5,
-   "term": "下",
    "title": "游子吟",
    "author": "孟郊",
    "dynasty": "唐",
@@ -772,7 +687,6 @@
   },
   {
    "grade": 5,
-   "term": "下",
    "title": "鸟鸣涧",
    "author": "王维",
    "dynasty": "唐",
@@ -781,7 +695,6 @@
   },
   {
    "grade": 5,
-   "term": "下",
    "title": "从军行",
    "author": "王昌龄",
    "dynasty": "唐",
@@ -790,7 +703,6 @@
   },
   {
    "grade": 5,
-   "term": "下",
    "title": "秋夜将晓出篱门迎凉有感",
    "author": "陆游",
    "dynasty": "宋",
@@ -799,7 +711,6 @@
   },
   {
    "grade": 5,
-   "term": "下",
    "title": "闻官军收河南河北",
    "author": "杜甫",
    "dynasty": "唐",
@@ -808,7 +719,6 @@
   },
   {
    "grade": 5,
-   "term": "下",
    "title": "凉州词（黄河远上白云间）",
    "author": "王之涣",
    "dynasty": "唐",
@@ -817,7 +727,6 @@
   },
   {
    "grade": 5,
-   "term": "下",
    "title": "乡村四月",
    "author": "翁卷",
    "dynasty": "宋",
@@ -826,7 +735,6 @@
   },
   {
    "grade": 6,
-   "term": "上",
    "title": "七律·长征",
    "author": "毛泽东",
    "dynasty": "近现代",
@@ -835,7 +743,6 @@
   },
   {
    "grade": 6,
-   "term": "上",
    "title": "观书有感（其二）",
    "author": "朱熹",
    "dynasty": "宋",
@@ -844,7 +751,6 @@
   },
   {
    "grade": 6,
-   "term": "上",
    "title": "送元二使安西",
    "author": "王维",
    "dynasty": "唐",
@@ -853,7 +759,6 @@
   },
   {
    "grade": 6,
-   "term": "上",
    "title": "浪淘沙（其一）",
    "author": "刘禹锡",
    "dynasty": "唐",
@@ -862,7 +767,6 @@
   },
   {
    "grade": 6,
-   "term": "上",
    "title": "江南春",
    "author": "杜牧",
    "dynasty": "唐",
@@ -871,7 +775,6 @@
   },
   {
    "grade": 6,
-   "term": "上",
    "title": "书湖阴先生壁",
    "author": "王安石",
    "dynasty": "宋",
@@ -880,7 +783,6 @@
   },
   {
    "grade": 6,
-   "term": "上",
    "title": "过故人庄",
    "author": "孟浩然",
    "dynasty": "唐",
@@ -889,7 +791,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "寒食",
    "author": "韩翃",
    "dynasty": "唐",
@@ -898,7 +799,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "迢迢牵牛星",
    "author": "",
    "dynasty": "汉",
@@ -907,7 +807,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "十五夜望月",
    "author": "王建",
    "dynasty": "唐",
@@ -916,7 +815,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "长歌行",
    "author": "",
    "dynasty": "汉",
@@ -925,7 +823,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "马诗",
    "author": "李贺",
    "dynasty": "唐",
@@ -934,7 +831,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "石灰吟",
    "author": "于谦",
    "dynasty": "明",
@@ -943,7 +839,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "竹石",
    "author": "郑燮",
    "dynasty": "清",
@@ -952,7 +847,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "采薇（节选）",
    "author": "",
    "dynasty": "先秦",
@@ -961,7 +855,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "春夜喜雨",
    "author": "杜甫",
    "dynasty": "唐",
@@ -970,7 +863,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "泊船瓜洲",
    "author": "王安石",
    "dynasty": "宋",
@@ -979,7 +871,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "游园不值",
    "author": "叶绍翁",
    "dynasty": "宋",
@@ -988,7 +879,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "卜算子·送鲍浩然之浙东",
    "author": "王观",
    "dynasty": "宋",
@@ -997,7 +887,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "浣溪沙",
    "author": "苏轼",
    "dynasty": "宋",
@@ -1006,7 +895,6 @@
   },
   {
    "grade": 6,
-   "term": "下",
    "title": "清平乐",
    "author": "黄庭坚",
    "dynasty": "宋",

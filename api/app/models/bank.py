@@ -47,7 +47,6 @@ class EnglishWord(BaseModel):
     meaning = db.Column(db.String(120), default="")
     example = db.Column(db.String(200), default="")
     example_cn = db.Column(db.String(200), default="")
-    kind = db.Column(db.String(10), default="单词")
     level = db.Column(db.String(8), default="中等")
     audio_url = db.Column(db.String(200), default="")
 

@@ -139,11 +139,6 @@ const LEVEL_OPTIONS = [
   { label: '困难', value: '困难' },
 ]
 
-const KIND_OPTIONS = [
-  { label: '单词', value: '单词' },
-  { label: '短语', value: '短语' },
-]
-
 const PHONEME_TYPES = [
   { label: '元音', value: 'vowel' },
   { label: '辅音', value: 'consonant' },
@@ -231,14 +226,12 @@ export const BANK_CONFIGS: BankConfig[] = [
       { name: 'phonetic', label: '音标' },
       { name: 'pos', label: '词性', render: (r) => POS_TEXT[r.pos] ?? (r.pos || '—') },
       { name: 'meaning', label: '释义' },
-      { name: 'kind', label: '类型' },
       { name: 'level', label: '等级' },
     ],
     fields: [
       { name: 'word', label: '单词', required: true },
       { name: 'phonetic', label: '音标', placeholder: '/ˈruːlə/' },
       { name: 'pos', label: '词性', type: 'select', options: POS_OPTIONS },
-      { name: 'kind', label: '类型', type: 'select', options: KIND_OPTIONS },
       { name: 'level', label: '等级', type: 'select', options: LEVEL_OPTIONS, hint: '出题时按 10/40/30/15/5 抽取' },
       { name: 'meaning', label: '中文释义', required: true },
       { name: 'example', label: '英文例句', span: 2 },

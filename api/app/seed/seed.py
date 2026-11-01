@@ -138,10 +138,7 @@ def ensure_seed():
 
 
 SAMPLE_REWARDS = [
-    ("周末多看 30 分钟动画", 100, "📺"),
-    ("选一个想吃的晚餐", 150, "🍜"),
-    ("周末去公园玩半天", 200, "🌳"),
-    ("买一本新绘本", 300, "📚"),
+    ("多看1小时电视", 50, "📺"),
 ]
 
 
@@ -477,6 +474,18 @@ def _drop_math_rule_weight():
     current_app.logger.info("已移除出题规则的权重字段（改由等级决定出题比例）")
 
 
+def _drop_english_word_kind():
+    """v11 起单词库不再区分「单词 / 短语」：朗读与选择题都是一张词卡，留着只会误导。"""
+    inspector = inspect(db.engine)
+    if "english_word" not in set(inspector.get_table_names()):
+        return
+    if "kind" not in {c["name"] for c in inspector.get_columns("english_word")}:
+        return
+    _rebuild_table_without("english_word", ["kind"])
+    db.session.commit()
+    current_app.logger.info("已移除单词库的类型字段")
+
+
 def _run_migrations():
     version = _data_version()
     if version < 2:
@@ -505,6 +514,9 @@ def _run_migrations():
     if version < 10:
         _fix_poem_record_result()
         _set_data_version(10)
+    if version < 11:
+        _drop_english_word_kind()
+        _set_data_version(11)
 
 
 def _fix_poem_record_result():
