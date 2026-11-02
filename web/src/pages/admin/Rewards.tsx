@@ -35,6 +35,21 @@ export default function RewardsPage() {
     }
   }
 
+  const removeRedemption = async (r: any) => {
+    const tip =
+      r.status === 'approved'
+        ? `删除这条已通过的兑换「${r.reward_name}」？会物理删除记录并退回 ${r.cost} 积分、恢复库存，孩子端不再显示。`
+        : `删除这条兑换申请「${r.reward_name}」？记录会被彻底删除。`
+    if (!confirm(tip)) return
+    try {
+      await api.del(`/admin/redemptions/${r.id}`, true)
+      toast.success('已删除')
+      qc.invalidateQueries({ queryKey: ['admin-redemptions'] })
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : '删除失败')
+    }
+  }
+
   const remove = async (id: number) => {
     if (!confirm('删除这个奖励？兑换记录会保留，只是不再出现在孩子的兑换清单里。')) return
     try {
@@ -128,16 +143,25 @@ export default function RewardsPage() {
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground">{r.created_at?.slice(0, 16).replace('T', ' ')}</TableCell>
                   <TableCell className="text-right">
-                    {r.status === 'pending' && (
-                      <div className="flex justify-end gap-1">
-                        <button className="rounded-lg p-1.5 text-emerald-600 hover:bg-emerald-50" onClick={() => handle(r.id, 'approve')}>
-                          <Check className="h-4 w-4" />
-                        </button>
-                        <button className="rounded-lg p-1.5 text-red-500 hover:bg-red-50" onClick={() => handle(r.id, 'reject')}>
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    )}
+                    <div className="flex justify-end gap-1">
+                      {r.status === 'pending' && (
+                        <>
+                          <button className="rounded-lg p-1.5 text-emerald-600 hover:bg-emerald-50" onClick={() => handle(r.id, 'approve')}>
+                            <Check className="h-4 w-4" />
+                          </button>
+                          <button className="rounded-lg p-1.5 text-red-500 hover:bg-red-50" onClick={() => handle(r.id, 'reject')}>
+                            <X className="h-4 w-4" />
+                          </button>
+                        </>
+                      )}
+                      <button
+                        className="rounded-lg p-1.5 text-muted-foreground hover:bg-red-50 hover:text-red-500"
+                        title="物理删除"
+                        onClick={() => removeRedemption(r)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

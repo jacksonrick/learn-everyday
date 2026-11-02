@@ -364,14 +364,24 @@ function PointsTab({ childId }: { childId: number | null }) {
         <Card className="p-4">
           <p className="mb-3 flex items-center gap-1.5 text-sm font-medium">
             <Gift className="h-4 w-4 text-rose-400" /> 可以兑换
+            {(rewardsQuery.data?.pending ?? []).length > 0 ? (
+              <span className="ml-1 text-xs font-normal text-ink-soft">（上一份礼物等爸妈审批后再换吧）</span>
+            ) : rewardsQuery.data?.redeem_lock_until ? (
+              <span className="ml-1 text-xs font-normal text-ink-soft">
+                （{rewardsQuery.data.redeem_lock_until.slice(5).replace('-', ' 月 ')} 日后可再兑换）
+              </span>
+            ) : null}
           </p>
           <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {rewardsQuery.data.items.map((r: any) => (
+            {(rewardsQuery.data?.items ?? []).map((r: any) => {
+              const locked =
+                !!rewardsQuery.data?.redeem_lock_until || (rewardsQuery.data?.pending ?? []).length > 0
+              return (
               <div
                 key={r.id}
                 className={cn(
                   'flex flex-col rounded-2xl border p-3 transition-colors',
-                  r.affordable
+                  r.affordable && !locked
                     ? 'border-persimmon/40 bg-paper-card shadow-sm'
                     : 'border-line/70 bg-paper-deep/50',
                 )}
@@ -379,7 +389,7 @@ function PointsTab({ childId }: { childId: number | null }) {
                 <div
                   className={cn(
                     'grid h-14 place-items-center rounded-xl text-3xl',
-                    r.affordable ? 'bg-persimmon-soft' : 'bg-paper-deep opacity-70',
+                    r.affordable && !locked ? 'bg-persimmon-soft' : 'bg-paper-deep opacity-70',
                   )}
                 >
                   {r.icon}
@@ -388,22 +398,29 @@ function PointsTab({ childId }: { childId: number | null }) {
                 <p
                   className={cn(
                     'mt-0.5 font-num text-xs',
-                    r.affordable ? 'font-semibold text-persimmon-deep' : 'text-ink-soft',
+                    r.affordable && !locked ? 'font-semibold text-persimmon-deep' : 'text-ink-soft',
                   )}
                 >
                   {r.cost} 积分
                 </p>
                 <Button
                   size="sm"
-                  variant={r.affordable ? 'default' : 'outline'}
+                  variant={r.affordable && !locked ? 'default' : 'outline'}
                   className="mt-2.5 w-full"
-                  disabled={!r.affordable}
+                  disabled={!r.affordable || locked}
                   onClick={() => redeem(r.id, r.cost)}
                 >
-                  {r.affordable ? '兑换' : `还差 ${r.gap}`}
+                  {locked
+                    ? (rewardsQuery.data?.pending ?? []).length > 0 && !rewardsQuery.data?.redeem_lock_until
+                      ? '等待审批中'
+                      : '间隔休息中'
+                    : r.affordable
+                      ? '兑换'
+                      : `还差 ${r.gap}`}
                 </Button>
               </div>
-            ))}
+              )
+            })}
           </div>
         </Card>
       )}

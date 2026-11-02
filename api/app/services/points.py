@@ -154,11 +154,13 @@ def award_checkin(child_id: int, date: str, row: Checkin, already_awarded: bool)
     if got:
         detail.append({"reason": "今日打卡", "points": got})
 
-    milestones = get_setting("streak_milestones") or {}
+    # 连续完整打卡奖励：每满 N 天在第 N 天的打卡里额外加 M 分（7/14/21… 都触发）；
+    # 只认「完整打卡」（partial 不计 streak），补卡 streak 归零所以补卡日不触发
+    n = int(get_setting("streak_bonus_days") or 0)
+    bonus_points = int(get_setting("streak_bonus_points") or 0)
     streak = row.streak or 0
-    bonus = int(milestones.get(str(streak), 0)) if milestones else 0
-    if bonus:
-        got = add(child_id, bonus, f"streak_{streak}", "checkin", row.id, today=date)
+    if n > 0 and bonus_points > 0 and streak > 0 and streak % n == 0:
+        got = add(child_id, bonus_points, f"streak_{streak}", "checkin", row.id, today=date)
         if got:
             detail.append({"reason": f"连续打卡 {streak} 天", "points": got})
 

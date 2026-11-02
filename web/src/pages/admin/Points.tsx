@@ -19,10 +19,10 @@ const QUICK_PRESETS: { title: string; tone: 'reward' | 'penalty'; items: { label
     title: '奖励类',
     tone: 'reward',
     items: [
-      { label: '打扫卫生', delta: 5 },
-      { label: '洗碗', delta: 5 },
+      { label: '打扫卫生', delta: 10 },
+      { label: '洗碗', delta: 10 },
       { label: '拿快递', delta: 5 },
-      { label: '考试A', delta: 20 },
+      { label: '考试A', delta: 50 },
       { label: '作业A', delta: 10 },
     ],
   },
@@ -33,6 +33,7 @@ const QUICK_PRESETS: { title: string; tone: 'reward' | 'penalty'; items: { label
       { label: '看电视超时', delta: -10 },
       { label: '说脏话', delta: -20 },
       { label: '顶嘴', delta: -20 },
+      { label: '缺卡', delta: -100 },
     ],
   },
 ]

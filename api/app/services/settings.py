@@ -21,13 +21,18 @@ DEFAULTS = {
     "english_sentence_count": 1,  # 单词组句
     # 其它
     "retry_count": 2,  # 每天插在最前面的错题重练条数
+    "redeem_interval_days": 0,  # 兑换间隔（天）：距上次兑换成功需隔几天才能再兑，0 不限制
+    "client_time_start": "",  # 客户端可用时间段开始（HH:MM），与结束同时填写才生效
+    "client_time_end": "",  # 客户端可用时间段结束（HH:MM）；留空 = 全天可用
     "instant_feedback": True,
     "srs_enabled": True,
     "point_per_subject": 10,
     "point_per_excellent": 5,
     "point_checkin": 20,
     "point_wrong_fix": 2,
-    "streak_milestones": {"3": 10, "7": 30, "14": 60, "30": 150, "100": 500},
+    # 连续完整打卡奖励：每连续打满 N 天，第 N 天打卡入账时额外加 M 分；N 填 0 关闭
+    "streak_bonus_days": 7,
+    "streak_bonus_points": 100,
     # 大模型（当前仅 DeepSeek，兼容 OpenAI 协议）：配好参数即可用，没有单独开关
     "ai_provider": "deepseek",
     "ai_base_url": "https://api.deepseek.com/v1",

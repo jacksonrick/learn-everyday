@@ -22,7 +22,7 @@
 - **判分在服务端**：客户端只拿去掉 `answer` 的 payload；`/task/answer` 只做单题反馈，`/task/submit` 才写记录、算分、发积分。
 - **任务幂等（含并发）**：同天同科重复 `start` 返回已有 payload；`get_or_create_task()` 撞唯一约束时回滚取另一路刚插的那条，不能 500。客户端 `startTask()`（`lib/hooks.ts`）用 in-flight map 兜并发；新增「先查后插」位点照此兜底。
 - **答题进度以服务端为准**：`/task/answer` 每题 upsert，`/task/start` 返回 `answered[]`，前端 `lib/resume.ts` 过滤已答题；`submit` 的 `answer_map` 先取存档再被客户端传值覆盖。科目页要自动补交已答未提交的任务；完成判定必须带 `list.length > 0` 保护（题库空时别把 0 题任务标成完成）。
-- **打卡**：三科 `done` 才 `full`，否则 `partial`；补卡 `is_makeup=true` 且 `streak=0`。
+- **打卡**：三科 `done` 才 `full`，否则 `partial`；补卡 `is_makeup=true` 且 `streak=0`。连续奖励：`award_checkin()` 在 `streak % streak_bonus_days == 0` 时加 `streak_bonus_points`（默认每满 7 天 +100，`streak_bonus_days=0` 关闭；旧的 `streak_milestones` 已删，别加回来）。
 - **积分**：`points.add()` 内做日上限裁剪；流水只增不改、冲正写负数、有 `date`；`balance()` 取最后一条流水的 `balance_after`（滚动账本，不是求和）。
 - **作废打卡 = 级联清理 + 余额重算**：删当天 `study_record / daily_task / checkin / task_answer / recitation`（含 `storage.delete_recite()` 音频）及 `ref_type ∈ {task, checkin, wrong_item}` 的流水（manual/redeem 不动），然后按 id 升序重滚该孩子所有流水的 `balance_after`。**任何新的任务位态表、任何删流水的地方都要同步这两步。**
 - **SRS**：间隔 `[1,2,4,7,15,30]`，答对升 1 档、答错降 1 档明天再考；只记 char / word / poem（数学无稳定主键不入队）。
@@ -32,7 +32,7 @@
 - **错题只能靠重做关闭**：①当天重练累计答对 2 次（`submit._upsert_wrong`）；②错题本专项订正 `/client/wrong-practice/*` 答对 1 次。题目由 `wrong_item.snapshot_json` 还原；快照残缺的要在列表提示「再做一次原题后就能订正」，别留点不动的死按钮。
 - **古诗与朗读卡不判分**：`NO_SCORE_KINDS`（poem）/ `NO_SCORE_TYPES`（word_read/phoneme_read/char_read）不进总分、不进错题本、不发积分。朗读提交 `READ_ANSWER`（`__read__`）后**必须记 SRS**——朗读是新字词唯一的「学过」入口，不记第二天会当新内容重发。判断一律用 type/kind 白名单。客户端朗读/认读卡要停留 `quiz.tsx` 的 `READ_MIN_SECONDS`（10s）才能点「下一个」，防连点刷完。
 - **物理删除**：模型没有 `enabled`，删除即 `db.session.delete()`，不做软删除。
-- **奖励可以删，兑换记录不跟着删**：`redemption.reward_id` 可空，另有 `reward_name / reward_icon` 快照（下单时写入）。删除奖励时先看有没有 `pending` 申请（有就 409 拒绝），历史记录只把 `reward_id` 断成 NULL、名称靠快照显示——不能级联删，积分流水 `ref_type='redemption'` 还指着它。
+- **奖励可以删，兑换记录不跟着删**：`redemption.reward_id` 可空，另有 `reward_name / reward_icon` 快照（下单时写入）。删除奖励时先看有没有 `pending` 申请（有就 409 拒绝），历史记录只把 `reward_id` 断成 NULL、名称靠快照显示——不能级联删，积分流水 `ref_type='redemption'` 还指着它。兑换申请本身支持**物理删除**（`DELETE /admin/redemptions/<id>`）：pending/rejected 直接删；approved 视为兑换从未发生——删扣分流水 + 库存 ≥0 时退 1 + 重滚余额，删 approved 也会让兑换间隔锁失去这条基准。
 - **删孩子要按外键顺序清子表**：`task_answer → recitation`（含 `storage.delete_recite()`）`→ study_record → daily_task → checkin / srs_item / points_ledger / wrong_item → redemption → reward`。漏一张就撞外键，前端表现为「服务端异常 FOREIGN KEY constraint failed」。
 - **写 NULL 用 `sqlalchemy.null()`**：列有 `default=False`，直接传 `None` 会被顶成 `False`。
 
@@ -42,7 +42,10 @@
   语文 认读 5 / 组词 5 / 古诗 1（`chinese_read / chinese_word / chinese_poem`）；
   数学 计算题 15 / 应用题 2（`math_calc / math_app`）；
   英语 朗读 10 / 音标朗读 2 / 音标选词 2 / 看中选英 2 / 看英选中 2 / 组句 1（`english_word_read / english_phoneme_read / english_phoneme_pick / english_word_choice / english_meaning_choice / english_sentence_count`）；
-  其它 错题重练 `retry_count` = 2。旧键已删，`all_settings()` 只认 DEFAULTS 里的键。
+  其它 错题重练 `retry_count` = 2、兑换间隔 `redeem_interval_days` = 0（0 不限制）。旧键已删，`all_settings()` 只认 DEFAULTS 里的键。
+- **兑换间隔锁**：`client._redeem_lock()` 以最近一次 `approved` 兑换为基准算下次可兑日期；`POST /client/redemptions` 服务端强校验（409），`GET /client/rewards` 下发 `redeem_lock_until` 供前端置灰按钮。被拒/锁定期只看 approved，pending 和 rejected 不算。
+- **同时只能有一个待审批**：`redeem()` 里已存在 `pending` 记录就 409（提示带奖励名快照）；前端 `Me.tsx` 按 `pending` 非空置灰全部兑换按钮（「等待审批中」）。审批通过/拒绝后才能再次申请。
+- **客户端可用时间段**：`client_time_start / client_time_end`（HH:MM，两项都有值才生效；开始晚于结束视为跨午夜）。`/client/prefs` 连同 `server_now` 下发，前端 `components/client/time-guard.tsx`（挂在 `ClientLayout` 末尾）用服务器时间校准本机偏差，时间段之外盖全屏遮罩（z-[100]）无法关闭，每 30 秒复查到点自动放行。改动判断逻辑时记住：判断只在遮罩组件里做，服务端不做时段拦截。
 - **等级只有一份定义**：`level.py` 的 `LEVELS` + `RATIOS`（10/40/30/15/5）+ `GRADE_LEVEL`（1、2 年级容易 … 6 年级困难）。六张题库表的 `level` 列都靠它归一，别复制比例常量。新题走 `level.split()` / `pick_one()`；**复习题和错题重练不按比例**。某档题库空了配额自动回补（数学同一学期常全在一档，这是正常的）。导入用 `from_grade()` 折算，不直接写 grade。
 - **只有数学看年级学期**：语文英语题库不关联年级学期，全库随机；数学严格 `grade_id + term`，仅当该学期没配规则时退到本年级其他学期。别给语文英语加回年级过滤。
 - **组词题**：题字取已学过的字（到期优先），答案是词里的另一个字；干扰项按词内真实读音取同音字，并排除一切能与题字拼成词的字（否则两个答案）。

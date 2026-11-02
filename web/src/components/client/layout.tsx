@@ -6,6 +6,7 @@ import { useSession } from '@/lib/hooks'
 import { Skeleton } from '@/components/ui/feedback'
 import { Badge } from '@/components/ui/badge'
 import { IconChinese, IconEnglish, IconMath, IconMe, IconToday, FoxWave } from './art'
+import TimeGuard from './time-guard'
 
 const NAV = [
   { to: '/', label: '今日', Icon: IconToday },
@@ -191,6 +192,9 @@ export default function ClientLayout() {
           ))}
         </div>
       </nav>
+
+      {/* 可用时间段之外盖全屏遮罩，盖住侧栏与主内容且无法关闭（z 高于一切） */}
+      <TimeGuard />
     </div>
   )
 }

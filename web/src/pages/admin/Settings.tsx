@@ -32,10 +32,13 @@ const NUMBERS: { key: string; label: string; hint?: string }[] = [
   { key: 'english_sentence_count', label: '单词组句', hint: '默认 1 道；0 为关闭' },
   // 其它
   { key: 'retry_count', label: '额外错题重练', hint: '默认 2 道，插在当天任务最前面；0 为关闭' },
+  { key: 'redeem_interval_days', label: '兑换间隔（天）', hint: '距上次兑换成功需隔几天才能再兑；0 为不限制' },
   { key: 'point_per_subject', label: '单科完成积分', hint: '正确率 ≥60%' },
   { key: 'point_per_excellent', label: '正确率优秀加分', hint: '≥90% 额外加' },
   { key: 'point_checkin', label: '打卡积分', hint: '三科完成' },
   { key: 'point_wrong_fix', label: '错题订正积分', hint: '重练答对一道给多少' },
+  { key: 'streak_bonus_days', label: '连续打卡奖励天数', hint: '每连续完整打满 N 天额外加分；0 为关闭' },
+  { key: 'streak_bonus_points', label: '连续打卡奖励积分', hint: '第 N 天打卡完成时直接入账' },
 ]
 
 const TAB_FIELDS: { value: string; label: string; keys: string[] }[] = [
@@ -56,7 +59,7 @@ const TAB_FIELDS: { value: string; label: string; keys: string[] }[] = [
   {
     value: 'misc',
     label: '其它',
-    keys: ['retry_count', 'point_per_subject', 'point_per_excellent', 'point_checkin', 'point_wrong_fix'],
+    keys: ['retry_count', 'redeem_interval_days', 'streak_bonus_days', 'streak_bonus_points', 'point_per_subject', 'point_per_excellent', 'point_checkin', 'point_wrong_fix'],
   },
 ]
 
@@ -100,6 +103,8 @@ export default function SettingsPage() {
     const payload: Record<string, any> = {}
     NUMBERS.forEach((n) => (payload[n.key] = Number(form[n.key]) || 0))
     SWITCHES.forEach((s) => (payload[s.key] = !!form[s.key]))
+    payload.client_time_start = String(form.client_time_start ?? '').trim()
+    payload.client_time_end = String(form.client_time_end ?? '').trim()
     try {
       await api.put('/admin/settings', payload, true)
       toast.success('设置已保存，明天的任务按新配置生成')
@@ -183,6 +188,28 @@ export default function SettingsPage() {
               </div>
               {tab.value === 'misc' && (
                 <div className="space-y-4 border-t border-border pt-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-1.5">
+                      <Label>客户端可用时间（开始）</Label>
+                      <Input
+                        type="time"
+                        value={form.client_time_start ?? ''}
+                        onChange={(e) => setForm({ ...form, client_time_start: e.target.value })}
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        时间段之外客户端会被全屏遮罩盖住，孩子无法操作；两项留空 = 全天可用
+                      </p>
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>客户端可用时间（结束）</Label>
+                      <Input
+                        type="time"
+                        value={form.client_time_end ?? ''}
+                        onChange={(e) => setForm({ ...form, client_time_end: e.target.value })}
+                      />
+                      <p className="text-xs text-muted-foreground">如 21:00；开始时间晚于结束时间视为跨午夜（如 21:00 - 次日 7:00）</p>
+                    </div>
+                  </div>
                   {SWITCHES.map((s) => (
                     <div key={s.key} className="flex items-center justify-between gap-4">
                       <div>

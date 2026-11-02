@@ -1,6 +1,6 @@
 import calendar as cal
 import json
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 from flask import Blueprint, request
 
@@ -64,12 +64,16 @@ def bootstrap():
 
 @bp.get("/prefs")
 def prefs():
-    """客户端用得到的开关：语音模式、即时对错。不需要孩子档案。"""
+    """客户端用得到的开关：语音模式、即时对错、可用时间段。不需要孩子档案。"""
     return ok(
         {
             "voice_mode": get_setting("voice_mode") or "browser",
             "instant_feedback": bool(get_setting("instant_feedback")),
             "srs_enabled": bool(get_setting("srs_enabled")),
+            # 可用时间段（HH:MM），两者都有值才限制；server_now 供客户端校准本机时间偏差
+            "client_time_start": (get_setting("client_time_start") or "").strip(),
+            "client_time_end": (get_setting("client_time_end") or "").strip(),
+            "server_now": datetime.now().isoformat(timespec="seconds"),
         }
     )
 
@@ -433,13 +437,40 @@ def rewards():
         .order_by(Redemption.id.desc())
         .all()
     )
+    lock = _redeem_lock(child.id)
     return ok(
         {
             "balance": balance,
             "items": items,
             "pending": [r.to_dict() for r in pending],
+            # 兑换间隔锁：早于该日期时按钮置灰并提示，服务端在 redeem() 里强校验
+            "redeem_lock_until": lock[0] if lock and lock[0] > today_str() else None,
         }
     )
+
+
+def _redeem_lock(child_id: int) -> tuple[str, int] | None:
+    """兑换间隔锁：返回 (下次可兑换日期, 间隔天数)，None 表示现在就能兑。
+
+    以最近一次「兑换成功」（approved）的时间为基准；0 天或不曾兑过 = 不限制。
+    """
+    try:
+        interval = max(0, int(get_setting("redeem_interval_days") or 0))
+    except (TypeError, ValueError):
+        interval = 0
+    if interval <= 0:
+        return None
+    last = (
+        Redemption.query.filter_by(child_id=child_id, status="approved")
+        .order_by(Redemption.id.desc())
+        .first()
+    )
+    if last is None:
+        return None
+    base = (last.handled_at or last.created_at or "")[:10]
+    if not base:
+        return None
+    return shift_date(base, interval), interval
 
 
 @bp.post("/redemptions")
@@ -451,6 +482,23 @@ def redeem():
     reward = Reward.query.get(int(data.get("reward_id") or 0))
     if reward is None:
         return fail("NOT_FOUND", "奖励不存在", 404)
+
+    lock = _redeem_lock(child.id)
+    if lock is not None and today_str() < lock[0]:
+        _, _, day = lock[0].split("-")
+        return fail(
+            "CONFLICT",
+            f"上次兑换后要休息 {lock[1]} 天，{int(day)} 日后才能再兑换",
+            409,
+        )
+
+    pending_row = Redemption.query.filter_by(child_id=child.id, status="pending").first()
+    if pending_row is not None:
+        return fail(
+            "CONFLICT",
+            f"上一次兑换「{pending_row.reward_name}」还在等家长审批，审批完成后再来兑换吧",
+            409,
+        )
 
     balance = points.balance(child.id)
     if balance < reward.cost:

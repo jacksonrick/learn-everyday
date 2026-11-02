@@ -852,6 +852,44 @@ def redemption_handle(redemption_id: int, action: str):
     return ok(row.to_dict())
 
 
+@bp.delete("/redemptions/<int:redemption_id>")
+@jwt_required()
+def redemption_delete(redemption_id: int):
+    """物理删除兑换申请。
+
+    pending / rejected 直接删；approved 视为「这次兑换从未发生」：
+    当时的扣分流水一起删、奖励库存退回，然后按 id 升序重滚该孩子的余额。
+    删掉 approved 的也会影响兑换间隔锁（以最近一次 approved 为基准）。
+    """
+    row = Redemption.query.get(redemption_id)
+    if row is None:
+        return fail("NOT_FOUND", "申请不存在", 404)
+    child_id = row.child_id
+
+    if row.status == "approved":
+        PointsLedger.query.filter(
+            PointsLedger.ref_type == "redemption", PointsLedger.ref_id == row.id
+        ).delete(synchronize_session=False)
+        # 审批通过时只在 stock > 0 才扣了库存，-1（不限）没扣；这里对称处理
+        if row.reward and row.reward.stock >= 0:
+            row.reward.stock += 1
+
+    db.session.delete(row)
+    db.session.flush()
+
+    balance = 0
+    for ledger in (
+        PointsLedger.query.filter_by(child_id=child_id)
+        .order_by(PointsLedger.id.asc())
+        .all()
+    ):
+        balance += ledger.delta
+        if ledger.balance_after != balance:
+            ledger.balance_after = balance
+    db.session.commit()
+    return ok({"deleted": True, "points_balance": balance})
+
+
 # ------------------------------------------------------------------ 统计
 
 @bp.get("/stats/overview")
