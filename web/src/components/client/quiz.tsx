@@ -69,6 +69,8 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
   const isRead = READ_TYPES.includes(String(item?.type ?? ''))
   // 语文补全词语：题字 + 空框，选项是单字，答案在词里的另一头
   const isFillChar = item?.type === 'fill_char'
+  // 语文看拼音选字：题干是拼音，选项是字，不能把答案字当大字摆在上面
+  const isPinyinChoice = item?.type === 'pinyin_choice'
 
   useEffect(() => {
     setValue('')
@@ -184,7 +186,7 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
       </div>
 
       <div className="flex-1">
-        {item.kind === 'char' && !isRead && !isFillChar && (
+        {item.kind === 'char' && !isRead && !isFillChar && !isPinyinChoice && (
           <div className="mb-4 flex flex-col items-center gap-2">
             <div className="text-[76px] font-medium leading-none tracking-widest text-foreground">
               {item.char as string}
@@ -379,8 +381,8 @@ export function Quiz({ subject, items, doneCount = 0, onFinish, onExit }: Props)
                   }}
                   className={cn(
                     'flex min-h-[64px] items-center justify-center rounded-2xl border-2 bg-card px-3 py-3 text-center transition active:scale-[0.98]',
-                    // 补全题的选项是单个汉字，字号放大才看得清
-                    isFillChar ? 'min-h-[76px] text-3xl font-medium' : 'text-lg',
+                    // 补全题和拼音选字的选项都是单个汉字，字号放大才看得清
+                    isFillChar || isPinyinChoice ? 'min-h-[76px] text-3xl font-medium' : 'text-lg',
                     chosen ? 'border-primary' : 'border-border',
                     showCorrect && 'border-emerald-500 bg-emerald-50 text-emerald-700',
                     showWrong && 'border-red-400 bg-red-50 text-red-600',

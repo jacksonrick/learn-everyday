@@ -25,8 +25,10 @@
 - **打卡**：三科 `done` 才 `full`，否则 `partial`；补卡 `is_makeup=true` 且 `streak=0`。连续奖励：`award_checkin()` 在 `streak % streak_bonus_days == 0` 时加 `streak_bonus_points`（默认每满 7 天 +100，`streak_bonus_days=0` 关闭；旧的 `streak_milestones` 已删，别加回来）。
 - **积分**：`points.add()` 内做日上限裁剪；流水只增不改、冲正写负数、有 `date`；`balance()` 取最后一条流水的 `balance_after`（滚动账本，不是求和）。
 - **作废打卡 = 级联清理 + 余额重算**：删当天 `study_record / daily_task / checkin / task_answer / recitation`（含 `storage.delete_recite()` 音频）及 `ref_type ∈ {task, checkin, wrong_item}` 的流水（manual/redeem 不动），然后按 id 升序重滚该孩子所有流水的 `balance_after`。**任何新的任务位态表、任何删流水的地方都要同步这两步。**
-- **SRS**：间隔 `[1,2,4,7,15,30]`，答对升 1 档、答错降 1 档明天再考；只记 char / word / poem（数学无稳定主键不入队）。
-- **复习优先**：SRS 到期条目先占认读卡/朗读卡约四成（`taskgen._due_rows()`），其余到期词在选择池、组词题字里排最前；复习占少数、新题为主，别做成复习占大头。
+- **SRS**：间隔 `[1,2,4,7,15,30]`，答对升 1 档、答错降 1 档明天再考；只记 char / word / poem / phoneme（数学无稳定主键不入队；48 个音标也走这套，读卡和选词共用一份进度）。
+- **复习优先**：SRS 到期条目先占认读卡/朗读卡名额（`taskgen._review_cap()`），其余到期词在选择池、组词题字里排最前；复习占少数、新题为主，别做成复习占大头。
+- **复习给新内容让位**：`srs.backlog()` 算到期条数，≥ `srs_backlog_threshold`（默认 20）时复习名额从四成抬到六成，≥ 两倍阈值时只留 `srs_new_floor`（默认 2）个新内容。固定四成永远消化不完积压，别把这段退回常量。
+- **先教后练、先考学过的**：语文组词题前一半名额给「当天认读的字」，其后才是到期字、其它已学字，全库兜底封顶一半；英语词义选择按 到期 → 已学 → 未学 排序。**没教过就考，孩子只能瞎蒙**，新增题型照这个顺序取候选。
 - **复习队列和错题本的 `item_id` 必须是题库主键**：用 `taskgen.item_key(item)`（优先 `ref_id`；数学计算题是 `md5(kind+topic)` 知识点哈希）。绝不能存 payload 里的 `item_id`（那是当天第几题）。新增题型记得写 `ref_id`。
 - **错题重练与当天题去重**：数学（`kind == 'math'`）比 `stem` 不比 `item_key()`（哈希按知识点聚合，会误删成半数），见 `_dedupe_key()`。
 - **错题只能靠重做关闭**：①当天重练累计答对 2 次（`submit._upsert_wrong`）；②错题本专项订正 `/client/wrong-practice/*` 答对 1 次。题目由 `wrong_item.snapshot_json` 还原；快照残缺的要在列表提示「再做一次原题后就能订正」，别留点不动的死按钮。
@@ -39,16 +41,24 @@
 ## 出题
 
 - **每日题量后台可配**（`settings.py` 的 `DEFAULTS`；设置页按语/数/英/其它四个 Tab；0 = 当天不出该题型）：
-  语文 认读 5 / 组词 5 / 古诗 1（`chinese_read / chinese_word / chinese_poem`）；
+  语文 认读 5 / 组词 5 / 看拼音选字 3 / 古诗 1（`chinese_read / chinese_word / chinese_pinyin / chinese_poem`）；
   数学 计算题 15 / 应用题 2（`math_calc / math_app`）；
   英语 朗读 10 / 音标朗读 2 / 音标选词 2 / 看中选英 2 / 看英选中 2 / 组句 1（`english_word_read / english_phoneme_read / english_phoneme_pick / english_word_choice / english_meaning_choice / english_sentence_count`）；
-  其它 错题重练 `retry_count` = 2、兑换间隔 `redeem_interval_days` = 0（0 不限制）。旧键已删，`all_settings()` 只认 DEFAULTS 里的键。
+  其它 错题重练 `retry_count` = 2、复习积压闸门 `srs_backlog_threshold` = 20、让位后保留新内容 `srs_new_floor` = 2、兑换间隔 `redeem_interval_days` = 0（0 不限制）。旧键已删，`all_settings()` 只认 DEFAULTS 里的键。
+- **古诗一轮内不重复**：先挑还没背过的（SRS 里没有记录的诗）；**全部背完后**按 `srs.learned_order()`（`srs_item.id` 升序＝最早背过的）从头再来。**别让到期复习插队**——插队的结果是孩子连着几天背同一首。
+- **题型交错**：`taskgen._interleave()` 把朗读/认读卡和判分题按 2:1 穿插，古诗（recite）单独留在最后。连着看十张卡最容易走神。
+- **干扰项必须唯一**：英语选项排除同义/包含释义（`_meanings_clash`，dance 与 dancing 都译"跳舞"）；音标例词建 `_phoneme_index()`，含目标音素或跨音标复用的词不当干扰项（book 同时是 /b/ 和 /ʊ/ 的例词）。
+- **数学跨天不重出**：`_recent_items()` 回看 3 天，题干相同（计算题）或 `ref_id` 相同（应用题）的跳过；凑不够时允许重复，题量优先。
+- **数学自适应一档**：近 3 天均分 ≥92 难度中心上移一档、≤65 下移一档（`_math_center()`），样本不足两天不判断。
+- **应用题 term 允许为空**：内置题库常常不填学期，取题按 `grade_id` 查、学期精确匹配优先，空学期不能被筛成 0 道。
 - **兑换间隔锁**：`client._redeem_lock()` 以最近一次 `approved` 兑换为基准算下次可兑日期；`POST /client/redemptions` 服务端强校验（409），`GET /client/rewards` 下发 `redeem_lock_until` 供前端置灰按钮。被拒/锁定期只看 approved，pending 和 rejected 不算。
 - **同时只能有一个待审批**：`redeem()` 里已存在 `pending` 记录就 409（提示带奖励名快照）；前端 `Me.tsx` 按 `pending` 非空置灰全部兑换按钮（「等待审批中」）。审批通过/拒绝后才能再次申请。
 - **客户端可用时间段**：`client_time_start / client_time_end`（HH:MM，两项都有值才生效；开始晚于结束视为跨午夜）。`/client/prefs` 连同 `server_now` 下发，前端 `components/client/time-guard.tsx`（挂在 `ClientLayout` 末尾）用服务器时间校准本机偏差，时间段之外盖全屏遮罩（z-[100]）无法关闭，每 30 秒复查到点自动放行。改动判断逻辑时记住：判断只在遮罩组件里做，服务端不做时段拦截。
-- **等级只有一份定义**：`level.py` 的 `LEVELS` + `RATIOS`（10/40/30/15/5）+ `GRADE_LEVEL`（1、2 年级容易 … 6 年级困难）。六张题库表的 `level` 列都靠它归一，别复制比例常量。新题走 `level.split()` / `pick_one()`；**复习题和错题重练不按比例**。某档题库空了配额自动回补（数学同一学期常全在一档，这是正常的）。导入用 `from_grade()` 折算，不直接写 grade。
-- **只有数学看年级学期**：语文英语题库不关联年级学期，全库随机；数学严格 `grade_id + term`，仅当该学期没配规则时退到本年级其他学期。别给语文英语加回年级过滤。
-- **组词题**：题字取已学过的字（到期优先），答案是词里的另一个字；干扰项按词内真实读音取同音字，并排除一切能与题字拼成词的字（否则两个答案）。
+- **等级只有一份定义**：`level.py` 的 `LEVELS` + `RATIOS`（10/40/30/15/5）+ `CENTER_WEIGHTS` + `GRADE_LEVEL`（1、2 年级容易 … 6 年级困难）。六张题库表的 `level` 列都靠它归一，别复制比例常量。新题走 `level.split(pool, n, rng, weights=...)` / `pick_one()`；**复习题和错题重练不按比例**。某档题库空了配额自动回补（数学同一学期常全在一档，这是正常的）。导入用 `from_grade()` 折算，不直接写 grade。
+- **难度中心跟孩子年级走**：语文英语的题量配额用 `level.ratios_for(孩子年级档)`（钟形，三年级约 24/32/24/13/6），`RATIOS` 只在没有年级参照时兜底。这样三年级的孩子不会有一大截五、六年级的字词混进来。
+- **只有数学看年级学期**：语文英语题库不关联年级学期，仍从全库取（只是按上面的难度中心加权）；数学严格 `grade_id + term`，仅当该学期没配规则时退到本年级其他学期。别给语文英语加回年级过滤。
+- **组词题**：题字按「当天认读的字（前一半名额）→ 到期字 → 其它已学字 → 全库兜底」取，答案是词里的另一个字；干扰项按词内真实读音取同音字，并排除一切能与题字拼成词的字（否则两个答案）。
+- **看拼音选字**：`pinyin_choice`，题干是拼音、选项是单字。同音字（拼音完全相同）不进选项，否则两个答案；**同音异调**（huā/huá）优先当干扰项，考的就是声调。前端 `quiz.tsx` 的 `isPinyinChoice` 必须继续挡住「大字渲染」，不然答案直接印在题干上方。
 - **数学**：`mathgen.GENERATORS` 注册表，`math_rule.generator` 存键名、`params_json` 存区间参数，`GENERATOR_SPECS` 声明可调参数。新增题型 = `@register` + 注册参数 + 加规则数据，前端自动出现。
 - 词库小于「朗读 + 选择题总数」时先给选择题留词，朗读卡让路；当天朗读过的词不再出选择题，朗读过的音标不再出音标选词。
 

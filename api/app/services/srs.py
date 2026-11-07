@@ -12,8 +12,8 @@ from .settings import get_setting
 INTERVALS = [1, 2, 4, 7, 15, 30]
 MAX_STAGE = len(INTERVALS) - 1
 
-# 数学题每天现生成，没有稳定主键，进复习队列没有意义；只记语文和英语
-SRS_KINDS = ("char", "word", "poem")
+# 数学题每天现生成，没有稳定主键，进复习队列没有意义；只记语文、英语和音标
+SRS_KINDS = ("char", "word", "poem", "phoneme")
 
 
 def enabled() -> bool:
@@ -65,6 +65,25 @@ def due_items(child_id: int, subject: str, item_type: str, limit: int, today: st
     )
 
 
+def backlog(child_id: int, subject: str, item_type: str, today: str | None = None) -> int:
+    """到期没复习的条目数。
+
+    出题时用它决定「今天还教不教新内容」：积压越多，复习越该优先，
+    否则每天固定只放几个复习名额，队列只会越积越长。
+    """
+    if not enabled():
+        return 0
+    today = today or today_str()
+    return (
+        SrsItem.query.filter(
+            SrsItem.child_id == child_id,
+            SrsItem.subject == subject,
+            SrsItem.item_type == item_type,
+            SrsItem.next_date <= today,
+        ).count()
+    )
+
+
 def learned_ids(child_id: int, subject: str, item_type: str):
     """学过的题库主键集合。关掉复习调度后返回空，出题退回全库随机。"""
     if not enabled():
@@ -73,6 +92,19 @@ def learned_ids(child_id: int, subject: str, item_type: str):
         child_id=child_id, subject=subject, item_type=item_type
     ).all()
     return {r.item_id for r in rows}
+
+
+def learned_order(child_id: int, subject: str, item_type: str) -> dict[int, int]:
+    """题库主键 → 进入队列的先后（srs_item.id 升序即首次学习的先后）。
+
+    古诗「一轮背完之后重头来」靠它排序：谁最早学的，谁先重背。
+    """
+    rows = (
+        SrsItem.query.filter_by(child_id=child_id, subject=subject, item_type=item_type)
+        .order_by(SrsItem.id.asc())
+        .all()
+    )
+    return {r.item_id: r.id for r in rows}
 
 
 def stage_of(child_id: int, subject: str, item_type: str, item_id: int):

@@ -19,7 +19,8 @@ const NUMBERS: { key: string; label: string; hint?: string }[] = [
   // 语文
   { key: 'chinese_read', label: '认读字数', hint: '默认 5，认读卡不计分；0 为关闭' },
   { key: 'chinese_word', label: '组词题数', hint: '默认 5，补全词语选择题' },
-  { key: 'chinese_poem', label: '古诗数量', hint: '默认 1 首背诵录音，不计分；0 为关闭' },
+  { key: 'chinese_pinyin', label: '看拼音选字', hint: '默认 3 道，判分；0 为关闭' },
+  { key: 'chinese_poem', label: '古诗数量', hint: '默认 1 首背诵录音，一轮内不重复；0 为关闭' },
   // 数学
   { key: 'math_calc', label: '计算题数量', hint: '默认 15，按出题规则现算' },
   { key: 'math_app', label: '应用题数量', hint: '默认 2，从本年级学期题库抽取；0 为关闭' },
@@ -32,6 +33,8 @@ const NUMBERS: { key: string; label: string; hint?: string }[] = [
   { key: 'english_sentence_count', label: '单词组句', hint: '默认 1 道；0 为关闭' },
   // 其它
   { key: 'retry_count', label: '额外错题重练', hint: '默认 2 道，插在当天任务最前面；0 为关闭' },
+  { key: 'srs_backlog_threshold', label: '复习积压闸门', hint: '到期没复习的条数超过它，新字新词自动让位给复习；0 为不让位' },
+  { key: 'srs_new_floor', label: '让位后保留新内容', hint: '积压严重时每天至少还教几个新字/新词' },
   { key: 'redeem_interval_days', label: '兑换间隔（天）', hint: '距上次兑换成功需隔几天才能再兑；0 为不限制' },
   { key: 'point_per_subject', label: '单科完成积分', hint: '正确率 ≥60%' },
   { key: 'point_per_excellent', label: '正确率优秀加分', hint: '≥90% 额外加' },
@@ -42,7 +45,7 @@ const NUMBERS: { key: string; label: string; hint?: string }[] = [
 ]
 
 const TAB_FIELDS: { value: string; label: string; keys: string[] }[] = [
-  { value: 'chinese', label: '语文', keys: ['chinese_read', 'chinese_word', 'chinese_poem'] },
+  { value: 'chinese', label: '语文', keys: ['chinese_read', 'chinese_word', 'chinese_pinyin', 'chinese_poem'] },
   { value: 'math', label: '数学', keys: ['math_calc', 'math_app'] },
   {
     value: 'english',
@@ -59,7 +62,7 @@ const TAB_FIELDS: { value: string; label: string; keys: string[] }[] = [
   {
     value: 'misc',
     label: '其它',
-    keys: ['retry_count', 'redeem_interval_days', 'streak_bonus_days', 'streak_bonus_points', 'point_per_subject', 'point_per_excellent', 'point_checkin', 'point_wrong_fix'],
+    keys: ['retry_count', 'srs_backlog_threshold', 'srs_new_floor', 'redeem_interval_days', 'streak_bonus_days', 'streak_bonus_points', 'point_per_subject', 'point_per_excellent', 'point_checkin', 'point_wrong_fix'],
   },
 ]
 

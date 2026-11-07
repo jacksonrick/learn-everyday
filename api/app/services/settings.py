@@ -8,6 +8,7 @@ DEFAULTS = {
     # 语文
     "chinese_read": 5,  # 认读字数（认读卡，不计分）
     "chinese_word": 5,  # 补全词语题数
+    "chinese_pinyin": 3,  # 看拼音选字（判分）
     "chinese_poem": 1,  # 古诗背诵首数（不计分）
     # 数学
     "math_calc": 15,  # 计算题（按出题规则现算）
@@ -26,6 +27,10 @@ DEFAULTS = {
     "client_time_end": "",  # 客户端可用时间段结束（HH:MM）；留空 = 全天可用
     "instant_feedback": True,
     "srs_enabled": True,
+    # 复习积压闸门：某科到期没复习的条目超过这个数，当天新内容自动让位给复习；
+    # 达到两倍时新内容压到「每天至少保留」的条数。0 表示不让位（不推荐）。
+    "srs_backlog_threshold": 20,
+    "srs_new_floor": 2,
     "point_per_subject": 10,
     "point_per_excellent": 5,
     "point_checkin": 20,
