@@ -17,7 +17,7 @@ const READ_TYPES = ['word_read', 'phoneme_read', 'char_read']
 /** 与后端 taskgen.READ_ANSWER 保持一致 */
 const READ_ANSWER = '__read__'
 /** 朗读/认读卡至少停留的秒数：防止无脑连点「下一个」刷完 */
-const READ_MIN_SECONDS = 10
+const READ_MIN_SECONDS = 20
 
 function SpeakButton({ onClick, label = '播放读音' }: { onClick: () => void; label?: string }) {
   return (
