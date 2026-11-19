@@ -565,6 +565,8 @@ def wrong_practice_list():
                 "stem": snap.get("stem"),
                 "options": options,
                 "tokens": tokens,
+                # 数学应用题的计量单位（米/个/元），订正时和打卡页一样跟在答案后面
+                "unit": snap.get("unit") or "",
                 "input": not options and not tokens,
                 "wrong_count": row.wrong_count or 1,
                 "correct_streak": row.correct_streak or 0,

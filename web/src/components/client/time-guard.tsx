@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Clock, Lock } from 'lucide-react'
 import { api } from '@/lib/api'
+import { acquireKeyboardLock } from '@/lib/keys'
 import { FoxWave } from './art'
 
 /** 解析 HH:MM 为当天分钟数；格式非法返回 null（视为未限制） */
@@ -58,11 +59,20 @@ export default function TimeGuard() {
     return () => window.clearInterval(timer)
   }, [restricted])
 
-  if (!restricted) return null
-
   // 起点小于终点是正常窗口（9:00-21:00）；起点大于终点视为跨午夜（21:00-次日 9:00）
-  const allowed = start <= end ? nowMin >= start && nowMin <= end : nowMin >= start || nowMin <= end
-  if (allowed) return null
+  let blocked = false
+  if (start !== null && end !== null) {
+    const allowed = start <= end ? nowMin >= start && nowMin <= end : nowMin >= start || nowMin <= end
+    blocked = !allowed
+  }
+
+  // 遮罩期间把快捷键整体锁死：否则孩子能隔着「休息时间」的遮罩把题做完
+  useEffect(() => {
+    if (!blocked) return
+    return acquireKeyboardLock()
+  }, [blocked])
+
+  if (!blocked || start === null || end === null) return null
 
   // 距开放还有多少分钟：未到开始时间等开始；过了结束时间等明天的开始
   const waitMin = nowMin < start ? start - nowMin : 1440 - nowMin + start

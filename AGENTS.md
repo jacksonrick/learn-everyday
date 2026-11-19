@@ -9,7 +9,7 @@
 ## 结构与数据库
 
 - `api/app/`：models（catalog 年级孩子 / bank 三科题库 / study / reward / system）、api（client 无鉴权、auth、admin JWT）、services（mathgen 出题器注册表 / taskgen 每日任务 / grading / submit / points / srs / settings / homophone / ai）、seed（首次启动数据 + 手写迁移）、utils（responses 统一响应 / dates）
-- `web/src/`：pages/client（首页·语数英·我的）、pages/admin、components/client（layout / quiz 答题内核 / poem-player / result）、components/ui（shadcn 同源手写组件）、lib（api / types / hooks / speech / phoneme-audio / utils）、stores（zustand，childId 持久化）
+- `web/src/`：pages/client（首页·语数英·我的）、pages/admin、components/client（layout / quiz 答题内核 / math-pad 数字键盘 / poem-player / result / key-hints 按键提示）、components/ui（shadcn 同源手写组件）、lib（api / types / hooks / keys 键盘层 / speech / phoneme-audio / utils）、stores（zustand，childId 持久化）
 - `web/public/phonemes/`：48 个音标真人单音 mp3（IPA 符号 TTS 读不了）。播放走 `lib/phoneme-audio.ts` 的 IPA→文件名映射 + `speech.speakPhoneme()`，**不要**把音标符号丢给 TTS；映射改动必须与 `seed.SAMPLE_PHONEMES` 的 48 个符号对齐
 - **TTS 缓存是内容寻址、不进数据库**：缓存键 = md5(音色|语速|文本)，前端把文本发到 `/client/tts`、后端现场算哈希查 `uploads/tts/` 下同名文件是否在。题库表不存音频地址，别加回来
 - 数据库根目录 `db.sqlite`（WAL，备份=复制文件）。表：`grade / child / chinese_char / poem / english_word / english_sentence / english_phoneme / math_rule / math_question / daily_task / study_record / task_answer / recitation / checkin / srs_item / wrong_item / points_ledger / reward / redemption / admin_user / setting`
@@ -92,6 +92,24 @@
 - 新增设置项要确认真的有人读（`get_setting`），并在 `Settings.tsx` 的 NUMBERS / SWITCHES / TAB_FIELDS 里露出。
 - 客户端截图用 `web/scripts/shot.mjs`（已带 serviceWorkers block 防 PWA 旧包），落 `docs/screenshots`。
 - 完成里程碑：勾 `docs/03-开发计划.md`，并在 `.workbuddy/memory/YYYY-MM-DD.md` 记一行结论。
+
+## 键盘交互
+
+客户端（`/`、语文、数学、英语、我的）整套答题流程要能纯键盘走完，鼠标只是备选。改任何答题 UI 前先读这一节。
+
+- **唯一入口** `web/src/lib/keys.ts` 的 `useHotkeys(map, {enabled, bypassLock})`：键名是小写的逻辑名（`a~z` `0~9` `enter` `space` `esc` `backspace` `dot` `minus` `slash` `colon` `question`），键表按题型在渲染时重建，别各自 `addEventListener`。
+- **只认 `e.code`**：中文输入法开着时 `e.key` 会变 `Process`；同时过滤 `isComposing / keyCode 229 / e.repeat / ctrl·meta·alt`。输入框里只放行 `esc`（Enter 交给输入框自己的 `onKeyDown`，不然一次回车提交两遍）。
+- **capture 阶段 `preventDefault + stopPropagation`**：焦点留在按钮上时，Space 会同时触发按钮 click 和快捷键，不拦就是一次按两下。换题后 `focus()` 回答题容器（`tabIndex={-1}`）。
+- **键盘锁是计数式的**：`acquireKeyboardLock()` 返回释放函数。非学习时段遮罩（`time-guard.tsx`）和 `?` 快捷键面板都靠它，新增任何全屏遮挡都必须 acquire，否则孩子能隔着遮罩答题；布尔锁会在「先关面板」时把遮罩的锁一起解掉。
+- **鼠标与键盘共用一个动作函数**（`chooseOption / appendMath / pickToken / undoToken / advance / replay`），别在键盘分支里另写一套逻辑——两边行为分叉就会一边判分一边不判。
+- **每个题型必须挂常驻 `KeyHints`**（`components/client/key-hints.tsx`），主按钮上用 `<Kbd>` 标快捷键；没提示孩子就当没这个功能。`?` 唤出总表（`KeyboardHelp`），侧栏底部也有入口。
+- 快捷键映射：`Ctrl+1/2/3` 语数英、`Ctrl+0` 今日、`Ctrl+4` 我的；选择题 `1~6` 一步提交（按第 n 项，选了就提交，与点击一致；不用字母是因为孩子找字母比找数字慢，且中文输入法会把 A 变成 `Process`）；组句 `1~0` 选词 / `Backspace` 撤销 / `Enter` 确认；数学 `0-9 . - / :` + `Backspace` / `Esc` / `Enter`；朗读卡 `Space` 翻页（倒计时未到只 toast）、`R` 重听、音标卡 `1~9` 播例词；反馈条 `Enter/Space` 下一题、`L` 听一遍；古诗 `1/2` 切听读背诵、`Space` 录音、`Enter` 提交。**「跳过」不给键**（家长要求在键盘流里也要做完）。
+- **计时器要能被打断**：朗读卡 20 秒倒计时、答对 900ms 自动前进的 `setTimeout` 都存在 ref 里，键盘按键先 clear 再 `advance()`，否则连按两下会跳两题。
+- **数学答案不只有数字**：`fraction_*` 出 `3/4`、`ratio_simplify` 出 `3:4`，键盘和数字键盘都要能打 `/` `:`；`-` 只贴最前面，`.` `/` `:` 各自只能出现一次。输入规则只有一份：`components/client/math-pad.tsx` 的 `applyMathKey()`，数字键盘 `MathPad` 也在这。**打卡页和错题本订正必须都用它**（`quiz.tsx` 与 `Me.tsx` 的 `WrongPractice` 共用），别在某一处退回 `<Input>`——错题订正是数学错题的唯一出口，输入框里打不出分数线等于题做不了。应用题的单位由 `MathPad` 的 `unit` 属性跟在答案后面显示，`/client/wrong-practice` 已下发 `unit`。输入规则只有一份：`components/client/math-pad.tsx` 的 `applyMathKey()`，数字键盘 `MathPad` 也在这。**打卡页和错题本订正必须都用它**（`quiz.tsx` 与 `Me.tsx` 的 `WrongPractice` 共用），别在某一处退回 `<Input>`——错题订正是数学错题的唯一出口，输入框里打不出分数线等于题做不了。应用题的单位由 `MathPad` 的 `unit` 属性跟在答案后面显示，`/client/wrong-practice` 已下发 `unit`。
+- **不能朗读答案**：`word_choice`（看中文选英文）题干即答案，`R` 键要对这类题关掉（`canReplay` 判 `isWordChoice`）。
+- 选项超过 6 个、组句词超过 10 个时超出部分没有快捷键，提示条要如实标注。
+- **朗读按钮必须能锁住**：`speak()` 返回的 Promise 在「真正出声」时才 resolve，`useSpeaker()`（`lib/speech.ts`）负责 loading 态，`SpeakButton`（`quiz.tsx`）点下去就 disabled + 转圈，直到后端合成回来。动作函数要 `return speak(...)`，写成 `void speak(...)` 会让按钮立刻恢复可点，孩子连点就把合成器打爆（每次都是几百毫秒到两秒的等待）。同一文本的并发请求由 `speech.ts` 的 `inFlight` 合并，URL 命中缓存后连请求都不发。
+- 语文认读卡（`char_read`）必须给朗读入口：字旁边的大按钮（`R` 键同效）、词语 chip 可点读、例句带朗读按钮——「听一听，跟读一遍」没有声音就只是看图。
 
 ## 常用命令
 

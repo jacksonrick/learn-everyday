@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { Loader2, Mic, RotateCcw, Square, Volume2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { api } from '@/lib/api'
-import { speak, stopSpeaking } from '@/lib/speech'
+import { speak, stopSpeaking, useSpeaker } from '@/lib/speech'
+import { useHotkeys, type KeyMap } from '@/lib/keys'
 import { cn } from '@/lib/utils'
+import { KeyHints, Kbd, type KeyHint } from './key-hints'
 import { FoxWave } from './art'
 
 type PoemItem = {
@@ -49,6 +52,8 @@ export function PoemPlayer({
   const chunksRef = useRef<Blob[]>([])
   const tickRef = useRef<number | null>(null)
   const startedAt = useRef(Date.now())
+  // 连按两下空格会并发两次 getUserMedia：用一个 ref 把重复的 start 挡掉
+  const starting = useRef(false)
 
   const masked = tab === 'recite'
 
@@ -67,13 +72,19 @@ export function PoemPlayer({
     }
   }, [audioUrl])
 
+  // 整首朗读要等后端合成，按下去到出声之间按钮置灰，防止连点排队
+  const { pending: reading, run: runRead } = useSpeaker()
   const readAll = () =>
-    speak(
-      `《${poem.title}》，${poem.dynasty} ${poem.author}。${poem.content.replace(/\n/g, '，')}`,
-      { lang: 'zh-CN', rate: 0.9 },
+    runRead(() =>
+      speak(`《${poem.title}》，${poem.dynasty} ${poem.author}。${poem.content.replace(/\n/g, '，')}`, {
+        lang: 'zh-CN',
+        rate: 0.9,
+      }),
     )
 
   const startRecord = async () => {
+    if (recording || starting.current) return
+    starting.current = true
     setMicError('')
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
@@ -96,6 +107,8 @@ export function PoemPlayer({
       }, 250)
     } catch {
       setMicError('没能打开麦克风，检查一下浏览器权限后再试')
+    } finally {
+      starting.current = false
     }
   }
 
@@ -138,6 +151,69 @@ export function PoemPlayer({
     }
   }
 
+  /* -------------------------------------------------------- 键盘 */
+
+  /** 录音/上传中不许切标签，切走会把 MediaStream 留成孤儿 */
+  const switchTab = (next: string) => {
+    if (recording || uploading) {
+      if (recording) toast('先把录音结束掉再切')
+      return
+    }
+    stopSpeaking()
+    setTab(next)
+  }
+
+  const actions: KeyMap = {}
+  if (tab === 'listen') {
+    actions.space = readAll
+    actions['1'] = () => switchTab('listen')
+    actions['2'] = () => switchTab('recite')
+  } else {
+    actions['1'] = () => switchTab('listen')
+    // 空格：开始录音 → 结束 → 有录音时重录，跟圆形按钮完全一致
+    actions.space = () => {
+      if (uploading) return
+      if (recording) {
+        stopRecord()
+        return
+      }
+      if (audioUrl) {
+        reset()
+        void startRecord()
+        return
+      }
+      void startRecord()
+    }
+    // 回车：录音中先结束（不直接上传，免得背到一半误触就交上去），录完再按才提交
+    actions.enter = () => {
+      if (uploading) return
+      if (recording) {
+        stopRecord()
+        return
+      }
+      if (audioUrl) void upload()
+    }
+  }
+
+  useHotkeys(actions)
+
+  const hints: KeyHint[] =
+    tab === 'listen'
+      ? [
+          { keys: 'Space', label: '整首朗读' },
+          { keys: '2', label: '去背诵' },
+        ]
+      : recording
+        ? [
+            { keys: ['Space', 'Enter'], label: '结束录音' },
+          ]
+        : audioUrl
+          ? [
+              { keys: 'Enter', label: '提交，今天背完啦' },
+              { keys: 'Space', label: '再录一次' },
+            ]
+          : [{ keys: 'Space', label: '开始录音' }]
+
   return (
     <div className="mx-auto max-w-2xl space-y-4">
       <Card className="overflow-hidden p-5 text-center">
@@ -166,16 +242,24 @@ export function PoemPlayer({
         </p>
       </Card>
 
-      <Tabs value={tab} onValueChange={(v) => { stopSpeaking(); setTab(v) }}>
+      <Tabs value={tab} onValueChange={switchTab}>
         <TabsList className="w-full">
-          <TabsTrigger value="listen">听读</TabsTrigger>
-          <TabsTrigger value="recite">背诵</TabsTrigger>
+          <TabsTrigger value="listen">
+            听读
+            <Kbd>1</Kbd>
+          </TabsTrigger>
+          <TabsTrigger value="recite">
+            背诵
+            <Kbd>2</Kbd>
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="listen">
           <Card className="animate-slide-up space-y-4 p-5">
-            <Button variant="outline" className="w-full" size="lg" onClick={readAll}>
-              <Volume2 className="h-4 w-4" /> 整首朗读
+            <Button variant="outline" className="w-full" size="lg" disabled={reading} onClick={() => void readAll()}>
+              {reading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Volume2 className="h-4 w-4" />}
+              {reading ? '正在准备朗读…' : '整首朗读'}
+              <Kbd>Space</Kbd>
             </Button>
             <div className="space-y-2 rounded-2xl bg-paper-deep/60 px-4 py-3 text-sm text-ink-soft">
               {poem.translation ? <p>{poem.translation}</p> : <p>点上面的「整首朗读」，听题目、诗人和全诗。</p>}
@@ -193,7 +277,7 @@ export function PoemPlayer({
             {!audioUrl ? (
               <>
                 <p className="text-sm text-ink-soft">
-                  {recording ? '正在听你背……背完再点一下红色按钮' : '点一下开始录音，背完再点一下结束'}
+                  {recording ? '正在听你背……背完再按一下空格' : '按空格开始录音，背完再按一下空格'}
                 </p>
                 <button
                   onClick={recording ? stopRecord : startRecord}
@@ -205,7 +289,7 @@ export function PoemPlayer({
                 >
                   {recording ? <Square className="h-7 w-7" /> : <Mic className="h-7 w-7" />}
                 </button>
-                <p className="font-num text-sm text-persimmon-deep">{recording ? `${seconds} 秒` : '准备好了就点'}</p>
+                <p className="font-num text-sm text-persimmon-deep">{recording ? `${seconds} 秒` : '准备好了就按空格'}</p>
               </>
             ) : (
               <div className="space-y-3">
@@ -213,10 +297,12 @@ export function PoemPlayer({
                 <div className="flex gap-2">
                   <Button variant="outline" className="flex-1" onClick={reset}>
                     <RotateCcw className="h-4 w-4" /> 再录一次
+                    <Kbd>Space</Kbd>
                   </Button>
                   <Button className="flex-1" disabled={uploading} onClick={upload}>
                     {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                     上传，今天背完啦
+                    <Kbd>Enter</Kbd>
                   </Button>
                 </div>
               </div>
@@ -236,6 +322,8 @@ export function PoemPlayer({
           </Card>
         </TabsContent>
       </Tabs>
+
+      <KeyHints hints={hints} />
     </div>
   )
 }

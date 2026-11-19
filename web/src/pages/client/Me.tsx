@@ -28,6 +28,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton, EmptyState } from '@/components/ui/feedback'
 import { Input } from '@/components/ui/input'
 import { SUBJECT_META, cn, currentMonth, fmtDate, todayStr } from '@/lib/utils'
+import { useHotkeys, type KeyMap } from '@/lib/keys'
+import { KeyHints, Kbd, type KeyHint } from '@/components/client/key-hints'
+import { MathPad, applyMathKey } from '@/components/client/math-pad'
 import type { Subject } from '@/lib/types'
 import { FoxCheer, TrophyArt } from '@/components/client/art'
 
@@ -604,6 +607,9 @@ function WrongPractice({
   const tokens: string[] = item?.tokens ?? []
   const isOrder = tokens.length > 0
   const orderText = picked.map((i) => tokens[i]).join(' ')
+  // 数学订正和打卡里一样用数字键盘：3/4、3:4 这种答案在输入框里不好打
+  const options: string[] = item?.options ?? []
+  const isMath = !isOrder && options.length === 0 && String(item?.kind ?? item?.item_type ?? '') === 'math'
 
   const submit = async () => {
     const final = isOrder ? orderText : answer.trim()
@@ -640,6 +646,66 @@ function WrongPractice({
     setFeedback(null)
   }
 
+  /* -------------------------------------------------------- 键盘 */
+
+  const actions: KeyMap = {}
+  if (finished) {
+    actions.enter = onExit
+    actions.space = onExit
+  } else if (feedback) {
+    // 订正答对才关题，答错必须重做：回车跟着当前该做的事走
+    actions.enter = feedback.correct ? next : retry
+    actions.space = feedback.correct ? next : retry
+  } else if (isOrder) {
+    tokens.slice(0, 10).forEach((_, i) => {
+      actions[String((i + 1) % 10)] = () => setPicked((prev) => (prev.includes(i) ? prev : [...prev, i]))
+    })
+    actions.backspace = () => setPicked((prev) => prev.slice(0, -1))
+    actions.enter = () => void submit()
+  } else if (isMath) {
+    '0123456789'.split('').forEach((d) => {
+      actions[d] = () => setAnswer((v) => applyMathKey(v, d))
+    })
+    actions.dot = () => setAnswer((v) => applyMathKey(v, '.'))
+    actions.minus = () => setAnswer((v) => applyMathKey(v, '-'))
+    actions.slash = () => setAnswer((v) => applyMathKey(v, '/'))
+    actions.colon = () => setAnswer((v) => applyMathKey(v, ':'))
+    actions.backspace = () => setAnswer((v) => v.slice(0, -1))
+    actions.esc = () => setAnswer('')
+    actions.enter = () => void submit()
+  } else if (options.length > 0) {
+    options.slice(0, 6).forEach((opt, i) => {
+      actions[String(i + 1)] = () => setAnswer(opt)
+    })
+    actions.enter = () => void submit()
+  } else {
+    actions.enter = () => void submit()
+  }
+
+  useHotkeys(actions)
+
+  const hints: KeyHint[] = feedback
+    ? [{ keys: ['Enter', 'Space'], label: feedback.correct ? (index + 1 >= total ? '完成订正' : '下一题') : '再做一次' }]
+    : isOrder
+      ? [
+          { keys: '1-0', label: '按顺序选词' },
+          { keys: 'Backspace', label: '撤销' },
+          { keys: 'Enter', label: '提交' },
+        ]
+      : isMath
+        ? [
+            { keys: '0-9 . - / :', label: '输入' },
+            { keys: 'Backspace', label: '删一位' },
+            { keys: 'Esc', label: '清空' },
+            { keys: 'Enter', label: '提交' },
+          ]
+        : options.length > 0
+          ? [
+              { keys: options.slice(0, 6).map((_, i) => String(i + 1)).join(' '), label: '选答案' },
+              { keys: 'Enter', label: '提交' },
+            ]
+          : [{ keys: 'Enter', label: '提交' }]
+
   if (finished) {
     return (
       <Card className="flex flex-col items-center gap-3 p-8 text-center">
@@ -655,13 +721,13 @@ function WrongPractice({
         </p>
         <Button className="mt-2" onClick={onExit}>
           回到错题本
+          <Kbd>Enter</Kbd>
         </Button>
       </Card>
     )
   }
 
   const meta = SUBJECT_META[item.subject as Subject]
-  const options: string[] = item.options ?? []
 
   return (
     <div className="space-y-3">
@@ -711,6 +777,7 @@ function WrongPractice({
                       : 'border-line/80 bg-paper-card hover:border-persimmon/50',
                   )}
                 >
+                  {i < 10 && <span className="mr-1 font-num text-[10px] text-ink-soft">{(i + 1) % 10}</span>}
                   {token}
                 </button>
               ))}
@@ -723,27 +790,43 @@ function WrongPractice({
                 onClick={() => setPicked(picked.slice(0, -1))}
               >
                 撤销一个
+                <Kbd>⌫</Kbd>
               </Button>
             )}
           </div>
         ) : options.length > 0 ? (
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
-            {options.map((opt) => (
+            {options.map((opt, i) => (
               <button
                 key={opt}
                 disabled={!!feedback}
                 onClick={() => setAnswer(opt)}
                 className={cn(
-                  'rounded-2xl border px-4 py-3 text-left text-sm transition-all',
+                  'relative rounded-2xl border px-4 py-3 text-left text-sm transition-all',
                   answer === opt
                     ? 'border-persimmon bg-persimmon-soft font-medium text-persimmon-deep'
                     : 'border-line/80 bg-paper-card hover:border-persimmon/50',
                   feedback && 'opacity-80',
                 )}
               >
+                {i < 6 && (
+                  <span className="absolute right-2 top-1.5 font-num text-[10px] text-ink-soft">{i + 1}</span>
+                )}
                 {opt}
               </button>
             ))}
+          </div>
+        ) : isMath ? (
+          <div className="mt-4 w-1/2">
+            <MathPad
+              value={answer}
+              onChange={setAnswer}
+              unit={item.unit ? String(item.unit) : undefined}
+              onSubmit={() => void submit()}
+              disabled={!!feedback}
+              busy={sending}
+              submitLabel="提交答案"
+            />
           </div>
         ) : (
           <Input
@@ -766,10 +849,10 @@ function WrongPractice({
             <FoxCheer className="h-14 w-14 shrink-0" />
             <div className="min-w-0">
               <p className={cn('font-round text-base font-semibold', feedback.correct ? 'text-grass' : 'text-persimmon-deep')}>
-                {feedback.correct ? '答对了，这道题毕业啦' : '还差一点点，再看一遍答案'}
+                {feedback.correct ? '答对了，这道题毕业啦' : '还差一点点'}
               </p>
               <p className="mt-1 text-sm text-ink-soft">
-                正确答案：<span className="font-medium text-ink">{feedback.correct_answer || '—'}</span>
+                {feedback.correct ? <>正确答案：<span className="font-medium text-ink">{feedback.correct_answer || '—'}</span></> : '再试试看'}
               </p>
               {feedback.correct && feedback.points_earned > 0 && (
                 <p className="mt-1 text-xs text-ink-soft">订正奖励 +{feedback.points_earned} 积分</p>
@@ -780,13 +863,23 @@ function WrongPractice({
 
         <div className="mt-5 flex flex-wrap gap-3">
           {!feedback ? (
-            <Button disabled={!(isOrder ? picked.length : answer.trim()) || sending} onClick={submit}>
-              {sending ? '判分中…' : '提交答案'}
-            </Button>
+            // 数学的提交按钮在数字键盘里，这里不重复摆一个
+            isMath ? null : (
+              <Button disabled={!(isOrder ? picked.length : answer.trim()) || sending} onClick={submit}>
+                {sending ? '判分中…' : '提交答案'}
+                <Kbd>Enter</Kbd>
+              </Button>
+            )
           ) : feedback.correct ? (
-            <Button onClick={next}>{index + 1 >= total ? '完成订正' : '下一题'}</Button>
+            <Button onClick={next}>
+              {index + 1 >= total ? '完成订正' : '下一题'}
+              <Kbd>Enter</Kbd>
+            </Button>
           ) : (
-            <Button onClick={retry}>再做一次</Button>
+            <Button onClick={retry}>
+              再做一次
+              <Kbd>Enter</Kbd>
+            </Button>
           )}
           {feedback && !feedback.correct && (isOrder ? orderText : answer) && (
             <p className="self-center text-xs text-ink-soft">
@@ -794,6 +887,8 @@ function WrongPractice({
             </p>
           )}
         </div>
+
+        <KeyHints hints={hints} className="justify-start" />
       </Card>
     </div>
   )

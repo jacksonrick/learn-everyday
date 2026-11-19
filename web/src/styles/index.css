@@ -102,7 +102,7 @@
   }
 
   .num-pad-btn {
-    @apply flex h-16 items-center justify-center rounded-2xl bg-white text-2xl font-medium shadow-sm ring-1 ring-black/5 transition active:scale-95 active:bg-muted;
+    @apply flex h-16 items-center justify-center rounded-2xl bg-white text-2xl font-medium shadow-sm ring-1 ring-black/5 transition active:scale-95 active:bg-muted disabled:opacity-40 disabled:shadow-none;
   }
 
   /* 田字纸：极淡的点阵，像作业本，不抢内容 */

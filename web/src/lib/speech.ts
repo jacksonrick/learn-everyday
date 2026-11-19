@@ -1,3 +1,4 @@
+import { useCallback, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from './api'
 import { phonemeAudioUrl } from './phoneme-audio'
@@ -14,6 +15,8 @@ let currentAudio: HTMLAudioElement | null = null
 let enabled = true
 let modePromise: Promise<string> | null = null
 const urlCache = new Map<string, string>()
+/** 同一文本正在合成中的请求：连点两下只发一次，避免重复计费与竞态 */
+const inFlight = new Map<string, Promise<string>>()
 
 export function setSpeechEnabled(value: boolean) {
   enabled = value
@@ -47,6 +50,10 @@ function pickVoice(lang: string) {
   return voices.find((v) => /English|Samantha|Daniel|Google US/i.test(v.name)) ?? null
 }
 
+/**
+ * 朗读文本。返回的 Promise 在「真正开始出声」或「失败」时才 resolve，
+ * 调用方拿它做按钮的 loading/禁用态——后端合成期间一直转圈，防止连点重复请求。
+ */
 export async function speak(text: string, options: { lang?: string; rate?: number } = {}) {
   if (!enabled || !text) return
   const { lang = 'zh-CN', rate = 1 } = options
@@ -57,32 +64,55 @@ export async function speak(text: string, options: { lang?: string; rate?: numbe
     const cacheKey = `${langKey}|${rate}|${text}`
     let url = urlCache.get(cacheKey)
     if (!url) {
+      let request = inFlight.get(cacheKey)
+      if (!request) {
+        request = api
+          .post<{ url: string }>('/client/tts', { text, lang: langKey, speed: rate })
+          .then((res) => {
+            urlCache.set(cacheKey, res.url)
+            return res.url
+          })
+          .finally(() => inFlight.delete(cacheKey))
+        inFlight.set(cacheKey, request)
+      }
       try {
-        const res = await api.post<{ url: string }>('/client/tts', {
-          text,
-          lang: langKey,
-          speed: rate,
-        })
-        url = res.url
+        url = await request
       } catch (e) {
         // API 出问题就退回浏览器朗读，但要把原因告诉家长，别闷头失败
         toast.warning(e instanceof Error ? e.message : '语音合成失败，已改用浏览器发音')
         speakFallback(text, lang, rate)
         return
       }
-      urlCache.set(cacheKey, url)
     }
-    playUrl(url)
+    await playUrl(url)
     return
   }
   speakFallback(text, lang, rate)
 }
 
-function playUrl(url: string) {
-  const audio = new Audio(url)
-  currentAudio = audio
-  audio.play().catch(() => {
-    /* 自动播放被拦等情况：静默失败，不打断做题 */
+/**
+ * 播一个音频地址，resolve 表示「已经出声」（或出错放弃）。
+ * 加超时兜底：缓存命中时 playing 可能早于监听注册、或被浏览器拦下，
+ * 不让按钮一直卡在转圈状态。
+ */
+function playUrl(url: string): Promise<void> {
+  return new Promise((resolve) => {
+    const audio = new Audio(url)
+    currentAudio = audio
+    let settled = false
+    let timer = 0
+    const done = () => {
+      if (settled) return
+      settled = true
+      window.clearTimeout(timer)
+      audio.removeEventListener('playing', done)
+      audio.removeEventListener('error', done)
+      resolve()
+    }
+    audio.addEventListener('playing', done)
+    audio.addEventListener('error', done)
+    timer = window.setTimeout(done, 4000)
+    audio.play().catch(done)
   })
 }
 
@@ -105,6 +135,29 @@ export function stopSpeaking() {
     window.speechSynthesis.cancel()
     current = null
   }
+}
+
+/**
+ * 给播放按钮用的「正在出声」状态。
+ * run() 返回前按钮应置灰：否则孩子连点时后端会被同一个文本打爆（合成器排队，越点越慢）。
+ */
+export function useSpeaker() {
+  const [pending, setPending] = useState(false)
+  const running = useRef(false)
+  const run = useCallback(async (task: () => void | Promise<unknown>) => {
+    if (running.current) return
+    running.current = true
+    setPending(true)
+    try {
+      await task()
+    } catch {
+      /* speak() 内部已提示，这里只负责收尾 */
+    } finally {
+      running.current = false
+      setPending(false)
+    }
+  }, [])
+  return { pending, run }
 }
 
 /**

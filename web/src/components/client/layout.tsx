@@ -1,11 +1,13 @@
 import { useEffect, useState, type ComponentType } from 'react'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Flame, Settings2 } from 'lucide-react'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Flame, Settings2, Keyboard } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { isKeyboardLocked, useHotkeys } from '@/lib/keys'
 import { useSession } from '@/lib/hooks'
 import { Skeleton } from '@/components/ui/feedback'
 import { Badge } from '@/components/ui/badge'
 import { IconChinese, IconEnglish, IconMath, IconMe, IconToday, FoxWave } from './art'
+import { Kbd, KeyboardHelp } from './key-hints'
 import TimeGuard from './time-guard'
 
 const NAV = [
@@ -15,6 +17,14 @@ const NAV = [
   { to: '/c/english', label: '英语', Icon: IconEnglish },
   { to: '/me', label: '我的', Icon: IconMe },
 ] as { to: string; label: string; Icon: ComponentType<{ className?: string }> }[]
+
+const ROUTES: Record<string, string> = {
+  '0': '/',
+  '1': '/c/chinese',
+  '2': '/c/math',
+  '3': '/c/english',
+  '4': '/me',
+}
 
 /** 侧栏 logo：坐着挥手的小狐狸，静态不闪，避免孩子在答题时被侧栏吸引 */
 function BrandMark({ className }: { className?: string }) {
@@ -68,9 +78,33 @@ function TodayBadge({ compact = false }: { compact?: boolean }) {
 
 export default function ClientLayout() {
   const location = useLocation()
+  const navigate = useNavigate()
   const { data } = useSession()
   const child = data?.child
   const leftCount = (data?.subjects ?? []).filter((s) => s.status !== 'done').length
+  const [help, setHelp] = useState(false)
+
+  // `?` 唤出快捷键总表（面板自己用 Esc 关）
+  useHotkeys({ question: () => setHelp(true) })
+
+  /**
+   * Ctrl+1/2/3 切语数英、Ctrl+0 回今日、Ctrl+4 我的。
+   *
+   * 同时认 Meta 键，但 Mac 上 Cmd+1 会被浏览器抢去切标签页，所以提示条里只写 Ctrl。
+   * 全屏遮罩（非学习时段）或面板打开时一律不响应，别让孩子隔着遮罩换页。
+   */
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.repeat || e.isComposing || e.keyCode === 229) return
+      if (!(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return
+      const route = ROUTES[/^(?:Digit|Numpad)([0-4])$/.exec(e.code)?.[1] ?? '']
+      if (!route || isKeyboardLocked()) return
+      e.preventDefault()
+      navigate(route)
+    }
+    window.addEventListener('keydown', onKeyDown, true)
+    return () => window.removeEventListener('keydown', onKeyDown, true)
+  }, [navigate])
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     cn(
@@ -139,6 +173,15 @@ export default function ClientLayout() {
           ))}
         </nav>
 
+        <button
+          onClick={() => setHelp(true)}
+          className="mt-3 flex items-center gap-2 rounded-xl px-2 py-1.5 text-left text-xs text-ink-soft transition hover:bg-white/70 hover:text-ink"
+        >
+          <Keyboard className="h-4 w-4" />
+          快捷键
+          <Kbd>?</Kbd>
+        </button>
+
         <TodayBadge />
       </aside>
 
@@ -195,6 +238,9 @@ export default function ClientLayout() {
 
       {/* 可用时间段之外盖全屏遮罩，盖住侧栏与主内容且无法关闭（z 高于一切） */}
       <TimeGuard />
+
+      {/* 快捷键总表：`?` 或侧栏按钮唤出 */}
+      <KeyboardHelp open={help} onClose={() => setHelp(false)} />
     </div>
   )
 }

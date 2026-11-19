@@ -3,6 +3,8 @@ import { CheckCircle2, Flame, Star } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { useHotkeys } from '@/lib/keys'
+import { KeyHints, Kbd } from './key-hints'
 import { fmtDuration } from '@/lib/utils'
 import type { SubmitResult } from '@/lib/types'
 
@@ -10,6 +12,13 @@ export function ResultView({ result, label }: { result: SubmitResult; label: str
   const navigate = useNavigate()
   const good = result.score >= 90
   const pass = result.score >= 60
+
+  // 收尾页也要能纯键盘走掉：回车回今日，2 直接进错题本
+  useHotkeys({
+    enter: () => navigate('/'),
+    '1': () => navigate('/'),
+    '2': () => navigate('/me?tab=wrong'),
+  })
 
   return (
     <div className="space-y-4 py-4">
@@ -76,11 +85,15 @@ export function ResultView({ result, label }: { result: SubmitResult; label: str
       <div className="flex gap-3">
         <Button variant="outline" className="flex-1" onClick={() => navigate('/')}>
           回到首页
+          <Kbd>1</Kbd>
         </Button>
         <Button className="flex-1" onClick={() => navigate('/me?tab=wrong')}>
           看错题本
+          <Kbd>2</Kbd>
         </Button>
       </div>
+
+      <KeyHints hints={[{ keys: 'Enter', label: '回到今日' }]} />
 
       {result.checkin?.newly_done && (
         <div className="flex items-center justify-center gap-2 pt-2 text-sm text-emerald-700">

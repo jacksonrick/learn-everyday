@@ -1,10 +1,12 @@
 import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Flame } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useSession } from '@/lib/hooks'
+import { useHotkeys } from '@/lib/keys'
 import { SUBJECT_META } from '@/lib/utils'
+import { Kbd } from './key-hints'
 import { FoxCheer, FoxSleep, FoxWave } from './art'
 
 /** 加载骨架：三条起伏的书本条，代替原来的灰方块 */
@@ -34,6 +36,14 @@ const NEXT_SUBJECT = { chinese: 'math', math: 'english', english: 'chinese' } as
 export function DoneNotice({ subject, score }: { subject: 'chinese' | 'math' | 'english'; score: number }) {
   const next = NEXT_SUBJECT[subject]
   const nextMeta = SUBJECT_META[next]
+  const navigate = useNavigate()
+
+  // 回车接着练下一科，1 回今日——收尾页也不该逼孩子去摸鼠标
+  useHotkeys({
+    enter: () => navigate(`/c/${next}`),
+    '1': () => navigate('/'),
+  })
+
   return (
     <Card className="mx-auto max-w-3xl overflow-hidden p-0">
       <div className="flex flex-col items-center gap-1 bg-persimmon-soft/70 px-6 py-8 text-center sm:flex-row sm:gap-6 sm:text-left">
@@ -47,10 +57,16 @@ export function DoneNotice({ subject, score }: { subject: 'chinese' | 'math' | '
       </div>
       <div className="flex flex-col gap-3 border-t border-line/70 p-5 sm:flex-row">
         <Button asChild variant="outline" className="flex-1">
-          <Link to="/">回到今日</Link>
+          <Link to="/">
+            回到今日
+            <Kbd>1</Kbd>
+          </Link>
         </Button>
         <Button asChild className="flex-1">
-          <Link to={`/c/${next}`}>接着练{nextMeta.label}</Link>
+          <Link to={`/c/${next}`}>
+            接着练{nextMeta.label}
+            <Kbd>Enter</Kbd>
+          </Link>
         </Button>
       </div>
     </Card>
@@ -59,6 +75,9 @@ export function DoneNotice({ subject, score }: { subject: 'chinese' | 'math' | '
 
 /** 题库没配好：不打「空」的标签，直接告诉家长去哪里补 */
 export function EmptyNotice({ title, tip, to }: { title: string; tip: string; to: string }) {
+  const navigate = useNavigate()
+  useHotkeys({ enter: () => navigate('/') })
+
   return (
     <Card className="mx-auto flex max-w-2xl flex-col items-center gap-2 px-6 py-12 text-center">
       <FoxSleep className="h-28 w-28" />
@@ -66,7 +85,10 @@ export function EmptyNotice({ title, tip, to }: { title: string; tip: string; to
       <p className="max-w-md text-sm text-ink-soft">{tip}</p>
       <div className="mt-4 flex flex-col gap-3 sm:flex-row">
         <Button asChild variant="outline">
-          <Link to="/">回到今日</Link>
+          <Link to="/">
+            回到今日
+            <Kbd>Enter</Kbd>
+          </Link>
         </Button>
       </div>
     </Card>
